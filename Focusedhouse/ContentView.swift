@@ -24,6 +24,7 @@ struct ContentView: View {
                 .onDelete { offsets in
                     let gone = offsets.map { plans[$0] }
                     CalendarSync.remove(gone.flatMap(\.tasks))
+                    Reminders.cancel(gone.flatMap(\.tasks))
                     gone.forEach(context.delete)
                 }
             }

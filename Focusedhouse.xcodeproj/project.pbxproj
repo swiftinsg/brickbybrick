@@ -17,6 +17,7 @@
 		CEBC947E66BBFC3320921D8E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224DCE94898B243733436668 /* ContentView.swift */; };
 		D252C05A6D054177450173F0 /* SchedulerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3661C18AF3148DEAF17080 /* SchedulerTests.swift */; };
 		E2A306AEE7946F63A1CC555F /* CalendarSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 815FB93CA245604DF4C5F6B1 /* CalendarSync.swift */; };
+		F20BAC785C8F1127A4F7D611 /* Reminders.swift in Sources */ = {isa = PBXBuildFile; fileRef = E028781E787C6E8D5981F4ED /* Reminders.swift */; };
 		FF5631649E05FD0874E51BCD /* Scheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B79E88359A0D882222CE7717 /* Scheduler.swift */; };
 /* End PBXBuildFile section */
 
@@ -42,6 +43,7 @@
 		B79E88359A0D882222CE7717 /* Scheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scheduler.swift; sourceTree = "<group>"; };
 		CACF9EEA9E397E74B26F58F4 /* CalendarTipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarTipView.swift; sourceTree = "<group>"; };
 		DF3661C18AF3148DEAF17080 /* SchedulerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchedulerTests.swift; sourceTree = "<group>"; };
+		E028781E787C6E8D5981F4ED /* Reminders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reminders.swift; sourceTree = "<group>"; };
 		E0B8A0E30A4AF30C4CF54279 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		F81D679311E3A5937BE34827 /* NewPlanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPlanView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -84,6 +86,7 @@
 				F81D679311E3A5937BE34827 /* NewPlanView.swift */,
 				673ECD89D90C3D5A417179CE /* Planner.swift */,
 				369589E12FA2271115673198 /* PlanView.swift */,
+				E028781E787C6E8D5981F4ED /* Reminders.swift */,
 				B79E88359A0D882222CE7717 /* Scheduler.swift */,
 				16A0D16A418FF5EEB88AD020 /* SettingsView.swift */,
 			);
@@ -172,6 +175,7 @@
 				253D7AE2578435EB763C5F83 /* NewPlanView.swift in Sources */,
 				A120E772502F28EC84B0138F /* PlanView.swift in Sources */,
 				48751A7B3F3D537EEC59D280 /* Planner.swift in Sources */,
+				F20BAC785C8F1127A4F7D611 /* Reminders.swift in Sources */,
 				FF5631649E05FD0874E51BCD /* Scheduler.swift in Sources */,
 				46E25D1B566905893966BE94 /* SettingsView.swift in Sources */,
 			);

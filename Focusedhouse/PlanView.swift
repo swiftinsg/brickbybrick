@@ -18,12 +18,13 @@ struct PlanView: View {
                 .listRowSeparator(.hidden)
 
             ForEach(plan.ordered) { task in
-                TaskRow(task: task) { plan.reflow() }
+                TaskRow(task: task, onChange: { plan.reflow() }, onPushBack: { plan.pushBack(task, by: $0) })
             }
             .onDelete { offsets in
                 let list = plan.ordered
                 let gone = offsets.map { list[$0] }
                 CalendarSync.remove(gone)
+                Reminders.cancel(gone)
                 gone.forEach { plan.modelContext?.delete($0) }
                 renumber(list.enumerated().filter { !offsets.contains($0.offset) }.map(\.element))
             }
@@ -73,12 +74,26 @@ struct PlanView: View {
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            if Planner.isAvailable && !plan.input.isEmpty {
+            if Planner.isAvailable && (!plan.input.isEmpty || hasPending) {
                 ToolbarItem {
-                    Button {
-                        Task { await tryAgain() }
+                    Menu {
+                        if hasPending {
+                            Button("Re-plan the rest with AI", systemImage: "sparkles") {
+                                Task { await run { plan.replaceRemaining(with: try await Planner.replan(plan)) } }
+                            }
+                        }
+                        if !plan.input.isEmpty {
+                            Button("Start over (new plan)", systemImage: "arrow.clockwise") {
+                                Task {
+                                    await run {
+                                        plan.replaceTasks(with: try await Planner.draft(
+                                            mode: plan.mode, input: plan.input, materials: plan.materials, days: plan.days))
+                                    }
+                                }
+                            }
+                        }
                     } label: {
-                        if isWorking { ProgressView() } else { Label("Try again", systemImage: "arrow.clockwise") }
+                        if isWorking { ProgressView() } else { Label("Re-plan", systemImage: "arrow.clockwise") }
                     }
                     .disabled(isWorking)
                 }
@@ -112,13 +127,15 @@ struct PlanView: View {
         plan.reflow()
     }
 
-    private func tryAgain() async {
+    private var hasPending: Bool { plan.tasks.contains { !$0.done } }
+
+    /// Runs an AI re-plan with a spinner, then re-adds to Calendar if auto-add is on.
+    private func run(_ work: () async throws -> Void) async {
         isWorking = true
         error = nil
         defer { isWorking = false }
         do {
-            let draft = try await Planner.draft(mode: plan.mode, input: plan.input, materials: plan.materials, days: plan.days)
-            plan.replaceTasks(with: draft)
+            try await work()
             if autoAddToCalendar { await addToCalendar() }
         } catch {
             self.error = error.localizedDescription
@@ -129,11 +146,13 @@ struct PlanView: View {
 private struct TaskRow: View {
     @Bindable var task: PlanTask
     var onChange: () -> Void
+    var onPushBack: (Int) -> Void
 
     var body: some View {
         HStack(alignment: .top) {
             Button {
                 task.done.toggle()
+                onChange()   // re-arm reminders; a finished task keeps its time
             } label: {
                 Image(systemName: task.done ? "checkmark.circle.fill" : "circle")
                     .font(.title2)
@@ -171,6 +190,21 @@ private struct TaskRow: View {
                 Stepper("\(task.minutes) min", value: $task.minutes, in: 5...240, step: 5)
                     .font(.subheadline)
                     .onChange(of: task.minutes) { onChange() }
+            }
+        }
+        .contextMenu {
+            if !task.done {
+                Section("Need more time?") {
+                    ForEach([15, 30, 60], id: \.self) { minutes in
+                        Button("+\(minutes) min", systemImage: "clock.arrow.circlepath") { onPushBack(minutes) }
+                    }
+                }
+            }
+        }
+        .swipeActions(edge: .leading) {
+            if !task.done {
+                Button("+15 min", systemImage: "clock.arrow.circlepath") { onPushBack(15) }
+                    .tint(.orange)
             }
         }
     }

@@ -35,14 +35,33 @@ enum PlanMode: String, CaseIterable {
         return Routine(wake: freeFrom, bed: freeUntil, hasSchool: false)
     }
 
-    /// Recompute every task's start time from the plan start, in order,
-    /// around Calendar events (but not around this plan's own events).
+    /// Recompute start times of unfinished tasks from the plan start, in order,
+    /// around Calendar events (not this plan's own) and around finished tasks,
+    /// which keep their times. Then re-arm the reminders.
     @MainActor func reflow() {
         let list = ordered
+        let pending = list.filter { !$0.done }
+        let finished = list.filter(\.done).compactMap { t in t.start.map { $0..<t.end! } }
         let busy = CalendarSync.busy(from: start, days: days, excluding: Set(list.compactMap(\.eventID)))
-        let starts = Scheduler.schedule(list.map { ($0.minutes, $0.day) }, from: start,
-                                        routine: routine, busy: busy)
-        for (task, s) in zip(list, starts) { task.start = s }
+        let starts = Scheduler.schedule(pending.map { ($0.minutes, $0.day) }, from: start,
+                                        routine: routine, busy: busy + finished)
+        for (task, s) in zip(pending, starts) { task.start = s }
+        Reminders.sync(self)
+    }
+
+    /// "Need more time": the task runs longer and everything after it shifts later
+    /// (past bedtime it moves to the next free morning).
+    @MainActor func pushBack(_ task: PlanTask, by minutes: Int) {
+        task.minutes += minutes
+        reflow()
+    }
+}
+
+extension Date {
+    /// Now, rounded up to the next 5 minutes.
+    static var nextFiveMinutes: Date {
+        let step: TimeInterval = 5 * 60
+        return Date(timeIntervalSinceReferenceDate: (Date.now.timeIntervalSinceReferenceDate / step).rounded(.up) * step)
     }
 }
 
@@ -57,6 +76,7 @@ enum PlanMode: String, CaseIterable {
     var eventID: String?   // Calendar event, once added
     var priority = 1       // 0 high, 1 normal, 2 low
     var section = ""       // topic from the study material
+    var uid: UUID?         // stable id for reminders; set on first use
     var plan: Plan?
 
     init(title: String, category: String, minutes: Int, day: Int, order: Int) {
@@ -68,4 +88,9 @@ enum PlanMode: String, CaseIterable {
     }
 
     var end: Date? { start?.addingTimeInterval(TimeInterval(minutes * 60)) }
+
+    var key: String {
+        if uid == nil { uid = UUID() }
+        return uid!.uuidString
+    }
 }

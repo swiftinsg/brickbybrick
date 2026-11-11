@@ -79,18 +79,17 @@ struct NewPlanView: View {
                 freeFrom = start
                 freeUntil = Calendar.current.startOfDay(for: .now).addingTimeInterval(TimeInterval(bed * 60))
             }
-            .task { await CalendarSync.requestAccess() }
+            .task {
+                await CalendarSync.requestAccess()
+                await Reminders.requestAccess()
+            }
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } }
             }
         }
     }
 
-    /// Now, rounded up to the next 5 minutes.
-    private var start: Date {
-        let step: TimeInterval = 5 * 60
-        return Date(timeIntervalSinceReferenceDate: (Date.now.timeIntervalSinceReferenceDate / step).rounded(.up) * step)
-    }
+    private var start: Date { .nextFiveMinutes }
 
     private func makePlan() async {
         isWorking = true
@@ -128,8 +127,26 @@ struct NewPlanView: View {
 extension Plan {
     /// Swap in the model's tasks and schedule them.
     @MainActor func replaceTasks(with draft: DraftPlan) {
-        CalendarSync.remove(tasks)
-        tasks.forEach { modelContext?.delete($0) }
+        replace(tasks, with: draft)
+    }
+
+    /// Re-plan with AI: rebuild only the unfinished tasks, starting now.
+    @MainActor func replaceRemaining(with draft: DraftPlan) {
+        let now = Date.nextFiveMinutes
+        if now > start {
+            let cal = Calendar.current
+            let elapsed = cal.dateComponents([.day], from: cal.startOfDay(for: start), to: cal.startOfDay(for: now)).day ?? 0
+            days = max(1, days - elapsed)
+            start = now
+        }
+        replace(tasks.filter { !$0.done }, with: draft)
+    }
+
+    @MainActor private func replace(_ old: [PlanTask], with draft: DraftPlan) {
+        CalendarSync.remove(old)
+        Reminders.cancel(old)
+        old.forEach { modelContext?.delete($0) }
+        let kept = tasks.filter { t in !old.contains { $0 === t } }
         let made = draft.tasks.map { t in
             let task = PlanTask(title: t.title, category: t.category, minutes: t.minutes,
                                 day: mode == .today ? 1 : min(max(t.day, 1), days), order: 0)
@@ -138,7 +155,7 @@ extension Plan {
             return task
         }
         // Higher priority first within each day; otherwise keep the AI's order (stable sort).
-        tasks = made.enumerated()
+        tasks = kept.sorted { $0.order < $1.order } + made.enumerated()
             .sorted { ($0.element.day, $0.element.priority, $0.offset) < ($1.element.day, $1.element.priority, $1.offset) }
             .map(\.element)
         for (i, task) in tasks.enumerated() { task.order = i }

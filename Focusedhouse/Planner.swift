@@ -68,6 +68,39 @@ enum Planner {
     }
 }
 
+extension Planner {
+    /// Re-plan with AI: the student is behind, so rebuild what's left.
+    @MainActor static func replan(_ plan: Plan) async throws -> DraftPlan {
+        let left = plan.ordered.filter { !$0.done }.map { t in
+            "- \(t.title) (\(t.minutes) min, \(priorities[min(max(t.priority, 0), 2)]) priority"
+                + (t.section.isEmpty ? ")" : ", section: \(t.section))")
+        }
+        let cal = Calendar.current
+        let elapsed = cal.dateComponents([.day], from: cal.startOfDay(for: plan.start), to: cal.startOfDay(for: .now)).day ?? 0
+        let daysLeft = max(1, plan.days - elapsed)
+        let when = plan.mode == .today || daysLeft == 1
+            ? "Fit them into the rest of today; set day to 1 for every task."
+            : "Spread them over the next \(daysLeft) days, starting today as day 1."
+        let session = LanguageModelSession(instructions: """
+            You help a student who is running behind on their plan. Rebuild a realistic plan \
+            for their remaining tasks. Keep every high-priority task. You may merge small \
+            tasks, shorten or split long ones, and reorder them, but don't invent new work. \
+            Keep each task's section and priority.
+            """)
+        let prompt = """
+            It is now \(Date.now.formatted(date: .omitted, time: .shortened)). Remaining tasks:
+            \(left.joined(separator: "\n"))
+
+            \(when)
+            """
+        do {
+            return try await session.respond(to: prompt, generating: DraftPlan.self).content
+        } catch LanguageModelSession.GenerationError.exceededContextWindowSize {
+            throw PlannerError.tooLong
+        }
+    }
+}
+
 enum PlannerError: LocalizedError {
     case tooLong
     var errorDescription: String? {
