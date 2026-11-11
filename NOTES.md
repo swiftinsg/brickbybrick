@@ -10,7 +10,7 @@ A SwiftUI app using Apple's on-device Foundation Models to:
 ## Decided
 - Name: Focusedhouse
 - Repo: public on GitHub
-- Platform: iOS SwiftUI app (min iOS 26, required for Foundation Models) — *Claude's default, not yet confirmed*
+- Platform: iOS SwiftUI app targeting iOS 27.2 (confirmed)
 
 ## Open questions
 - What's the real moment this is for? What does the user type in?
