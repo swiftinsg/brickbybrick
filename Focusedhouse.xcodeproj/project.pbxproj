@@ -13,8 +13,10 @@
 		5633AD5BD272246718F28BFA /* FocusedhouseApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEEC15198079EA3BE1A20B7 /* FocusedhouseApp.swift */; };
 		8E35AB9DA0CC1EFC6C997637 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0B8A0E30A4AF30C4CF54279 /* Models.swift */; };
 		A120E772502F28EC84B0138F /* PlanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 369589E12FA2271115673198 /* PlanView.swift */; };
+		AC42018FEFEF09FC44C26F2B /* CalendarTipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CACF9EEA9E397E74B26F58F4 /* CalendarTipView.swift */; };
 		CEBC947E66BBFC3320921D8E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224DCE94898B243733436668 /* ContentView.swift */; };
 		D252C05A6D054177450173F0 /* SchedulerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3661C18AF3148DEAF17080 /* SchedulerTests.swift */; };
+		E2A306AEE7946F63A1CC555F /* CalendarSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 815FB93CA245604DF4C5F6B1 /* CalendarSync.swift */; };
 		FF5631649E05FD0874E51BCD /* Scheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B79E88359A0D882222CE7717 /* Scheduler.swift */; };
 /* End PBXBuildFile section */
 
@@ -35,8 +37,10 @@
 		369589E12FA2271115673198 /* PlanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanView.swift; sourceTree = "<group>"; };
 		4C896DDE10D200A021200A1F /* Focusedhouse.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Focusedhouse.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		673ECD89D90C3D5A417179CE /* Planner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Planner.swift; sourceTree = "<group>"; };
+		815FB93CA245604DF4C5F6B1 /* CalendarSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarSync.swift; sourceTree = "<group>"; };
 		B1C1EADE119637FF5F3DA189 /* FocusedhouseTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = FocusedhouseTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B79E88359A0D882222CE7717 /* Scheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scheduler.swift; sourceTree = "<group>"; };
+		CACF9EEA9E397E74B26F58F4 /* CalendarTipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarTipView.swift; sourceTree = "<group>"; };
 		DF3661C18AF3148DEAF17080 /* SchedulerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchedulerTests.swift; sourceTree = "<group>"; };
 		E0B8A0E30A4AF30C4CF54279 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		F81D679311E3A5937BE34827 /* NewPlanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPlanView.swift; sourceTree = "<group>"; };
@@ -72,6 +76,8 @@
 		AEE41EBB7E7AF22A6FCA0514 /* Focusedhouse */ = {
 			isa = PBXGroup;
 			children = (
+				815FB93CA245604DF4C5F6B1 /* CalendarSync.swift */,
+				CACF9EEA9E397E74B26F58F4 /* CalendarTipView.swift */,
 				224DCE94898B243733436668 /* ContentView.swift */,
 				0AEEC15198079EA3BE1A20B7 /* FocusedhouseApp.swift */,
 				E0B8A0E30A4AF30C4CF54279 /* Models.swift */,
@@ -158,6 +164,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E2A306AEE7946F63A1CC555F /* CalendarSync.swift in Sources */,
+				AC42018FEFEF09FC44C26F2B /* CalendarTipView.swift in Sources */,
 				CEBC947E66BBFC3320921D8E /* ContentView.swift in Sources */,
 				5633AD5BD272246718F28BFA /* FocusedhouseApp.swift in Sources */,
 				8E35AB9DA0CC1EFC6C997637 /* Models.swift in Sources */,
@@ -194,6 +202,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCalendarsFullAccessUsageDescription = "Focusedhouse plans around your calendar events and can add your tasks to Calendar.";
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -293,6 +302,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCalendarsFullAccessUsageDescription = "Focusedhouse plans around your calendar events and can add your tasks to Calendar.";
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

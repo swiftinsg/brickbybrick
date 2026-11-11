@@ -5,6 +5,8 @@ struct PlanView: View {
     @Bindable var plan: Plan
     @State private var isWorking = false
     @State private var error: String?
+    @State private var calendarMessage: String?
+    @AppStorage("autoAddToCalendar") private var autoAddToCalendar = false
 
     var body: some View {
         List {
@@ -20,7 +22,9 @@ struct PlanView: View {
             }
             .onDelete { offsets in
                 let list = plan.ordered
-                offsets.map { list[$0] }.forEach { plan.modelContext?.delete($0) }
+                let gone = offsets.map { list[$0] }
+                CalendarSync.remove(gone)
+                gone.forEach { plan.modelContext?.delete($0) }
                 renumber(list.enumerated().filter { !offsets.contains($0.offset) }.map(\.element))
             }
             .onMove { from, to in
@@ -32,6 +36,25 @@ struct PlanView: View {
                     moved.day = i == 0 ? 1 : list[i - 1].day
                 }
                 renumber(list)
+            }
+
+            if !plan.tasks.isEmpty {
+                Section {
+                    Button {
+                        Task { await addToCalendar() }
+                    } label: {
+                        Label(isInCalendar ? "Update Calendar" : "Add to Calendar", systemImage: "calendar.badge.plus")
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .controlSize(.large)
+                    .listRowInsets(EdgeInsets())
+                    .listRowBackground(Color.clear)
+                } footer: {
+                    if let calendarMessage {
+                        Text(calendarMessage)
+                    }
+                }
             }
 
             if let error {
@@ -63,6 +86,18 @@ struct PlanView: View {
             ToolbarItem { EditButton() }
             ToolbarItem { Button("Add task", systemImage: "plus", action: addTask) }
         }
+        .task { plan.reflow() }   // pick up Calendar changes made since last time
+    }
+
+    private var isInCalendar: Bool { plan.tasks.contains { $0.eventID != nil } }
+
+    private func addToCalendar() async {
+        do {
+            let n = try await CalendarSync.add(plan)
+            calendarMessage = "Added \(n) task\(n == 1 ? "" : "s") to Calendar."
+        } catch {
+            calendarMessage = error.localizedDescription
+        }
     }
 
     private func renumber(_ list: [PlanTask]) {
@@ -82,8 +117,9 @@ struct PlanView: View {
         error = nil
         defer { isWorking = false }
         do {
-            let draft = try await Planner.draft(mode: plan.mode, input: plan.input, days: plan.days)
+            let draft = try await Planner.draft(mode: plan.mode, input: plan.input, materials: plan.materials, days: plan.days)
             plan.replaceTasks(with: draft)
+            if autoAddToCalendar { await addToCalendar() }
         } catch {
             self.error = error.localizedDescription
         }
@@ -106,8 +142,28 @@ private struct TaskRow: View {
             .accessibilityLabel(task.done ? "Mark not done" : "Mark done")
 
             VStack(alignment: .leading, spacing: 4) {
-                TextField("Task", text: $task.title)
-                    .strikethrough(task.done)
+                HStack {
+                    TextField("Task", text: $task.title)
+                        .strikethrough(task.done)
+                    Menu {
+                        Picker("Priority", selection: $task.priority) {
+                            Label("High", systemImage: "exclamationmark").tag(0)
+                            Text("Normal").tag(1)
+                            Label("Low", systemImage: "arrow.down").tag(2)
+                        }
+                    } label: {
+                        switch task.priority {
+                        case 0: Image(systemName: "exclamationmark.circle.fill").foregroundStyle(.red)
+                        case 2: Image(systemName: "arrow.down.circle").foregroundStyle(.secondary)
+                        default: Image(systemName: "flag").foregroundStyle(.tertiary)
+                        }
+                    }
+                    .accessibilityLabel("Priority")
+                }
+                if !task.section.isEmpty {
+                    Text(task.section)
+                        .font(.caption.weight(.semibold)).foregroundStyle(.tint)
+                }
                 if let start = task.start, let end = task.end {
                     Text("\(start.formatted(.dateTime.weekday().day().month())) · \(start.formatted(date: .omitted, time: .shortened))–\(end.formatted(date: .omitted, time: .shortened))")
                         .font(.caption).foregroundStyle(.secondary)

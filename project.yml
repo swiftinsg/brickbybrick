@@ -11,6 +11,7 @@ targets:
     settings:
       GENERATE_INFOPLIST_FILE: YES
       INFOPLIST_KEY_UILaunchScreen_Generation: YES
+      INFOPLIST_KEY_NSCalendarsFullAccessUsageDescription: "Focusedhouse plans around your calendar events and can add your tasks to Calendar."
       SWIFT_VERSION: "6.0"
   FocusedhouseTests:
     type: bundle.unit-test

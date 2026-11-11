@@ -8,9 +8,15 @@ struct NewPlanView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var mode = PlanMode.today
     @State private var input = ""
+    @State private var materials = ""
     @State private var days = 7
     @State private var isWorking = false
     @State private var error: String?
+    @AppStorage("askFreeTime") private var askFreeTime = false
+    @AppStorage("autoAddToCalendar") private var autoAddToCalendar = false
+    @AppStorage("bed") private var bed = 22 * 60
+    @State private var freeFrom = Date.now
+    @State private var freeUntil = Date.now
 
     var body: some View {
         NavigationStack {
@@ -26,6 +32,25 @@ struct NewPlanView: View {
                         .lineLimit(4...10)
                     if mode == .goal {
                         Stepper("Over \(days) day\(days == 1 ? "" : "s")", value: $days, in: 1...30)
+                    }
+                }
+
+                if Planner.isAvailable {
+                    Section {
+                        TextField("Section 1: arenes, electrophilic substitution\nSection 2: other substituents…",
+                                  text: $materials, axis: .vertical)
+                            .lineLimit(3...12)
+                    } header: {
+                        Text("Study material (optional)")
+                    } footer: {
+                        Text("Paste notes or a syllabus. Tasks are split by its sections. Mark priorities in your list with words like \"urgent\" or \"can wait\".")
+                    }
+                }
+
+                if askFreeTime {
+                    Section("When are you free?") {
+                        DatePicker("From", selection: $freeFrom, displayedComponents: .hourAndMinute)
+                        DatePicker("Until", selection: $freeUntil, displayedComponents: .hourAndMinute)
                     }
                 }
 
@@ -50,6 +75,11 @@ struct NewPlanView: View {
                 }
             }
             .navigationTitle("New plan")
+            .onAppear {
+                freeFrom = start
+                freeUntil = Calendar.current.startOfDay(for: .now).addingTimeInterval(TimeInterval(bed * 60))
+            }
+            .task { await CalendarSync.requestAccess() }
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } }
             }
@@ -67,10 +97,10 @@ struct NewPlanView: View {
         error = nil
         defer { isWorking = false }
         do {
-            let draft = try await Planner.draft(mode: mode, input: input, days: days)
-            let plan = Plan(title: draft.title, mode: mode, input: input, days: days, start: start)
-            context.insert(plan)
+            let draft = try await Planner.draft(mode: mode, input: input, materials: materials, days: days)
+            let plan = newPlan(title: draft.title, input: input)
             plan.replaceTasks(with: draft)
+            if autoAddToCalendar { _ = try? await CalendarSync.add(plan) }
             onCreate(plan)
         } catch {
             self.error = error.localizedDescription
@@ -79,21 +109,39 @@ struct NewPlanView: View {
 
     private func makeManual() {
         let firstLine = input.split(separator: "\n").first.map(String.init) ?? ""
-        let plan = Plan(title: firstLine.isEmpty ? "My plan" : firstLine, mode: mode,
-                        input: "", days: days, start: start)
+        onCreate(newPlan(title: firstLine.isEmpty ? "My plan" : firstLine, input: ""))
+    }
+
+    private func newPlan(title: String, input: String) -> Plan {
+        let plan = Plan(title: title, mode: mode, input: input, days: days, start: start)
+        plan.materials = input.isEmpty ? "" : materials
+        if askFreeTime {
+            let minutes = { (d: Date) in Calendar.current.component(.hour, from: d) * 60 + Calendar.current.component(.minute, from: d) }
+            plan.freeFrom = minutes(freeFrom)
+            plan.freeUntil = minutes(freeUntil)
+        }
         context.insert(plan)
-        onCreate(plan)
+        return plan
     }
 }
 
 extension Plan {
     /// Swap in the model's tasks and schedule them.
-    func replaceTasks(with draft: DraftPlan) {
+    @MainActor func replaceTasks(with draft: DraftPlan) {
+        CalendarSync.remove(tasks)
         tasks.forEach { modelContext?.delete($0) }
-        tasks = draft.tasks.enumerated().map { i, t in
-            PlanTask(title: t.title, category: t.category, minutes: t.minutes,
-                     day: mode == .today ? 1 : min(max(t.day, 1), days), order: i)
+        let made = draft.tasks.map { t in
+            let task = PlanTask(title: t.title, category: t.category, minutes: t.minutes,
+                                day: mode == .today ? 1 : min(max(t.day, 1), days), order: 0)
+            task.priority = Planner.priorities.firstIndex(of: t.priority) ?? 1
+            task.section = t.section.trimmingCharacters(in: .whitespaces)
+            return task
         }
+        // Higher priority first within each day; otherwise keep the AI's order (stable sort).
+        tasks = made.enumerated()
+            .sorted { ($0.element.day, $0.element.priority, $0.offset) < ($1.element.day, $1.element.priority, $1.offset) }
+            .map(\.element)
+        for (i, task) in tasks.enumerated() { task.order = i }
         reflow()
     }
 }

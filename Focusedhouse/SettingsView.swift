@@ -8,6 +8,8 @@ struct SettingsView: View {
     @AppStorage("schoolStart") private var schoolStart = 480
     @AppStorage("schoolEnd") private var schoolEnd = 900
     @AppStorage("hasSchool") private var hasSchool = true
+    @AppStorage("autoAddToCalendar") private var autoAddToCalendar = false
+    @AppStorage("askFreeTime") private var askFreeTime = false
 
     var body: some View {
         NavigationStack {
@@ -21,6 +23,19 @@ struct SettingsView: View {
                     if hasSchool {
                         DatePicker("School starts", selection: minutesBinding($schoolStart), displayedComponents: .hourAndMinute)
                         DatePicker("School ends", selection: minutesBinding($schoolEnd), displayedComponents: .hourAndMinute)
+                    }
+                }
+                Section {
+                    Toggle("Add new plans to Calendar automatically", isOn: $autoAddToCalendar)
+                    Toggle("Ask when I'm free each time", isOn: $askFreeTime)
+                } header: {
+                    Text("Calendar")
+                } footer: {
+                    Text("When \"Ask when I'm free\" is on, each new plan asks for your free time instead of using your routine. Calendar events are still avoided.")
+                }
+                Section("Google Calendar") {
+                    NavigationLink("How to connect Google Calendar") {
+                        CalendarTipView()
                     }
                 }
                 Section {

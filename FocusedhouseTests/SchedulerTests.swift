@@ -37,4 +37,11 @@ struct SchedulerTests {
         let s = Scheduler.schedule([(30, 1), (30, 3)], from: at(14, 10), routine: routine, calendar: cal)
         #expect(s == [at(14, 10), at(16, 7)])
     }
+
+    @Test func skipsCalendarEvents() {
+        // Saturday 10:00 with a 10:30–12:00 event: 30 min fits first, 60 min waits until 12:00.
+        let s = Scheduler.schedule([(30, 1), (60, 1)], from: at(14, 10), routine: routine,
+                                   busy: [at(14, 10, 30)..<at(14, 12)], calendar: cal)
+        #expect(s == [at(14, 10), at(14, 12)])
+    }
 }

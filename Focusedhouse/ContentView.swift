@@ -7,6 +7,7 @@ struct ContentView: View {
     @State private var path: [Plan] = []
     @State private var showNew = false
     @State private var showSettings = false
+    @AppStorage("seenCalendarTip") private var seenCalendarTip = false
 
     var body: some View {
         NavigationStack(path: $path) {
@@ -20,7 +21,11 @@ struct ContentView: View {
                         }
                     }
                 }
-                .onDelete { $0.map { plans[$0] }.forEach(context.delete) }
+                .onDelete { offsets in
+                    let gone = offsets.map { plans[$0] }
+                    CalendarSync.remove(gone.flatMap(\.tasks))
+                    gone.forEach(context.delete)
+                }
             }
             .overlay {
                 if plans.isEmpty {
@@ -39,6 +44,12 @@ struct ContentView: View {
                 }
             }
             .sheet(isPresented: $showSettings) { SettingsView() }
+            .sheet(isPresented: .constant(!seenCalendarTip)) {
+                NavigationStack {
+                    CalendarTipView()
+                        .toolbar { Button("Got it") { seenCalendarTip = true } }
+                }
+            }
             .sheet(isPresented: $showNew) {
                 NewPlanView { plan in
                     showNew = false

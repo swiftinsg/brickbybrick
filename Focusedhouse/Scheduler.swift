@@ -40,8 +40,10 @@ enum Scheduler {
     /// Places tasks back-to-back, in order, inside the routine's free windows.
     /// `day` (1-based) is the earliest plan day a task may start on.
     /// A task that doesn't fit before bedtime moves to the next free window.
+    /// `busy` (calendar events) is never scheduled over.
     static func schedule(_ tasks: [(minutes: Int, day: Int)], from start: Date,
-                         routine: Routine, calendar: Calendar = .current) -> [Date] {
+                         routine: Routine, busy: [Range<Date>] = [],
+                         calendar: Calendar = .current) -> [Date] {
         let firstDay = calendar.startOfDay(for: start)
         var cursor = start
         return tasks.map { task in
@@ -49,18 +51,18 @@ enum Scheduler {
             if let dayStart = calendar.date(byAdding: .day, value: max(task.day, 1) - 1, to: firstDay) {
                 cursor = max(cursor, dayStart)
             }
-            let slot = firstFit(after: cursor, length: length, routine: routine, calendar: calendar)
+            let slot = firstFit(after: cursor, length: length, routine: routine, busy: busy, calendar: calendar)
             cursor = slot + length
             return slot
         }
     }
 
-    private static func firstFit(after cursor: Date, length: TimeInterval,
-                                 routine: Routine, calendar: Calendar) -> Date {
+    private static func firstFit(after cursor: Date, length: TimeInterval, routine: Routine,
+                                 busy: [Range<Date>], calendar: Calendar) -> Date {
         // Start a day early so a window running past midnight (late bedtime) is seen.
         var day = calendar.date(byAdding: .day, value: -1, to: calendar.startOfDay(for: cursor)) ?? cursor
         for _ in 0..<60 {
-            for w in routine.windows(on: day, calendar: calendar) {
+            for w in routine.windows(on: day, calendar: calendar).flatMap({ free($0, minus: busy) }) {
                 let s = max(w.lowerBound, cursor)
                 if s.addingTimeInterval(length) <= w.upperBound { return s }
             }
@@ -68,5 +70,17 @@ enum Scheduler {
             day = next
         }
         return cursor   // longer than any free window: place it anyway
+    }
+
+    /// The parts of `window` not covered by any busy range.
+    static func free(_ window: Range<Date>, minus busy: [Range<Date>]) -> [Range<Date>] {
+        var pieces: [Range<Date>] = []
+        var from = window.lowerBound
+        for b in busy.sorted(by: { $0.lowerBound < $1.lowerBound }) where b.overlaps(window) {
+            if b.lowerBound > from { pieces.append(from..<b.lowerBound) }
+            from = max(from, b.upperBound)
+        }
+        if from < window.upperBound { pieces.append(from..<window.upperBound) }
+        return pieces
     }
 }
