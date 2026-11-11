@@ -15,8 +15,10 @@ A SwiftUI app using Apple's on-device Foundation Models to:
 - Audience: students and teenagers
 - Free-time sources (mixed): iOS Calendar + Google Calendar events to schedule around; optional self-set routine (e.g. school hours, bedtime); Settings option to "ask me each time" instead
 - Google Calendar: read via iOS Calendar account sync (EventKit) — no Google sign-in/API. Onboarding shows a short "connect Google Calendar" tip
+- Output: schedule lives in-app with checkboxes + "Add to Calendar" button (writes events to iOS Calendar → syncs to Google). Settings toggle: auto-add to calendar right after a schedule is suggested
 
 ## Open questions
+- Own app notifications/reminders, or rely on calendar alerts?
 - (more to come)
 
 ## Q&A log
@@ -29,3 +31,6 @@ A: A mix: iOS Calendar, Google Calendar, a self-set routine if needed, and an "a
 
 **Q4: How should Google Calendar connect?**
 A: Option A, via the iOS Calendar account sync (EventKit). No in-app Google sign-in.
+
+**Q5: Where does the generated schedule go?**
+A: Both: in-app with checkboxes, plus an "Add to Calendar" button. A toggle can make it add to the calendar automatically once a schedule is suggested.
