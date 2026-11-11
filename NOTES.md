@@ -17,9 +17,10 @@ A SwiftUI app using Apple's on-device Foundation Models to:
 - Google Calendar: read via iOS Calendar account sync (EventKit) — no Google sign-in/API. Onboarding shows a short "connect Google Calendar" tip
 - Output: schedule lives in-app with checkboxes + "Add to Calendar" button (writes events to iOS Calendar → syncs to Google). Settings toggle: auto-add to calendar right after a schedule is suggested
 - Notifications: app sends its own task-start reminders, plus end-of-task check-ins ("Done? / Need more time?") that reschedule remaining tasks if behind
+- Rescheduling: default is simple push-back (+15/+30/+60 min, shifts later tasks; overflow past bedtime → tomorrow, no AI). Plus a "Re-plan with AI" button that has Foundation Models rebuild the rest of the plan
 
 ## Open questions
-- Rescheduling on "need more time": push back only today's remaining tasks, or also re-plan later days (Goal mode)?
+- How editable is a suggested schedule before accepting (drag times, edit durations, delete tasks)?
 - (more to come)
 
 ## Q&A log
@@ -38,3 +39,6 @@ A: Both: in-app with checkboxes, plus an "Add to Calendar" button. A toggle can 
 
 **Q6: Should the app send its own notifications?**
 A: C: its own reminders plus end-of-task check-ins that reschedule when running behind.
+
+**Q7: How does "Need more time" reschedule?**
+A: C: simple push-back by default, plus a "Re-plan with AI" button.
