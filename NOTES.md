@@ -16,9 +16,10 @@ A SwiftUI app using Apple's on-device Foundation Models to:
 - Free-time sources (mixed): iOS Calendar + Google Calendar events to schedule around; optional self-set routine (e.g. school hours, bedtime); Settings option to "ask me each time" instead
 - Google Calendar: read via iOS Calendar account sync (EventKit) — no Google sign-in/API. Onboarding shows a short "connect Google Calendar" tip
 - Output: schedule lives in-app with checkboxes + "Add to Calendar" button (writes events to iOS Calendar → syncs to Google). Settings toggle: auto-add to calendar right after a schedule is suggested
+- Notifications: app sends its own task-start reminders, plus end-of-task check-ins ("Done? / Need more time?") that reschedule remaining tasks if behind
 
 ## Open questions
-- Own app notifications/reminders, or rely on calendar alerts?
+- Rescheduling on "need more time": push back only today's remaining tasks, or also re-plan later days (Goal mode)?
 - (more to come)
 
 ## Q&A log
@@ -34,3 +35,6 @@ A: Option A, via the iOS Calendar account sync (EventKit). No in-app Google sign
 
 **Q5: Where does the generated schedule go?**
 A: Both: in-app with checkboxes, plus an "Add to Calendar" button. A toggle can make it add to the calendar automatically once a schedule is suggested.
+
+**Q6: Should the app send its own notifications?**
+A: C: its own reminders plus end-of-task check-ins that reschedule when running behind.
