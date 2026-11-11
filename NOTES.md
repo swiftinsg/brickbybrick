@@ -20,9 +20,10 @@ A SwiftUI app using Apple's on-device Foundation Models to:
 - Rescheduling: default is simple push-back (+15/+30/+60 min, shifts later tasks; overflow past bedtime → tomorrow, no AI). Plus a "Re-plan with AI" button that has Foundation Models rebuild the rest of the plan
 - Editing before accept: full control: rename/add/delete tasks, change durations (auto-reflow), and drag tasks to new slots on a timeline view. "Try again" regenerates
 - No Apple Intelligence (older device / turned off): manual mode: student enters tasks + durations; scheduling, calendar, reminders, check-ins still work. AI features (decomposition, estimates, Re-plan with AI) hidden
+- History + adaptive estimates (must be personalised): plans and actual durations (from check-ins) saved on-device; per-category estimate-vs-actual ratios fed into the model prompt so estimates adapt over time. No backend/accounts
 
 ## Open questions
-- Saving plans/history, and whether time estimates learn from past actual durations
+- Build order / v1 scope
 - (more to come)
 
 ## Q&A log
@@ -50,3 +51,6 @@ A: C: full control, including a drag-and-drop timeline.
 
 **Q9: What happens on devices without Apple Intelligence?**
 A: B: manual mode with the AI features hidden.
+
+**Q10: Should the app learn from the past?**
+A: C: keep a history and use it to correct estimates. It must be personalised and adaptive.
