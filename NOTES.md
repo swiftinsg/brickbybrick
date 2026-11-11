@@ -21,10 +21,18 @@ A SwiftUI app using Apple's on-device Foundation Models to:
 - Editing before accept: full control: rename/add/delete tasks, change durations (auto-reflow), and drag tasks to new slots on a timeline view. "Try again" regenerates
 - No Apple Intelligence (older device / turned off): manual mode: student enters tasks + durations; scheduling, calendar, reminders, check-ins still work. AI features (decomposition, estimates, Re-plan with AI) hidden
 - History + adaptive estimates (must be personalised): plans and actual durations (from check-ins) saved on-device; per-category estimate-vs-actual ratios fed into the model prompt so estimates adapt over time. No backend/accounts
+- Build in phases, each testable before the next (see Plan)
 
 ## Open questions
-- Build order / v1 scope
+- None. Plan agreed, waiting for "go"
 - (more to come)
+
+## Plan
+1. **Core**: Goal/Today toggle → Foundation Models decomposes into tasks + estimates → scheduled into a self-set routine's free time → editable list (rename/add/delete/durations, auto-reflow) → saved on-device (SwiftData). Manual mode when Apple Intelligence is unavailable.
+2. **Calendar**: EventKit reads iOS (+ synced Google) events as busy time; Add to Calendar button; auto-add toggle; "ask each time" setting; Google-sync onboarding tip.
+3. **Reminders & check-ins**: local notifications at task start; end-of-task "Done? / Need more time?" → +15/30/60 push-back (overflow → tomorrow); "Re-plan with AI" button.
+4. **Timeline**: drag-and-drop tasks between time slots.
+5. **Adaptive estimates**: record actual durations; per-category actual/estimate ratio injected into the prompt.
 
 ## Q&A log
 
@@ -54,3 +62,6 @@ A: B: manual mode with the AI features hidden.
 
 **Q10: Should the app learn from the past?**
 A: C: keep a history and use it to correct estimates. It must be personalised and adaptive.
+
+**Q11: How should it be built?**
+A: B: in phases, in the order listed in the Plan.
