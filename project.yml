@@ -12,3 +12,19 @@ targets:
       GENERATE_INFOPLIST_FILE: YES
       INFOPLIST_KEY_UILaunchScreen_Generation: YES
       SWIFT_VERSION: "6.0"
+  FocusedhouseTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources: [FocusedhouseTests]
+    dependencies:
+      - target: Focusedhouse
+    settings:
+      GENERATE_INFOPLIST_FILE: YES
+      SWIFT_VERSION: "6.0"
+schemes:
+  Focusedhouse:
+    build:
+      targets:
+        Focusedhouse: all
+    test:
+      targets: [FocusedhouseTests]

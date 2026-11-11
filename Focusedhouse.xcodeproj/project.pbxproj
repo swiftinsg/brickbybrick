@@ -7,14 +7,39 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		253D7AE2578435EB763C5F83 /* NewPlanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F81D679311E3A5937BE34827 /* NewPlanView.swift */; };
+		46E25D1B566905893966BE94 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A0D16A418FF5EEB88AD020 /* SettingsView.swift */; };
+		48751A7B3F3D537EEC59D280 /* Planner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 673ECD89D90C3D5A417179CE /* Planner.swift */; };
 		5633AD5BD272246718F28BFA /* FocusedhouseApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEEC15198079EA3BE1A20B7 /* FocusedhouseApp.swift */; };
+		8E35AB9DA0CC1EFC6C997637 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0B8A0E30A4AF30C4CF54279 /* Models.swift */; };
+		A120E772502F28EC84B0138F /* PlanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 369589E12FA2271115673198 /* PlanView.swift */; };
 		CEBC947E66BBFC3320921D8E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224DCE94898B243733436668 /* ContentView.swift */; };
+		D252C05A6D054177450173F0 /* SchedulerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3661C18AF3148DEAF17080 /* SchedulerTests.swift */; };
+		FF5631649E05FD0874E51BCD /* Scheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B79E88359A0D882222CE7717 /* Scheduler.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		2AB6B36133D9C8E8137F5413 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7712A57530DFE0E21024EE12 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F433E931B543E25979BBC751;
+			remoteInfo = Focusedhouse;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		0AEEC15198079EA3BE1A20B7 /* FocusedhouseApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusedhouseApp.swift; sourceTree = "<group>"; };
+		16A0D16A418FF5EEB88AD020 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		224DCE94898B243733436668 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		369589E12FA2271115673198 /* PlanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanView.swift; sourceTree = "<group>"; };
 		4C896DDE10D200A021200A1F /* Focusedhouse.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Focusedhouse.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		673ECD89D90C3D5A417179CE /* Planner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Planner.swift; sourceTree = "<group>"; };
+		B1C1EADE119637FF5F3DA189 /* FocusedhouseTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = FocusedhouseTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B79E88359A0D882222CE7717 /* Scheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scheduler.swift; sourceTree = "<group>"; };
+		DF3661C18AF3148DEAF17080 /* SchedulerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchedulerTests.swift; sourceTree = "<group>"; };
+		E0B8A0E30A4AF30C4CF54279 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		F81D679311E3A5937BE34827 /* NewPlanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPlanView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -22,6 +47,7 @@
 			isa = PBXGroup;
 			children = (
 				4C896DDE10D200A021200A1F /* Focusedhouse.app */,
+				B1C1EADE119637FF5F3DA189 /* FocusedhouseTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -30,8 +56,17 @@
 			isa = PBXGroup;
 			children = (
 				AEE41EBB7E7AF22A6FCA0514 /* Focusedhouse */,
+				A47D71E79CC515369BC87294 /* FocusedhouseTests */,
 				1BEA77BE428379A06CFE0C9A /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		A47D71E79CC515369BC87294 /* FocusedhouseTests */ = {
+			isa = PBXGroup;
+			children = (
+				DF3661C18AF3148DEAF17080 /* SchedulerTests.swift */,
+			);
+			path = FocusedhouseTests;
 			sourceTree = "<group>";
 		};
 		AEE41EBB7E7AF22A6FCA0514 /* Focusedhouse */ = {
@@ -39,6 +74,12 @@
 			children = (
 				224DCE94898B243733436668 /* ContentView.swift */,
 				0AEEC15198079EA3BE1A20B7 /* FocusedhouseApp.swift */,
+				E0B8A0E30A4AF30C4CF54279 /* Models.swift */,
+				F81D679311E3A5937BE34827 /* NewPlanView.swift */,
+				673ECD89D90C3D5A417179CE /* Planner.swift */,
+				369589E12FA2271115673198 /* PlanView.swift */,
+				B79E88359A0D882222CE7717 /* Scheduler.swift */,
+				16A0D16A418FF5EEB88AD020 /* SettingsView.swift */,
 			);
 			path = Focusedhouse;
 			sourceTree = "<group>";
@@ -46,6 +87,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		0E10AC91A890531819BEB27E /* FocusedhouseTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C33F9D25695BBC19FBAB9E4A /* Build configuration list for PBXNativeTarget "FocusedhouseTests" */;
+			buildPhases = (
+				C1D0EF14CDBB3F7B08E63732 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				01D3B1546DBA12E7E012FA7B /* PBXTargetDependency */,
+			);
+			name = FocusedhouseTests;
+			packageProductDependencies = (
+			);
+			productName = FocusedhouseTests;
+			productReference = B1C1EADE119637FF5F3DA189 /* FocusedhouseTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		F433E931B543E25979BBC751 /* Focusedhouse */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = E8A399FC46C7CD8FD01AB6DD /* Build configuration list for PBXNativeTarget "Focusedhouse" */;
@@ -89,6 +148,7 @@
 			projectRoot = "";
 			targets = (
 				F433E931B543E25979BBC751 /* Focusedhouse */,
+				0E10AC91A890531819BEB27E /* FocusedhouseTests */,
 			);
 		};
 /* End PBXProject section */
@@ -100,10 +160,32 @@
 			files = (
 				CEBC947E66BBFC3320921D8E /* ContentView.swift in Sources */,
 				5633AD5BD272246718F28BFA /* FocusedhouseApp.swift in Sources */,
+				8E35AB9DA0CC1EFC6C997637 /* Models.swift in Sources */,
+				253D7AE2578435EB763C5F83 /* NewPlanView.swift in Sources */,
+				A120E772502F28EC84B0138F /* PlanView.swift in Sources */,
+				48751A7B3F3D537EEC59D280 /* Planner.swift in Sources */,
+				FF5631649E05FD0874E51BCD /* Scheduler.swift in Sources */,
+				46E25D1B566905893966BE94 /* SettingsView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C1D0EF14CDBB3F7B08E63732 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D252C05A6D054177450173F0 /* SchedulerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		01D3B1546DBA12E7E012FA7B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F433E931B543E25979BBC751 /* Focusedhouse */;
+			targetProxy = 2AB6B36133D9C8E8137F5413 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		0114001043C3F79C9C58CBF5 /* Release */ = {
@@ -187,6 +269,24 @@
 			};
 			name = Debug;
 		};
+		5B74D5DF2FF4E531414B8C61 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.chuahchengxi.FocusedhouseTests;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Focusedhouse.app/Focusedhouse";
+			};
+			name = Debug;
+		};
 		613666594591F3C9AFEB35C1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -261,6 +361,24 @@
 			};
 			name = Release;
 		};
+		A3E53F50AD3DA474358ED51B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.chuahchengxi.FocusedhouseTests;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Focusedhouse.app/Focusedhouse";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -269,6 +387,15 @@
 			buildConfigurations = (
 				5096B00CAC8ECD99C9C6E4B7 /* Debug */,
 				7251DA1454E9B88E6433F431 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		C33F9D25695BBC19FBAB9E4A /* Build configuration list for PBXNativeTarget "FocusedhouseTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5B74D5DF2FF4E531414B8C61 /* Debug */,
+				A3E53F50AD3DA474358ED51B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
