@@ -18,9 +18,10 @@ A SwiftUI app using Apple's on-device Foundation Models to:
 - Output: schedule lives in-app with checkboxes + "Add to Calendar" button (writes events to iOS Calendar → syncs to Google). Settings toggle: auto-add to calendar right after a schedule is suggested
 - Notifications: app sends its own task-start reminders, plus end-of-task check-ins ("Done? / Need more time?") that reschedule remaining tasks if behind
 - Rescheduling: default is simple push-back (+15/+30/+60 min, shifts later tasks; overflow past bedtime → tomorrow, no AI). Plus a "Re-plan with AI" button that has Foundation Models rebuild the rest of the plan
+- Editing before accept: full control: rename/add/delete tasks, change durations (auto-reflow), and drag tasks to new slots on a timeline view. "Try again" regenerates
 
 ## Open questions
-- How editable is a suggested schedule before accepting (drag times, edit durations, delete tasks)?
+- What if Foundation Models is unavailable (older device, Apple Intelligence off)?
 - (more to come)
 
 ## Q&A log
@@ -42,3 +43,6 @@ A: C: its own reminders plus end-of-task check-ins that reschedule when running 
 
 **Q7: How does "Need more time" reschedule?**
 A: C: simple push-back by default, plus a "Re-plan with AI" button.
+
+**Q8: How much can the student edit a suggested schedule?**
+A: C: full control, including a drag-and-drop timeline.
