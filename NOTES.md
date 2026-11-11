@@ -19,9 +19,10 @@ A SwiftUI app using Apple's on-device Foundation Models to:
 - Notifications: app sends its own task-start reminders, plus end-of-task check-ins ("Done? / Need more time?") that reschedule remaining tasks if behind
 - Rescheduling: default is simple push-back (+15/+30/+60 min, shifts later tasks; overflow past bedtime → tomorrow, no AI). Plus a "Re-plan with AI" button that has Foundation Models rebuild the rest of the plan
 - Editing before accept: full control: rename/add/delete tasks, change durations (auto-reflow), and drag tasks to new slots on a timeline view. "Try again" regenerates
+- No Apple Intelligence (older device / turned off): manual mode: student enters tasks + durations; scheduling, calendar, reminders, check-ins still work. AI features (decomposition, estimates, Re-plan with AI) hidden
 
 ## Open questions
-- What if Foundation Models is unavailable (older device, Apple Intelligence off)?
+- Saving plans/history, and whether time estimates learn from past actual durations
 - (more to come)
 
 ## Q&A log
@@ -46,3 +47,6 @@ A: C: simple push-back by default, plus a "Re-plan with AI" button.
 
 **Q8: How much can the student edit a suggested schedule?**
 A: C: full control, including a drag-and-drop timeline.
+
+**Q9: What happens on devices without Apple Intelligence?**
+A: B: manual mode with the AI features hidden.
