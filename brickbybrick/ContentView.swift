@@ -8,6 +8,7 @@ struct ContentView: View {
     @State private var showNew = false
     @State private var showSettings = false
     @AppStorage("seenCalendarTip") private var seenCalendarTip = false
+    @State private var calendarError: String?
 
     var body: some View {
         NavigationStack(path: $path) {
@@ -28,6 +29,19 @@ struct ContentView: View {
                         Button("Delete", systemImage: "trash", role: .destructive) { delete([plan]) }
                     }
                     .contextMenu {
+                        if !plan.tasks.isEmpty {
+                            if CalendarSync.isUpToDate(plan) {
+                                Label("In Calendar", systemImage: "checkmark.circle")
+                            } else {
+                                Button(plan.tasks.contains { $0.eventID != nil } ? "Update Calendar" : "Add to Calendar",
+                                       systemImage: "calendar.badge.plus") {
+                                    Task {
+                                        do { _ = try await CalendarSync.add(plan) }
+                                        catch { calendarError = error.localizedDescription }
+                                    }
+                                }
+                            }
+                        }
                         Button("Delete plan", systemImage: "trash", role: .destructive) { delete([plan]) }
                     }
                 }
@@ -49,6 +63,9 @@ struct ContentView: View {
                     Button("New plan", systemImage: "plus") { showNew = true }
                 }
             }
+            .alert("Couldn't add to Calendar", isPresented: Binding(get: { calendarError != nil }, set: { if !$0 { calendarError = nil } })) {
+                Button("OK") {}
+            } message: { Text(calendarError ?? "") }
             .sheet(isPresented: $showSettings) { SettingsView() }
             .sheet(isPresented: .constant(!seenCalendarTip)) {
                 NavigationStack {

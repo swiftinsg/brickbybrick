@@ -43,7 +43,6 @@ struct PlanView: View {
             }
             toolbarItems
         }
-        .safeAreaInset(edge: .bottom) { calendarBar }
         .sheet(item: $editing) { SubtaskEditor(plan: plan, name: $0.name, subtasks: $0.tasks) }
         .task { plan.reflow() }   // pick up Calendar changes made since last time
     }
@@ -114,42 +113,33 @@ struct PlanView: View {
             if let error {
                 Text(error).foregroundStyle(.red)
             }
+
+            calendarSection
         }
         .animation(.smooth, value: plan.ordered.map(\.start))
     }
 
-    /// The bottom bar: a clear call to action until the plan is in Calendar,
-    /// then a quiet status instead.
-    @ViewBuilder private var calendarBar: some View {
+    /// End of the plan: once the student is happy with it, add it to Calendar.
+    /// It can also be done later from the plan's long-press menu on the home list.
+    @ViewBuilder private var calendarSection: some View {
         if !plan.tasks.isEmpty {
-            VStack(spacing: 6) {
-                if CalendarSync.isUpToDate(plan) {
-                    Label("In Calendar", systemImage: "checkmark.circle.fill")
-                        .font(.subheadline.weight(.medium))
-                        .foregroundStyle(.secondary)
-                        .padding(.vertical, 10)
-                        .padding(.horizontal, 18)
-                        .glassEffect()
+            let upToDate = CalendarSync.isUpToDate(plan)
+            Section {
+                if upToDate {
+                    Label("In Calendar", systemImage: "checkmark.circle.fill").foregroundStyle(.secondary)
                 } else {
-                    Button {
+                    Button(isInCalendar ? "Update Calendar" : "Add to Calendar", systemImage: "calendar.badge.plus") {
                         Task { await addToCalendar() }
-                    } label: {
-                        Label(isInCalendar ? "Update Calendar" : "Add to Calendar", systemImage: "calendar.badge.plus")
-                            .font(.headline)
-                            .padding(.horizontal, 8)
                     }
-                    .buttonStyle(.glassProminent)
-                    .controlSize(.large)
                 }
+            } footer: {
                 if let calendarMessage {
-                    Text(calendarMessage)
-                        .font(.footnote).foregroundStyle(.red)
-                        .multilineTextAlignment(.center)
+                    Text(calendarMessage).foregroundStyle(.red)
+                } else if !upToDate {
+                    Text(isInCalendar ? "You changed the plan since adding it."
+                                      : "Happy with your plan? Add it now, or later by long-pressing it on the Plans screen.")
                 }
             }
-            .padding(.horizontal, 20)
-            .padding(.bottom, 8)
-            .animation(.smooth, value: CalendarSync.isUpToDate(plan))
         }
     }
 
