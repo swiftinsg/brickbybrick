@@ -64,7 +64,7 @@ struct SettingsView: View {
                     Text("My pace")
                 } footer: {
                     Text(pace.isEmpty
-                         ? "After you finish 3 tasks of a kind, the AI learns how long they really take you."
+                         ? "After you finish \(Planner.paceRunway) tasks of a kind, the AI learns how long they really take you."
                          : "Real time ÷ AI estimate. ×1.5 means it takes you 50% longer; new plans adjust for it.")
                 }
                 Section("Google Calendar") {

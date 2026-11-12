@@ -40,12 +40,13 @@ struct PlannerTests {
 
 struct PaceTests {
     @Test func notesOnlyCategoriesThatAreOff() {
-        let saved = ["writing": [1.4, 1.6, 1.5], "homework": [1.0, 1.05, 0.95], "chores": [0.5, 0.5]]
+        let saved = ["writing": [1.4, 1.6, 1.5, 1.5, 1.45], "homework": [1.0, 1.05, 0.95, 1, 1],
+                     "chores": [0.5, 0.5, 0.5, 0.5]]   // 4 < runway of 5
         let note = Planner.paceNote(from: saved)
         #expect(note.contains("writing: takes longer than typical, ×1.5 (a typical 30 min writing task takes them about 45 min)"))
         #expect(!note.contains("homework"))   // on pace
         #expect(!note.contains("chores"))     // too few tasks
-        #expect(Planner.paceNote(from: ["homework": [1, 1, 1]]).isEmpty)
+        #expect(Planner.paceNote(from: ["homework": [1, 1, 1, 1, 1]]).isEmpty)
     }
 
     @Test func recordsActualOnlyOnceAndOnlyAfterStart() {

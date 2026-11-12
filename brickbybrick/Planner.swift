@@ -264,9 +264,13 @@ extension Planner {
 
     static func resetPace() { UserDefaults.standard.removeObject(forKey: paceKey) }
 
-    /// Median actual ÷ estimate per category with 3+ finished tasks.
+    /// Finished tasks a category needs before its pace counts: a longer runway,
+    /// so a couple of odd tasks (or students tweaking times) don't skew it.
+    static let paceRunway = 5
+
+    /// Median actual ÷ estimate per category with `paceRunway`+ finished tasks.
     static func pace(from saved: [String: [Double]] = savedPace()) -> [(category: String, ratio: Double, count: Int)] {
-        saved.filter { $0.value.count >= 3 }.map { category, ratios in
+        saved.filter { $0.value.count >= paceRunway }.map { category, ratios in
             let sorted = ratios.sorted()
             let mid = sorted.count / 2
             let median = sorted.count.isMultiple(of: 2) ? (sorted[mid - 1] + sorted[mid]) / 2 : sorted[mid]

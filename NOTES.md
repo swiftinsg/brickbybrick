@@ -151,7 +151,7 @@ A: B: in phases, in the order listed in the Plan.
   - ticked after it ended (or "Done ✓" on the check-in) → its length, including any "Need more time" push-backs or duration changes;
   - ticked before it started → unknown, not recorded (so ticking a whole parent ahead of time doesn't skew it).
 - Saved on device per category (homework, writing, revision…): the last 20 "real ÷ estimate" ratios. Deleting a plan doesn't erase them.
-- Once a category has 3+ finished tasks and you're 10%+ off, the new-plan prompt says e.g. "writing: takes longer than typical, ×1.5 (a typical 30 min writing task takes them about 45 min)".
+- Once a category has 5+ finished tasks (was 3; raised so a few odd tasks don't skew it) and you're 10%+ off, the new-plan prompt says e.g. "writing: takes longer than typical, ×1.5 (a typical 30 min writing task takes them about 45 min)".
 - Re-plan with AI doesn't get it: the remaining tasks already have adjusted times, so it would scale twice.
 - Settings → **My pace** shows each category's ratio and task count, with "Reset my pace".
 
