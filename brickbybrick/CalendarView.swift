@@ -14,17 +14,18 @@ struct CalendarView: View {
         tasks.filter { $0.start.map { cal.isDate($0, inSameDayAs: day) } ?? false }
             .sorted { $0.start! < $1.start! }
     }
-    /// Days with something still to do, for the dots.
-    private var busyDays: Set<Date> {
-        Set(tasks.filter { !$0.done }.compactMap { $0.start.map(cal.startOfDay) }
-            + todos.map { cal.startOfDay(for: $0.dueDate) })
+    /// How many unfinished things each day has, for the rings.
+    private var counts: [Date: Int] {
+        let days = tasks.filter { !$0.done }.compactMap { $0.start.map(cal.startOfDay) }
+            + todos.map { cal.startOfDay(for: $0.dueDate) }
+        return days.reduce(into: [:]) { $0[$1, default: 0] += 1 }
     }
     private var todosOnDay: [TodoItem] { todos.filter { cal.isDate($0.dueDate, inSameDayAs: day) } }
 
     var body: some View {
         NavigationStack {
             List {
-                MonthGrid(day: $day, busy: busyDays)
+                MonthGrid(day: $day, counts: counts)
 
                 Section(day.formatted(.dateTime.weekday(.wide).day().month())) {
                     ForEach(tasksOnDay) { task in
@@ -66,11 +67,6 @@ struct CalendarView: View {
             }
             .navigationTitle("Calendar")
             .navigationDestination(for: Plan.self) { PlanView(plan: $0) }
-            .toolbar {
-                if !cal.isDateInToday(day) {
-                    Button("Today") { day = .now }
-                }
-            }
         }
     }
 
@@ -83,10 +79,12 @@ struct CalendarView: View {
     }
 }
 
-/// A month of days with a dot under each day that has something to do.
+/// A month of days. A ring around each date fills up as the day gets busier:
+/// a dot for one thing to do, a full circle at `full`.
 struct MonthGrid: View {
     @Binding var day: Date
-    var busy: Set<Date>
+    var counts: [Date: Int]
+    private let full = 6   // ponytail: fixed scale; base it on the student's busiest day if 6 feels wrong
     @State private var month = Date.now
     private let cal = Calendar.current
 
@@ -118,25 +116,36 @@ struct MonthGrid: View {
     private func cell(_ date: Date) -> some View {
         let selected = cal.isDate(date, inSameDayAs: day)
         let today = cal.isDateInToday(date)
+        let count = counts[date] ?? 0
         return Button { day = date } label: {
-            VStack(spacing: 3) {
-                Text(date.formatted(.dateTime.day()))
-                    .font(.callout.weight(today || selected ? .bold : .regular))
-                    .foregroundStyle(selected ? Color.white : today ? Color.accentColor : .primary)
-                    .frame(width: 32, height: 32)
-                    .background(selected ? Color.accentColor : .clear, in: .circle)
-                Circle().fill(busy.contains(date) ? Color.accentColor : .clear).frame(width: 5, height: 5)
-            }
-            .frame(maxWidth: .infinity, minHeight: 40)
+            Text(date.formatted(.dateTime.day()))
+                .font(.callout.weight(today || selected ? .bold : .regular))
+                .foregroundStyle(selected ? Color.white : today ? Color.accentColor : .primary)
+                .frame(width: 32, height: 32)
+                .background(selected ? Color.accentColor : .clear, in: .circle)
+                .overlay {
+                    Circle().stroke(.fill.tertiary, lineWidth: 3).opacity(count > 0 ? 1 : 0)
+                    Circle().trim(from: 0, to: Self.fill(count, full: full))
+                        .stroke(Color.accentColor, style: StrokeStyle(lineWidth: 3, lineCap: .round))
+                        .rotationEffect(.degrees(-90))
+                }
+                .padding(3)
+                .frame(maxWidth: .infinity, minHeight: 44)
             .contentShape(.rect)
         }
         .buttonStyle(.plain)
-        .accessibilityLabel(date.formatted(date: .complete, time: .omitted) + (busy.contains(date) ? ", has tasks" : ""))
+        .accessibilityLabel(date.formatted(date: .complete, time: .omitted) + (count > 0 ? ", \(count) to do" : ""))
         .accessibilityAddTraits(selected ? .isSelected : [])
     }
 
     private func shift(_ months: Int) {
         month = cal.date(byAdding: .month, value: months, to: month)!
+    }
+
+    /// How far round the ring goes: nothing for 0, a dot for 1 (a tiny arc with
+    /// round caps), then evenly up to a full circle at `full` or more.
+    static func fill(_ count: Int, full: Int) -> CGFloat {
+        count <= 0 ? 0 : count == 1 ? 0.001 : min(CGFloat(count) / CGFloat(full), 1)
     }
 
     /// Very short weekday names, starting on the locale's first weekday.

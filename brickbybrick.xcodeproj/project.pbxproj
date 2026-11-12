@@ -51,7 +51,7 @@
 		61762F006A0C5336D075932C /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		6353C84493B0F59DD2940254 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		6638FCAF84E53D354AE6CED7 /* MonthGridTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthGridTests.swift; sourceTree = "<group>"; };
-		691861C606F3F35D098BC113 /* brickbybrickTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = brickbybrickTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		691861C606F3F35D098BC113 /* brickbybrickTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = brickbybrickTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6B71408BD45002B222E5B5FB /* CalendarTipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarTipView.swift; sourceTree = "<group>"; };
 		7BBB7DA0B668CDE6EBFBBD6C /* NewPlanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPlanView.swift; sourceTree = "<group>"; };
 		7C1CDE7F6858E568F06C5995 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
@@ -59,7 +59,7 @@
 		9AB02D955D9BFB6AD987B3E3 /* PlanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanView.swift; sourceTree = "<group>"; };
 		B5BCC361708AEA99AD39AD8F /* Scheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scheduler.swift; sourceTree = "<group>"; };
 		C228424E44EE090EE3F2E9B4 /* PlanTimeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanTimeline.swift; sourceTree = "<group>"; };
-		C6776605B0E918954DD5F8D5 /* brickbybrick.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = brickbybrick.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C6776605B0E918954DD5F8D5 /* brickbybrick.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = brickbybrick.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF4682920E48DC1C5D2B7984 /* Reminders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reminders.swift; sourceTree = "<group>"; };
 		E98D86AEEBBD14AFB1776E95 /* PlannerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlannerTests.swift; sourceTree = "<group>"; };
 		FADF47A616AC95EA8F982681 /* Planner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Planner.swift; sourceTree = "<group>"; };
@@ -165,9 +165,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastUpgradeCheck = 1430;
-				TargetAttributes = {
-				};
+				LastUpgradeCheck = 2720;
 			};
 			buildConfigurationList = D6ED11B7AB95C9513BB1BC13 /* Build configuration list for PBXProject "brickbybrick" */;
 			developmentRegion = en;
@@ -291,6 +289,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -304,6 +303,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
@@ -365,6 +365,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -385,6 +386,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;

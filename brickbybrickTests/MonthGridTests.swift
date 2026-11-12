@@ -31,4 +31,11 @@ struct MonthGridTests {
         let days = MonthGrid.days(in: c.date(from: DateComponents(year: 2028, month: 2, day: 10))!, calendar: c)
         #expect(days.compactMap { $0 }.count == 29)
     }
+
+    @Test func ringFillsWithCount() {
+        #expect(MonthGrid.fill(0, full: 6) == 0)
+        #expect(MonthGrid.fill(1, full: 6) < 0.01)   // a dot
+        #expect(MonthGrid.fill(3, full: 6) == 0.5)
+        #expect(MonthGrid.fill(9, full: 6) == 1)
+    }
 }
