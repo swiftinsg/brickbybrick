@@ -145,7 +145,15 @@ A: B: in phases, in the order listed in the Plan.
 - Calendar-style blocks: a tinted card with a coloured bar on the left (red = high priority, grey = done, with a ✓). Big enough blocks show the parent task's name above the title.
 - Day chips show "Today" or the weekday, the date, and the number of tasks. Hour labels are short ("4 PM"), with half-hour lines when zoomed in. The now line has a dot, and Busy blocks are dashed outlines.
 
-### Phase 5: Adaptive estimates (not started)
+### Phase 5: Adaptive estimates (in progress, not committed yet)
+- Every AI task keeps its original estimate. The first time it's ticked done, the app records how long it really took:
+  - ticked while it's running → time since it started (at least 5 min);
+  - ticked after it ended (or "Done ✓" on the check-in) → its length, including any "Need more time" push-backs or duration changes;
+  - ticked before it started → unknown, not recorded (so ticking a whole parent ahead of time doesn't skew it).
+- Saved on device per category (homework, writing, revision…): the last 20 "real ÷ estimate" ratios. Deleting a plan doesn't erase them.
+- Once a category has 3+ finished tasks and you're 10%+ off, the new-plan prompt says e.g. "writing: takes longer than typical, ×1.5 (a typical 30 min writing task takes them about 45 min)".
+- Re-plan with AI doesn't get it: the remaining tasks already have adjusted times, so it would scale twice.
+- Settings → **My pace** shows each category's ratio and task count, with "Reset my pace".
 
 ### How the work was split
 - Claude did the harder parts (scheduler, pinning and moving, timeline, prompts, notifications) and reviewed everything.
