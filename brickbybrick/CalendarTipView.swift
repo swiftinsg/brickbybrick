@@ -6,7 +6,7 @@ struct CalendarTipView: View {
             Section {
                 Label("Use your Google Calendar", systemImage: "calendar.badge.plus")
                     .font(.headline)
-                Text("Focusedhouse reads your iPhone Calendar, so add your Google account to iPhone once and your Google events show up here too.")
+                Text("brickbybrick reads your iPhone Calendar, so add your Google account to iPhone once and your Google events show up here too.")
             }
             Section("Steps") {
                 Text("1. Open the Settings app on your iPhone.")
@@ -16,7 +16,7 @@ struct CalendarTipView: View {
             }
             Section {
             } footer: {
-                Text("Plans you add to Calendar from Focusedhouse will also show up in Google Calendar.")
+                Text("Plans you add to Calendar from brickbybrick will also show up in Google Calendar.")
             }
         }
         .navigationTitle("Google Calendar")

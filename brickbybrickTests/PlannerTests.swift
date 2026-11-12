@@ -1,5 +1,6 @@
+import Foundation
 import Testing
-@testable import Focusedhouse
+@testable import brickbybrick
 
 struct PlannerTests {
     @Test func splitsToDoDump() {
@@ -34,5 +35,35 @@ struct PlannerTests {
         #expect(text.contains("English essay"))
         #expect(!text.contains("Clean bike"))
         #expect(Planner.examples(for: "feed cat", from: saved).isEmpty)
+    }
+}
+
+struct PaceTests {
+    @Test func notesOnlyCategoriesThatAreOff() {
+        let saved = ["writing": [1.4, 1.6, 1.5], "homework": [1.0, 1.05, 0.95], "chores": [0.5, 0.5]]
+        let note = Planner.paceNote(from: saved)
+        #expect(note.contains("writing: takes longer than typical, ×1.5 (a typical 30 min writing task takes them about 45 min)"))
+        #expect(!note.contains("homework"))   // on pace
+        #expect(!note.contains("chores"))     // too few tasks
+        #expect(Planner.paceNote(from: ["homework": [1, 1, 1]]).isEmpty)
+    }
+
+    @Test func recordsActualOnlyOnceAndOnlyAfterStart() {
+        let start = Date(timeIntervalSince1970: 0)
+        let task = PlanTask(title: "Essay", category: "test-\(UUID())", minutes: 40, day: 1, order: 0)
+        task.estimate = 30
+        task.start = start
+        task.setDone(true, now: start - 60)          // before it started: unknown
+        #expect(task.actual == nil)
+        task.setDone(false)
+        task.setDone(true, now: start + 20 * 60)     // mid-task: time so far
+        #expect(task.actual == 20)
+        task.setDone(false)
+        task.setDone(true, now: start + 99 * 60)     // already recorded
+        #expect(task.actual == 20)
+        let late = PlanTask(title: "x", category: "test-\(UUID())", minutes: 45, day: 1, order: 0)
+        late.estimate = 30; late.start = start
+        late.setDone(true, now: start + 3600)        // after the end: its (pushed-back) length
+        #expect(late.actual == 45)
     }
 }

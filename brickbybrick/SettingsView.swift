@@ -10,6 +10,7 @@ struct SettingsView: View {
     @AppStorage("hasSchool") private var hasSchool = true
     @AppStorage("autoAddToCalendar") private var autoAddToCalendar = false
     @AppStorage("askFreeTime") private var askFreeTime = false
+    @State private var pace = Planner.pace()
 
     var body: some View {
         NavigationStack {
@@ -32,6 +33,24 @@ struct SettingsView: View {
                     Text("Calendar")
                 } footer: {
                     Text("When \"Ask when I'm free\" is on, each new plan asks for your free time instead of using your routine. Calendar events are still avoided.")
+                }
+                Section {
+                    ForEach(pace, id: \.category) { p in
+                        LabeledContent(p.category.capitalized,
+                                       value: "×\(p.ratio.formatted(.number.precision(.fractionLength(1)))) · \(p.count) tasks")
+                    }
+                    if !pace.isEmpty {
+                        Button("Reset my pace", role: .destructive) {
+                            Planner.resetPace()
+                            pace = []
+                        }
+                    }
+                } header: {
+                    Text("My pace")
+                } footer: {
+                    Text(pace.isEmpty
+                         ? "After you finish 3 tasks of a kind, the AI learns how long they really take you."
+                         : "Real time ÷ AI estimate. ×1.5 means it takes you 50% longer; new plans adjust for it.")
                 }
                 Section("Google Calendar") {
                     NavigationLink("How to connect Google Calendar") {

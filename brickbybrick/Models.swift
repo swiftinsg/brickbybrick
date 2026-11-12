@@ -144,6 +144,8 @@ extension Date {
     var uid: UUID?         // stable id for reminders; set on first use
     var pinned: Date?      // fixed time, set only by the student ("Pin time")
     var notBefore: Date?   // dropped here on the timeline; may still be pushed later
+    var estimate: Int?     // the AI's minutes, kept to learn the student's pace
+    var actual: Int?       // minutes it really took, once recorded
     var plan: Plan?
 
     init(title: String, category: String, minutes: Int, day: Int, order: Int) {
@@ -155,6 +157,18 @@ extension Date {
     }
 
     var end: Date? { start?.addingTimeInterval(TimeInterval(minutes * 60)) }
+
+    /// Ticks or unticks the task. The first time an AI-estimated task is done,
+    /// its real duration is recorded: time so far if ticked mid-task, its
+    /// (pushed-back) length if ticked after it ended. Ticked before it started
+    /// = unknown, not recorded.
+    func setDone(_ value: Bool, now: Date = .now) {
+        done = value
+        guard value, actual == nil, let estimate, let start, let end = self.end, start <= now else { return }
+        let real = now < end ? max(5, Int(now.timeIntervalSince(start) / 60)) : minutes
+        actual = real
+        Planner.recordPace(category: category, estimate: estimate, actual: real)
+    }
 
     var key: String {
         if uid == nil { uid = UUID() }

@@ -2,7 +2,7 @@ import SwiftUI
 import SwiftData
 
 @main
-struct FocusedhouseApp: App {
+struct BrickByBrickApp: App {
     let container: ModelContainer
 
     init() {

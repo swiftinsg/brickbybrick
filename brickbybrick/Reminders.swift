@@ -84,7 +84,7 @@ import UserNotifications
               let task = try? context.fetch(FetchDescriptor<PlanTask>(predicate: #Predicate { $0.uid == uid })).first,
               let plan = task.plan else { return }
         if action == Self.done {
-            task.done = true
+            task.setDone(true)
             plan.reflow()
         } else if action.hasPrefix("MORE"), let minutes = Int(action.dropFirst(4)) {
             plan.pushBack(task, by: minutes)

@@ -191,6 +191,7 @@ extension Plan {
                 let task = PlanTask(title: step.title, category: item.category, minutes: step.minutes,
                                     day: mode == .today ? 1 : min(max(item.day, 1), days), order: 0)
                 task.priority = Planner.priorities.firstIndex(of: item.priority) ?? 1
+                task.estimate = step.minutes
                 task.parent = item.subtasks.isEmpty ? "" : item.title
                 return task
             }

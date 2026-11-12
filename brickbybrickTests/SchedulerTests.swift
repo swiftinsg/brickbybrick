@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import Focusedhouse
+@testable import brickbybrick
 
 struct SchedulerTests {
     var cal: Calendar = {

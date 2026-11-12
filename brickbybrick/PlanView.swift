@@ -288,7 +288,7 @@ private struct ParentRow: View {
             Button {
                 withAnimation(.snappy) {
                     let newValue = !allDone
-                    tasks.forEach { $0.done = newValue }
+                    tasks.forEach { $0.setDone(newValue) }
                 }
                 onChange()   // re-arm reminders
             } label: {
@@ -341,7 +341,7 @@ private struct TaskRow: View {
     var body: some View {
         HStack(alignment: .firstTextBaseline, spacing: 12) {
             Button {
-                withAnimation(.snappy) { task.done.toggle() }
+                withAnimation(.snappy) { task.setDone(!task.done) }
                 onChange()   // re-arm reminders; a finished task keeps its time
             } label: {
                 Image(systemName: task.done ? "checkmark.circle.fill" : "circle")

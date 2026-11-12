@@ -39,7 +39,7 @@ struct ContentView: View {
                                            description: Text("Tap + to plan your day or a goal."))
                 }
             }
-            .navigationTitle("Focusedhouse")
+            .navigationTitle("brickbybrick")
             .navigationDestination(for: Plan.self) { PlanView(plan: $0) }
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {

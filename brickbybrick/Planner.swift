@@ -81,6 +81,7 @@ enum Planner {
         let material = plan.materials.trimmingCharacters(in: .whitespacesAndNewlines)
         if !material.isEmpty { prompt += "\n\nStudy material:\n" + material.prefix(6000) }
         prompt += examples(for: plan.input + " " + material.prefix(2000))
+        prompt += paceNote()
 
         var options = GenerationOptions()
         if !previous.isEmpty {
@@ -239,6 +240,50 @@ extension Planner {
         guard !matches.isEmpty else { return "" }
         return "\n\nThis student has broken down similar work like this before. For matching items, use the same kind of steps and durations:\n"
             + matches.map { "- \($0.example.item): " + $0.example.steps.joined(separator: "; ") }.joined(separator: "\n")
+    }
+}
+
+/// Adaptive estimates: each finished AI-estimated task saves actual ÷ estimate
+/// for its category, and the typical ratio goes into the prompt.
+extension Planner {
+    private static let paceKey = "paceRatios"
+
+    // ponytail: last 20 ratios per category as JSON in UserDefaults; enough to track a pace.
+    static func recordPace(category: String, estimate: Int, actual: Int) {
+        guard estimate > 0 else { return }
+        var all = savedPace()
+        all[category, default: []].append(Double(actual) / Double(estimate))
+        all[category] = Array(all[category]!.suffix(20))
+        UserDefaults.standard.set(try? JSONEncoder().encode(all), forKey: paceKey)
+    }
+
+    static func savedPace() -> [String: [Double]] {
+        UserDefaults.standard.data(forKey: paceKey)
+            .flatMap { try? JSONDecoder().decode([String: [Double]].self, from: $0) } ?? [:]
+    }
+
+    static func resetPace() { UserDefaults.standard.removeObject(forKey: paceKey) }
+
+    /// Median actual ÷ estimate per category with 3+ finished tasks.
+    static func pace(from saved: [String: [Double]] = savedPace()) -> [(category: String, ratio: Double, count: Int)] {
+        saved.filter { $0.value.count >= 3 }.map { category, ratios in
+            let sorted = ratios.sorted()
+            let mid = sorted.count / 2
+            let median = sorted.count.isMultiple(of: 2) ? (sorted[mid - 1] + sorted[mid]) / 2 : sorted[mid]
+            return (category, median, ratios.count)
+        }.sorted { $0.category < $1.category }
+    }
+
+    /// Prompt section for categories where the student is 10%+ off the estimates;
+    /// empty when they match. Spells out an example so the small model can scale.
+    static func paceNote(from saved: [String: [Double]] = savedPace()) -> String {
+        let off = pace(from: saved).filter { abs($0.ratio - 1) >= 0.1 }
+        guard !off.isEmpty else { return "" }
+        return "\n\nThis student's real pace from past tasks. Scale your estimates for these categories:\n"
+            + off.map { p in
+                let example = Int((30 * p.ratio / 5).rounded()) * 5
+                return "- \(p.category): takes \(p.ratio > 1 ? "longer" : "less time") than typical, ×\(p.ratio.formatted(.number.precision(.fractionLength(1)))) (a typical 30 min \(p.category) task takes them about \(max(5, example)) min)"
+            }.joined(separator: "\n")
     }
 }
 

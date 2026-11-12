@@ -1,4 +1,4 @@
-# Focusedhouse — Planning Notes
+# brickbybrick — Planning Notes
 
 Living notes from the requirements Q&A. Updated after each answer.
 
@@ -8,7 +8,7 @@ A SwiftUI app using Apple's on-device Foundation Models to:
 - recommend a schedule with suggested timings for each task
 
 ## Decided
-- Name: Focusedhouse
+- Name: brickbybrick
 - Repo: public on GitHub
 - Platform: iOS SwiftUI app targeting iOS 27.2 (confirmed)
 - Input modes (toggle): **Goal mode** (one big goal → tasks spread over days) and **Today mode** (messy to-do dump → tidied, timed, fitted into today)
@@ -145,7 +145,7 @@ A: B: in phases, in the order listed in the Plan.
 - Calendar-style blocks: a tinted card with a coloured bar on the left (red = high priority, grey = done, with a ✓). Big enough blocks show the parent task's name above the title.
 - Day chips show "Today" or the weekday, the date, and the number of tasks. Hour labels are short ("4 PM"), with half-hour lines when zoomed in. The now line has a dot, and Busy blocks are dashed outlines.
 
-### Phase 5: Adaptive estimates (in progress, not committed yet)
+### Phase 5: Adaptive estimates
 - Every AI task keeps its original estimate. The first time it's ticked done, the app records how long it really took:
   - ticked while it's running → time since it started (at least 5 min);
   - ticked after it ended (or "Done ✓" on the check-in) → its length, including any "Need more time" push-backs or duration changes;
@@ -158,3 +158,7 @@ A: B: in phases, in the order listed in the Plan.
 ### How the work was split
 - Claude did the harder parts (scheduler, pinning and moving, timeline, prompts, notifications) and reviewed everything.
 - Small, mechanical UI edits went to opencode (GLM 5.3 Flash) from written specs. Claude then reviewed and fixed them (e.g. a duplicate button, a Section syntax error, a simplified time label).
+
+### Renamed to brickbybrick (2026-11-12)
+- App, Xcode targets, scheme, folders and bundle id (`com.chuahchengxi.brickbybrick`) renamed from Focusedhouse. It installs as a new app, so old on-device data stays in the old one.
+- Repo moved to https://github.com/swiftinsg/brickbybrick.
