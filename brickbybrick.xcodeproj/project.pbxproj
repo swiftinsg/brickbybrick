@@ -11,12 +11,15 @@
 		0BC27B0B6B2E495F6E78BE82 /* PlannerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E98D86AEEBBD14AFB1776E95 /* PlannerTests.swift */; };
 		0D4FCBA57D23DF892D66496F /* Scheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5BCC361708AEA99AD39AD8F /* Scheduler.swift */; };
 		0E26D4F65C4D6B1A04FC25FF /* Planner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADF47A616AC95EA8F982681 /* Planner.swift */; };
+		1ECC88793385EF6CD757FFB1 /* TodoItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 961FC91DAF1948FF8AF42C11 /* TodoItem.swift */; };
 		37E9AEE18A53BB7782566A9B /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61762F006A0C5336D075932C /* SettingsView.swift */; };
 		386821A46268EA512BCD741C /* SubtaskEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4B9B99F4C83C5C7AF524E1 /* SubtaskEditor.swift */; };
 		5114A631B5264B48568B575E /* PlanTimeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = C228424E44EE090EE3F2E9B4 /* PlanTimeline.swift */; };
 		5C31AE9F33EE98543DD6F94F /* PinTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E378B3E89C826810A78C6B6 /* PinTests.swift */; };
+		63246D9CA5AFED6435DC60C3 /* TaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5103F7C88F6F0D32C1F5E956 /* TaskView.swift */; };
 		66961EB27BA8E03A5BF122C9 /* BrickByBrickApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000AFAAAF3E31920DB5244ED /* BrickByBrickApp.swift */; };
 		877F7180B7C745070DB972C9 /* CalendarSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D3423EC25CB2F6AB07CA025 /* CalendarSync.swift */; };
+		8ACB8ABB8D6B2CA0F3D7E4A6 /* NewTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14BE29C8102EB22CFF96AF08 /* NewTaskView.swift */; };
 		9C372016696C91FF60338226 /* NewPlanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BBB7DA0B668CDE6EBFBBD6C /* NewPlanView.swift */; };
 		A479CAA0863B9BF1BCED94C5 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6353C84493B0F59DD2940254 /* Models.swift */; };
 		B234AB0D777A590F7EBB6991 /* CalendarTipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B71408BD45002B222E5B5FB /* CalendarTipView.swift */; };
@@ -38,14 +41,17 @@
 /* Begin PBXFileReference section */
 		000AFAAAF3E31920DB5244ED /* BrickByBrickApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrickByBrickApp.swift; sourceTree = "<group>"; };
 		1078D99946C40897C1B0BD4A /* SchedulerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchedulerTests.swift; sourceTree = "<group>"; };
+		14BE29C8102EB22CFF96AF08 /* NewTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTaskView.swift; sourceTree = "<group>"; };
 		1C3B0BE19C2CD843DC012E82 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		4D3423EC25CB2F6AB07CA025 /* CalendarSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarSync.swift; sourceTree = "<group>"; };
 		4E378B3E89C826810A78C6B6 /* PinTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinTests.swift; sourceTree = "<group>"; };
+		5103F7C88F6F0D32C1F5E956 /* TaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskView.swift; sourceTree = "<group>"; };
 		61762F006A0C5336D075932C /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		6353C84493B0F59DD2940254 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		691861C606F3F35D098BC113 /* brickbybrickTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = brickbybrickTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6B71408BD45002B222E5B5FB /* CalendarTipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarTipView.swift; sourceTree = "<group>"; };
 		7BBB7DA0B668CDE6EBFBBD6C /* NewPlanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPlanView.swift; sourceTree = "<group>"; };
+		961FC91DAF1948FF8AF42C11 /* TodoItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoItem.swift; sourceTree = "<group>"; };
 		9AB02D955D9BFB6AD987B3E3 /* PlanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanView.swift; sourceTree = "<group>"; };
 		B5BCC361708AEA99AD39AD8F /* Scheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scheduler.swift; sourceTree = "<group>"; };
 		C228424E44EE090EE3F2E9B4 /* PlanTimeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanTimeline.swift; sourceTree = "<group>"; };
@@ -84,6 +90,7 @@
 				1C3B0BE19C2CD843DC012E82 /* ContentView.swift */,
 				6353C84493B0F59DD2940254 /* Models.swift */,
 				7BBB7DA0B668CDE6EBFBBD6C /* NewPlanView.swift */,
+				14BE29C8102EB22CFF96AF08 /* NewTaskView.swift */,
 				FADF47A616AC95EA8F982681 /* Planner.swift */,
 				C228424E44EE090EE3F2E9B4 /* PlanTimeline.swift */,
 				9AB02D955D9BFB6AD987B3E3 /* PlanView.swift */,
@@ -91,6 +98,8 @@
 				B5BCC361708AEA99AD39AD8F /* Scheduler.swift */,
 				61762F006A0C5336D075932C /* SettingsView.swift */,
 				FC4B9B99F4C83C5C7AF524E1 /* SubtaskEditor.swift */,
+				5103F7C88F6F0D32C1F5E956 /* TaskView.swift */,
+				961FC91DAF1948FF8AF42C11 /* TodoItem.swift */,
 			);
 			path = brickbybrick;
 			sourceTree = "<group>";
@@ -195,6 +204,7 @@
 				D87E32B90D743EDA79EB553C /* ContentView.swift in Sources */,
 				A479CAA0863B9BF1BCED94C5 /* Models.swift in Sources */,
 				9C372016696C91FF60338226 /* NewPlanView.swift in Sources */,
+				8ACB8ABB8D6B2CA0F3D7E4A6 /* NewTaskView.swift in Sources */,
 				5114A631B5264B48568B575E /* PlanTimeline.swift in Sources */,
 				C8428787E0AC0B8FF7345CE7 /* PlanView.swift in Sources */,
 				0E26D4F65C4D6B1A04FC25FF /* Planner.swift in Sources */,
@@ -202,6 +212,8 @@
 				0D4FCBA57D23DF892D66496F /* Scheduler.swift in Sources */,
 				37E9AEE18A53BB7782566A9B /* SettingsView.swift in Sources */,
 				386821A46268EA512BCD741C /* SubtaskEditor.swift in Sources */,
+				63246D9CA5AFED6435DC60C3 /* TaskView.swift in Sources */,
+				1ECC88793385EF6CD757FFB1 /* TodoItem.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
