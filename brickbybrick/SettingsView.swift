@@ -8,6 +8,7 @@ struct SettingsView: View {
     @AppStorage("schoolStart") private var schoolStart = 480
     @AppStorage("schoolEnd") private var schoolEnd = 900
     @AppStorage("hasSchool") private var hasSchool = true
+    @AppStorage("useRoutine") private var useRoutine = true
     @AppStorage("autoAddToCalendar") private var autoAddToCalendar = false
     @AppStorage("askFreeTime") private var askFreeTime = false
     @State private var pace = Planner.pace()
@@ -15,15 +16,29 @@ struct SettingsView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("My routine") {
-                    DatePicker("Wake up", selection: minutesBinding($wake), displayedComponents: .hourAndMinute)
-                    DatePicker("Bedtime", selection: minutesBinding($bed), displayedComponents: .hourAndMinute)
+                Section {
+                    Toggle("Follow a routine", isOn: $useRoutine.animation())
+                    if useRoutine {
+                        DatePicker("Wake up", selection: minutesBinding($wake), displayedComponents: .hourAndMinute)
+                        DatePicker("Bedtime", selection: minutesBinding($bed), displayedComponents: .hourAndMinute)
+                    }
+                } header: {
+                    Text("My routine")
+                } footer: {
+                    Text(useRoutine ? "Tasks are only scheduled between wake-up and bedtime\(hasSchool ? ", outside school hours" : "")."
+                                    : "No routine (e.g. holidays): tasks can go anywhere from 8 AM to 11 PM, around your Calendar events.")
                 }
-                Section("School") {
-                    Toggle("School on weekdays", isOn: $hasSchool)
-                    if hasSchool {
-                        DatePicker("School starts", selection: minutesBinding($schoolStart), displayedComponents: .hourAndMinute)
-                        DatePicker("School ends", selection: minutesBinding($schoolEnd), displayedComponents: .hourAndMinute)
+                if useRoutine {
+                    Section {
+                        Toggle("School on weekdays", isOn: $hasSchool.animation())
+                        if hasSchool {
+                            DatePicker("School starts", selection: minutesBinding($schoolStart), displayedComponents: .hourAndMinute)
+                            DatePicker("School ends", selection: minutesBinding($schoolEnd), displayedComponents: .hourAndMinute)
+                        }
+                    } header: {
+                        Text("School")
+                    } footer: {
+                        Text("Turn off for school holidays.")
                     }
                 }
                 Section {
@@ -56,10 +71,6 @@ struct SettingsView: View {
                     NavigationLink("How to connect Google Calendar") {
                         CalendarTipView()
                     }
-                }
-                Section {
-                } footer: {
-                    Text("Tasks are only scheduled between wake-up and bedtime, outside school hours.")
                 }
             }
             .navigationTitle("Settings")

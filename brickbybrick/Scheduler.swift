@@ -8,8 +8,13 @@ struct Routine: Sendable {
     var schoolEnd = 15 * 60
     var hasSchool = true
 
-    static var current: Routine {
-        let d = UserDefaults.standard
+    /// No fixed routine (e.g. holidays): any time from 8 AM to 11 PM, no school.
+    static let loose = Routine(wake: 8 * 60, bed: 23 * 60, hasSchool: false)
+
+    static var current: Routine { from(.standard) }
+
+    static func from(_ d: UserDefaults) -> Routine {
+        if d.object(forKey: "useRoutine") != nil, !d.bool(forKey: "useRoutine") { return .loose }
         var r = Routine()
         if d.object(forKey: "wake") != nil { r.wake = d.integer(forKey: "wake") }
         if d.object(forKey: "bed") != nil { r.bed = d.integer(forKey: "bed") }
