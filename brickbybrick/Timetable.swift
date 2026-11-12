@@ -6,13 +6,19 @@ import EventKit
 import FoundationModels
 import UniformTypeIdentifiers
 
-/// One weekly class. `weekday` is Calendar's (1 = Sunday); times are minutes since midnight.
+/// One class. `weekday` is Calendar's (1 = Sunday); times are minutes since midnight.
+/// Week A/B (odd/even) lessons happen every other week.
 struct Lesson: Identifiable, Equatable {
     var id = UUID()
     var subject: String
     var weekday: Int
     var start: Int
     var end: Int
+    var week = Week.every
+}
+
+enum Week: String, CaseIterable {
+    case every = "Every week", a = "Week A", b = "Week B"
 }
 
 @Generable struct DraftTimetable {
@@ -29,6 +35,9 @@ struct Lesson: Identifiable, Equatable {
     @Guide(description: "Start minute", .range(0...59)) var startMinute: Int
     @Guide(description: "End hour, 24-hour clock", .range(0...23)) var endHour: Int
     @Guide(description: "End minute", .range(0...59)) var endMinute: Int
+    @Guide(description: "A if only in Week A (odd weeks), B if only in Week B (even weeks), every if the timetable has one week or the lesson is in both",
+           .anyOf(["every", "A", "B"]))
+    var week: String
 }
 
 enum Timetable {
@@ -53,7 +62,9 @@ enum Timetable {
             You read a student's school timetable. List every lesson with its day, start and end time. \
             Rows or columns are usually days and periods; a period's times apply to every lesson in it. \
             Times like 1:30 in the afternoon are 13:30. Skip breaks, recess and lunch. \
-            A lesson spanning two periods is one lesson from the first start to the last end.
+            A lesson spanning two periods is one lesson from the first start to the last end. \
+            Some timetables have two weeks (Week A and Week B, or odd and even weeks): mark each \
+            lesson with its week, and list a lesson that's the same in both weeks once, as every.
             """)
         let draft = try await session.respond(to: Prompt {
             "Timetable text (cells separated by |):\n\(text)"
@@ -68,19 +79,28 @@ enum Timetable {
         guard let day = weekdays.firstIndex(of: d.weekday), !subject.isEmpty,
               !["break", "recess", "lunch"].contains(subject.lowercased()) else { return nil }
         let start = d.startHour * 60 + d.startMinute, end = d.endHour * 60 + d.endMinute
-        return end > start ? Lesson(subject: subject, weekday: day + 1, start: start, end: end) : nil
+        let week: Week = d.week == "A" ? .a : d.week == "B" ? .b : .every
+        return end > start ? Lesson(subject: subject, weekday: day + 1, start: start, end: end, week: week) : nil
     }
 
-    /// The first time this lesson happens on or after `from`.
-    static func firstDate(of lesson: Lesson, from: Date, calendar cal: Calendar = .current) -> Date {
-        let day = cal.nextDate(after: cal.startOfDay(for: from).addingTimeInterval(-1),
+    /// The first time this lesson happens on or after `from`. For a Week A/B
+    /// lesson, `thisWeekIsA` says which week `from` is in.
+    static func firstDate(of lesson: Lesson, from: Date, thisWeekIsA: Bool = true,
+                          calendar cal: Calendar = .current) -> Date {
+        var day = cal.nextDate(after: cal.startOfDay(for: from).addingTimeInterval(-1),
                                matching: DateComponents(weekday: lesson.weekday), matchingPolicy: .nextTime)!
+        if lesson.week != .every {
+            let thisWeek = cal.dateInterval(of: .weekOfYear, for: from)!.start
+            let weeksLater = cal.dateComponents([.weekOfYear], from: thisWeek, to: day).weekOfYear ?? 0
+            let isA = thisWeekIsA == weeksLater.isMultiple(of: 2)
+            if isA != (lesson.week == .a) { day = cal.date(byAdding: .day, value: 7, to: day)! }
+        }
         return cal.date(byAdding: .minute, value: lesson.start, to: day)!
     }
 
     /// Weekly repeating events until `until`. A re-import replaces the last one.
     /// The scheduler then treats lessons as busy time, like any Calendar event.
-    @MainActor static func addToCalendar(_ lessons: [Lesson], until: Date) async throws {
+    @MainActor static func addToCalendar(_ lessons: [Lesson], until: Date, thisWeekIsA: Bool = true) async throws {
         guard await CalendarSync.requestAccess() else { throw CalendarError.noAccess }
         let store = CalendarSync.store
         guard let calendar = store.defaultCalendarForNewEvents else { throw CalendarError.noCalendar }
@@ -91,11 +111,11 @@ enum Timetable {
         for lesson in lessons {
             let event = EKEvent(eventStore: store)
             event.calendar = calendar
-            event.title = lesson.subject
-            event.startDate = firstDate(of: lesson, from: .now)
+            event.title = lesson.week == .every ? lesson.subject : "\(lesson.subject) (\(lesson.week.rawValue))"
+            event.startDate = firstDate(of: lesson, from: .now, thisWeekIsA: thisWeekIsA)
             event.endDate = event.startDate.addingTimeInterval(TimeInterval((lesson.end - lesson.start) * 60))
             event.notes = "From brickbybrick · School timetable"
-            event.addRecurrenceRule(EKRecurrenceRule(recurrenceWith: .weekly, interval: 1,
+            event.addRecurrenceRule(EKRecurrenceRule(recurrenceWith: .weekly, interval: lesson.week == .every ? 1 : 2,
                                                      end: EKRecurrenceEnd(end: until)))
             try store.save(event, span: .futureEvents, commit: false)
             ids.append(event.eventIdentifier)
@@ -125,6 +145,8 @@ struct TimetableView: View {
     @State private var isWorking = false
     @State private var message: String?
     @State private var until = Calendar.current.date(byAdding: .month, value: 3, to: .now)!
+    @State private var twoWeeks = false
+    @State private var thisWeekIsA = true
 
     var body: some View {
         Form {
@@ -144,6 +166,18 @@ struct TimetableView: View {
                 HStack { ProgressView(); Text("Reading your timetable…") }
             }
 
+            Section {
+                Toggle("Week A / Week B timetable", isOn: $twoWeeks.animation())
+                if twoWeeks {
+                    Picker("This week is", selection: $thisWeekIsA) {
+                        Text("Week A (odd)").tag(true)
+                        Text("Week B (even)").tag(false)
+                    }
+                }
+            } footer: {
+                Text("For timetables that alternate every other week, like odd and even weeks.")
+            }
+
             Section("Lessons") {
                 ForEach($lessons) { $lesson in
                     VStack(alignment: .leading) {
@@ -156,6 +190,11 @@ struct TimetableView: View {
                             DatePicker("to", selection: minutes($lesson.end), displayedComponents: .hourAndMinute)
                         }
                         .labelsHidden()
+                        if twoWeeks {
+                            Picker("Week", selection: $lesson.week) {
+                                ForEach(Week.allCases, id: \.self) { Text($0.rawValue).tag($0) }
+                            }
+                        }
                     }
                 }
                 .onDelete { lessons.remove(atOffsets: $0) }
@@ -205,6 +244,7 @@ struct TimetableView: View {
         do {
             let found = try await Timetable.read(try await load())
             lessons = found.sorted { ($0.weekday, $0.start) < ($1.weekday, $1.start) }
+            if found.contains(where: { $0.week != .every }) { twoWeeks = true }
             if found.isEmpty { message = "No lessons found. Add them yourself below." }
         } catch {
             message = error.localizedDescription
@@ -226,9 +266,11 @@ struct TimetableView: View {
     }
 
     private func add() async {
+        // Turning the A/B toggle off makes every lesson weekly again.
         let ready = lessons.filter { !$0.subject.trimmingCharacters(in: .whitespaces).isEmpty && $0.end > $0.start }
+            .map { var l = $0; if !twoWeeks { l.week = .every }; return l }
         do {
-            try await Timetable.addToCalendar(ready, until: until)
+            try await Timetable.addToCalendar(ready, until: until, thisWeekIsA: thisWeekIsA)
             dismiss()
         } catch {
             message = error.localizedDescription
