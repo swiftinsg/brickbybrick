@@ -45,6 +45,17 @@ import EventKit
         return count
     }
 
+    /// True when every scheduled task already has a matching Calendar event,
+    /// so "Update Calendar" would change nothing.
+    static func isUpToDate(_ plan: Plan) -> Bool {
+        guard hasAccess else { return false }
+        return plan.tasks.allSatisfy { t in
+            guard let start = t.start, let end = t.end else { return true }
+            guard let event = t.eventID.flatMap(store.event(withIdentifier:)) else { return false }
+            return event.startDate == start && event.endDate == end && event.title == t.title
+        }
+    }
+
     /// Removes the Calendar events of tasks that are being deleted.
     static func remove(_ tasks: [PlanTask]) {
         guard hasAccess else { return }

@@ -36,24 +36,88 @@ enum PlanMode: String, CaseIterable {
     }
 
     /// Recompute start times of unfinished tasks from the plan start, in order,
-    /// around Calendar events (not this plan's own) and around finished tasks,
-    /// which keep their times. Then re-arm the reminders.
+    /// around Calendar events (not this plan's own), finished tasks (which keep
+    /// their times) and tasks the student pinned. A dragged task starts no earlier
+    /// than where it was dropped.
+    /// Then list order follows time, and reminders are re-armed.
     @MainActor func reflow() {
         let list = ordered
-        let pending = list.filter { !$0.done }
-        let finished = list.filter(\.done).compactMap { t in t.start.map { $0..<t.end! } }
+        for task in list where task.pinned != nil && !task.done { task.start = task.pinned }
+        let fixed = list.filter { $0.done || $0.pinned != nil }.compactMap { t in t.start.map { $0..<t.end! } }
+        let flowing = list.filter { !$0.done && $0.pinned == nil }
         let busy = CalendarSync.busy(from: start, days: days, excluding: Set(list.compactMap(\.eventID)))
-        let starts = Scheduler.schedule(pending.map { ($0.minutes, $0.day) }, from: start,
-                                        routine: routine, busy: busy + finished)
-        for (task, s) in zip(pending, starts) { task.start = s }
+        let starts = Scheduler.schedule(flowing.map { ($0.minutes, $0.day) }, from: start,
+                                        routine: routine, busy: busy + fixed,
+                                        notBefore: flowing.map(\.notBefore))
+        for (task, s) in zip(flowing, starts) { task.start = s }
+        for (i, task) in list.enumerated().sorted(by: {
+            ($0.element.start ?? .distantFuture, $0.offset) < ($1.element.start ?? .distantFuture, $1.offset)
+        }).map(\.element).enumerated() { task.order = i }
         Reminders.sync(self)
     }
 
     /// "Need more time": the task runs longer and everything after it shifts later
     /// (past bedtime it moves to the next free morning).
+    /// Timeline drag: the task moves to `date`, among the other tasks by time.
+    /// It isn't pinned (the timeline asks first), so it can still be pushed
+    /// later if earlier tasks run over.
+    @MainActor func move(_ task: PlanTask, to date: Date) {
+        let cal = Calendar.current
+        task.day = max(1, (cal.dateComponents([.day], from: cal.startOfDay(for: start), to: cal.startOfDay(for: date)).day ?? 0) + 1)
+        task.pinned = nil
+        task.notBefore = date
+        // Slot it in among the other tasks by time, so it flows from there.
+        var list = ordered.filter { $0 !== task }
+        let index = list.firstIndex { ($0.start ?? .distantFuture) >= date } ?? list.count
+        list.insert(task, at: index)
+        for (i, t) in list.enumerated() { t.order = i }
+        reflow()
+    }
+
     @MainActor func pushBack(_ task: PlanTask, by minutes: Int) {
         task.minutes += minutes
         reflow()
+    }
+}
+
+extension Plan {
+    /// Deletes tasks with their Calendar events and reminders, then reflows.
+    @MainActor func delete(_ gone: [PlanTask]) {
+        CalendarSync.remove(gone)
+        Reminders.cancel(gone)
+        tasks.removeAll { t in gone.contains { $0 === t } }
+        gone.forEach { modelContext?.delete($0) }
+        for (i, task) in ordered.enumerated() { task.order = i }
+        reflow()
+    }
+
+    /// A new, empty subtask right after `last`, on the same day with the same
+    /// category, priority and parent.
+    @MainActor func addSubtask(after last: PlanTask) -> PlanTask {
+        let task = PlanTask(title: "", category: last.category, minutes: 20, day: last.day, order: 0)
+        task.priority = last.priority
+        task.parent = last.parent
+        var list = ordered
+        list.insert(task, at: (list.firstIndex { $0 === last } ?? list.count - 1) + 1)
+        tasks.append(task)
+        for (i, t) in list.enumerated() { t.order = i }
+        reflow()
+        return task
+    }
+
+    /// Groups `subtasks` under `name`. Blank subtasks are dropped, and a single
+    /// subtask with the item's own name stays a plain task. A breakdown of 2+
+    /// subtasks is remembered so the AI suggests similar ones next time.
+    @MainActor func saveSubtasks(_ subtasks: [PlanTask], name: String) {
+        let name = name.trimmingCharacters(in: .whitespaces)
+        let blank = subtasks.filter { $0.title.trimmingCharacters(in: .whitespaces).isEmpty }
+        let kept = subtasks.filter { t in !blank.contains { $0 === t } }
+        let standalone = name.isEmpty || kept.count == 1 && kept[0].title == name
+        kept.forEach { $0.parent = standalone ? "" : name }
+        if !standalone, kept.count >= 2 {
+            Planner.remember(item: name, steps: kept.map { ($0.title, $0.minutes) })
+        }
+        if blank.isEmpty { reflow() } else { delete(blank) }
     }
 }
 
@@ -75,8 +139,11 @@ extension Date {
     var done = false
     var eventID: String?   // Calendar event, once added
     var priority = 1       // 0 high, 1 normal, 2 low
-    var section = ""       // topic from the study material
+    /// The bigger item this is a subtask of ("English essay"), or empty for a standalone task.
+    @Attribute(originalName: "section") var parent = ""
     var uid: UUID?         // stable id for reminders; set on first use
+    var pinned: Date?      // fixed time, set only by the student ("Pin time")
+    var notBefore: Date?   // dropped here on the timeline; may still be pushed later
     var plan: Plan?
 
     init(title: String, category: String, minutes: Int, day: Int, order: Int) {

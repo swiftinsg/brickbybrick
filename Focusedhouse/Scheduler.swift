@@ -41,16 +41,19 @@ enum Scheduler {
     /// `day` (1-based) is the earliest plan day a task may start on.
     /// A task that doesn't fit before bedtime moves to the next free window.
     /// `busy` (calendar events) is never scheduled over.
+    /// `notBefore[i]` (a timeline drag) is the earliest task `i` may start; it can
+    /// still be pushed later if earlier tasks run over.
     static func schedule(_ tasks: [(minutes: Int, day: Int)], from start: Date,
-                         routine: Routine, busy: [Range<Date>] = [],
+                         routine: Routine, busy: [Range<Date>] = [], notBefore: [Date?] = [],
                          calendar: Calendar = .current) -> [Date] {
         let firstDay = calendar.startOfDay(for: start)
         var cursor = start
-        return tasks.map { task in
+        return tasks.enumerated().map { i, task in
             let length = TimeInterval(max(task.minutes, 1) * 60)
             if let dayStart = calendar.date(byAdding: .day, value: max(task.day, 1) - 1, to: firstDay) {
                 cursor = max(cursor, dayStart)
             }
+            if i < notBefore.count, let earliest = notBefore[i] { cursor = max(cursor, earliest) }
             let slot = firstFit(after: cursor, length: length, routine: routine, busy: busy, calendar: calendar)
             cursor = slot + length
             return slot
