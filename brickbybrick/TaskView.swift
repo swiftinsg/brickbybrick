@@ -22,6 +22,21 @@ struct TaskView: View {
     @Query var tasks: [TodoItem]
     @State private var isAddingTask = false
     @State private var sortOption: TaskSortOption = .priority
+    @State private var isPlanning = false
+    @State private var path: [Plan] = []
+
+    /// The inbox as a Today-mode dump, one to-do per line. "!" and "can wait"
+    /// set priority (the planner reads them). Avoid the word "due": it marks high.
+    private var dump: String {
+        sortedTasks.map { t in
+            let by = " (by \(t.dueDate.formatted(.dateTime.weekday().day().month())))"
+            switch t.priority {
+            case .high: return t.name + " !" + by
+            case .low: return t.name + " (can wait)" + by
+            case .medium: return t.name + by
+            }
+        }.joined(separator: "\n")
+    }
 
     /// Tasks currently shown, ordered by the selected sort option.
     private var sortedTasks: [TodoItem] {
@@ -51,7 +66,7 @@ struct TaskView: View {
     }
     
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $path) {
             List {
                 ForEach(sortedTasks) { task in
                     HStack {
@@ -82,6 +97,26 @@ struct TaskView: View {
                 .onDelete(perform: deleteTasks)
             }
             .navigationTitle("Tasks")
+            .navigationDestination(for: Plan.self) { PlanView(plan: $0) }
+            .safeAreaInset(edge: .bottom) {
+                if !tasks.isEmpty {
+                    Button { isPlanning = true } label: {
+                        Label("Plan these", systemImage: "sparkles").font(.headline).frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.glassProminent)
+                    .controlSize(.large)
+                    .padding()
+                }
+            }
+            .sheet(isPresented: $isPlanning) {
+                NewPlanView(initialInput: dump) { plan in
+                    // Planned to-dos now live in the plan. Manual mode ignores the
+                    // text, so an empty plan keeps them in the inbox.
+                    if !plan.tasks.isEmpty { tasks.forEach(modelContext.delete) }
+                    isPlanning = false
+                    path.append(plan)
+                }
+            }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Menu {

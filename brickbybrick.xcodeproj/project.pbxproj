@@ -11,6 +11,7 @@
 		0BC27B0B6B2E495F6E78BE82 /* PlannerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E98D86AEEBBD14AFB1776E95 /* PlannerTests.swift */; };
 		0D4FCBA57D23DF892D66496F /* Scheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5BCC361708AEA99AD39AD8F /* Scheduler.swift */; };
 		0E26D4F65C4D6B1A04FC25FF /* Planner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADF47A616AC95EA8F982681 /* Planner.swift */; };
+		193091EA98FC1DE8E51823D9 /* MonthGridTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6638FCAF84E53D354AE6CED7 /* MonthGridTests.swift */; };
 		1ECC88793385EF6CD757FFB1 /* TodoItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 961FC91DAF1948FF8AF42C11 /* TodoItem.swift */; };
 		37E9AEE18A53BB7782566A9B /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61762F006A0C5336D075932C /* SettingsView.swift */; };
 		386821A46268EA512BCD741C /* SubtaskEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4B9B99F4C83C5C7AF524E1 /* SubtaskEditor.swift */; };
@@ -24,6 +25,7 @@
 		A479CAA0863B9BF1BCED94C5 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6353C84493B0F59DD2940254 /* Models.swift */; };
 		B234AB0D777A590F7EBB6991 /* CalendarTipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B71408BD45002B222E5B5FB /* CalendarTipView.swift */; };
 		B34245E8CCF82E430131504C /* SchedulerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1078D99946C40897C1B0BD4A /* SchedulerTests.swift */; };
+		C107F9079E94F6AE13E4E6AE /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1CDE7F6858E568F06C5995 /* CalendarView.swift */; };
 		C8428787E0AC0B8FF7345CE7 /* PlanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AB02D955D9BFB6AD987B3E3 /* PlanView.swift */; };
 		D87E32B90D743EDA79EB553C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C3B0BE19C2CD843DC012E82 /* ContentView.swift */; };
 /* End PBXBuildFile section */
@@ -48,9 +50,11 @@
 		5103F7C88F6F0D32C1F5E956 /* TaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskView.swift; sourceTree = "<group>"; };
 		61762F006A0C5336D075932C /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		6353C84493B0F59DD2940254 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		6638FCAF84E53D354AE6CED7 /* MonthGridTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthGridTests.swift; sourceTree = "<group>"; };
 		691861C606F3F35D098BC113 /* brickbybrickTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = brickbybrickTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6B71408BD45002B222E5B5FB /* CalendarTipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarTipView.swift; sourceTree = "<group>"; };
 		7BBB7DA0B668CDE6EBFBBD6C /* NewPlanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPlanView.swift; sourceTree = "<group>"; };
+		7C1CDE7F6858E568F06C5995 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		961FC91DAF1948FF8AF42C11 /* TodoItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoItem.swift; sourceTree = "<group>"; };
 		9AB02D955D9BFB6AD987B3E3 /* PlanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanView.swift; sourceTree = "<group>"; };
 		B5BCC361708AEA99AD39AD8F /* Scheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scheduler.swift; sourceTree = "<group>"; };
@@ -87,6 +91,7 @@
 				000AFAAAF3E31920DB5244ED /* BrickByBrickApp.swift */,
 				4D3423EC25CB2F6AB07CA025 /* CalendarSync.swift */,
 				6B71408BD45002B222E5B5FB /* CalendarTipView.swift */,
+				7C1CDE7F6858E568F06C5995 /* CalendarView.swift */,
 				1C3B0BE19C2CD843DC012E82 /* ContentView.swift */,
 				6353C84493B0F59DD2940254 /* Models.swift */,
 				7BBB7DA0B668CDE6EBFBBD6C /* NewPlanView.swift */,
@@ -107,6 +112,7 @@
 		A9B8631DFE5B0475504BA704 /* brickbybrickTests */ = {
 			isa = PBXGroup;
 			children = (
+				6638FCAF84E53D354AE6CED7 /* MonthGridTests.swift */,
 				4E378B3E89C826810A78C6B6 /* PinTests.swift */,
 				E98D86AEEBBD14AFB1776E95 /* PlannerTests.swift */,
 				1078D99946C40897C1B0BD4A /* SchedulerTests.swift */,
@@ -188,6 +194,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				193091EA98FC1DE8E51823D9 /* MonthGridTests.swift in Sources */,
 				5C31AE9F33EE98543DD6F94F /* PinTests.swift in Sources */,
 				0BC27B0B6B2E495F6E78BE82 /* PlannerTests.swift in Sources */,
 				B34245E8CCF82E430131504C /* SchedulerTests.swift in Sources */,
@@ -201,6 +208,7 @@
 				66961EB27BA8E03A5BF122C9 /* BrickByBrickApp.swift in Sources */,
 				877F7180B7C745070DB972C9 /* CalendarSync.swift in Sources */,
 				B234AB0D777A590F7EBB6991 /* CalendarTipView.swift in Sources */,
+				C107F9079E94F6AE13E4E6AE /* CalendarView.swift in Sources */,
 				D87E32B90D743EDA79EB553C /* ContentView.swift in Sources */,
 				A479CAA0863B9BF1BCED94C5 /* Models.swift in Sources */,
 				9C372016696C91FF60338226 /* NewPlanView.swift in Sources */,

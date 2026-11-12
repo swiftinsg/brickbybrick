@@ -2,6 +2,7 @@ import SwiftUI
 import SwiftData
 
 struct NewPlanView: View {
+    var initialInput = ""
     var onCreate: (Plan) -> Void
 
     @Environment(\.modelContext) private var context
@@ -105,6 +106,7 @@ struct NewPlanView: View {
             }
             .navigationTitle("New plan")
             .onAppear {
+                if input.isEmpty { input = initialInput }
                 freeFrom = start
                 freeUntil = Calendar.current.startOfDay(for: .now).addingTimeInterval(TimeInterval(bed * 60))
             }

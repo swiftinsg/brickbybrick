@@ -162,3 +162,7 @@ A: B: in phases, in the order listed in the Plan.
 ### Renamed to brickbybrick (2026-11-12)
 - App, Xcode targets, scheme, folders and bundle id (`com.chuahchengxi.brickbybrick`) renamed from Focusedhouse. It installs as a new app, so old on-device data stays in the old one.
 - Repo moved to https://github.com/swiftinsg/brickbybrick.
+
+### Calendar home + Tasks inbox (2026-11-12)
+- **Calendar tab** (first tab): a custom month grid (dot = something still to do that day; ‹ › change month); below it, everything on the picked day. That's the scheduled tasks from all plans (tick them there; tap to open the plan) plus inbox to-dos due that day ("not planned yet").
+- **Tasks tab = inbox**: "Plan these" opens New Plan with every open to-do, one per line. High → "!", low → "(can wait)", due date → "(by Fri 14 Nov)" (not "due", which the planner reads as high priority). Once the AI makes the plan, those to-dos leave the inbox. Manual mode keeps them.

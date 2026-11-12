@@ -14,6 +14,7 @@ struct BrickByBrickApp: App {
     var body: some Scene {
         WindowGroup {
             TabView {
+                Tab("Calendar", systemImage: "calendar.day.timeline.left") { CalendarView() }
                 Tab("Plans", systemImage: "calendar") { ContentView() }
                 Tab("Tasks", systemImage: "checklist") {
                     TaskView(minimumDueDate: .distantPast, sortOrder: [])
