@@ -32,7 +32,11 @@ enum PlanMode: String, CaseIterable {
     /// The routine this plan schedules into: the "ask each time" answer, or Settings.
     var routine: Routine {
         guard let freeFrom, let freeUntil else { return .current }
-        return Routine(wake: freeFrom, bed: freeUntil, hasSchool: false)
+        // Keep school hours: a multi-day plan must still avoid lessons on school days.
+        var r = Routine.current
+        r.wake = freeFrom
+        r.bed = freeUntil
+        return r
     }
 
     /// Recompute start times of unfinished tasks from the plan start, in order,

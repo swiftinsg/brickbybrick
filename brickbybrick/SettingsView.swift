@@ -35,10 +35,15 @@ struct SettingsView: View {
                             DatePicker("School starts", selection: minutesBinding($schoolStart), displayedComponents: .hourAndMinute)
                             DatePicker("School ends", selection: minutesBinding($schoolEnd), displayedComponents: .hourAndMinute)
                         }
+                        NavigationLink {
+                            TimetableView()
+                        } label: {
+                            Label("Add timetable to Calendar", systemImage: "tablecells")
+                        }
                     } header: {
                         Text("School")
                     } footer: {
-                        Text("Turn off for school holidays.")
+                        Text("Turn off for school holidays. Add your timetable from a photo or PDF so plans also avoid lessons that run late, like CCAs.")
                     }
                 }
                 Section {
