@@ -1,14 +1,31 @@
-name: Focusedhouse
+name: brickbybrick
 options:
   bundleIdPrefix: com.chuahchengxi
   deploymentTarget:
     iOS: "27.2"
 targets:
-  Focusedhouse:
+  brickbybrick:
     type: application
     platform: iOS
-    sources: [Focusedhouse]
+    sources: [brickbybrick]
     settings:
       GENERATE_INFOPLIST_FILE: YES
       INFOPLIST_KEY_UILaunchScreen_Generation: YES
+      INFOPLIST_KEY_NSCalendarsFullAccessUsageDescription: "brickbybrick plans around your calendar events and can add your tasks to Calendar."
       SWIFT_VERSION: "6.0"
+  brickbybrickTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources: [brickbybrickTests]
+    dependencies:
+      - target: brickbybrick
+    settings:
+      GENERATE_INFOPLIST_FILE: YES
+      SWIFT_VERSION: "6.0"
+schemes:
+  brickbybrick:
+    build:
+      targets:
+        brickbybrick: all
+    test:
+      targets: [brickbybrickTests]
