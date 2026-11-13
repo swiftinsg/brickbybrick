@@ -32,6 +32,7 @@ struct PlanView: View {
         }
         .navigationTitle(showTimeline ? plan.title : "")
         .navigationBarTitleDisplayMode(.inline)
+        .paperBackground()
         .toolbar {
             ToolbarItem(placement: .principal) {
                 Picker("View", selection: $showTimeline) {

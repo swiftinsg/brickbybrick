@@ -43,7 +43,7 @@ struct SubtaskEditor: View {
                     Button("Done") { dismiss() }
                 }
             }
-            .navigationTitle("Subtasks")
+            .pixelTitle("Subtasks")
             .navigationBarTitleDisplayMode(.inline)
         }
         .onDisappear(perform: save)   // Done and swipe-to-close both save

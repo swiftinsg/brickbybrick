@@ -52,7 +52,7 @@ struct ContentView: View {
                                            description: Text("Tap + to plan your day or a goal."))
                 }
             }
-            .navigationTitle("Schedule")
+            .pixelTitle("Schedule")
             .navigationDestination(for: Plan.self) { PlanView(plan: $0) }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {

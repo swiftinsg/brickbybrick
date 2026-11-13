@@ -219,7 +219,7 @@ struct TimetableView: View {
                 Text(message).foregroundStyle(.red)
             }
         }
-        .navigationTitle("School timetable")
+        .pixelTitle("School timetable")
         .onChange(of: photo) {
             guard let photo else { return }
             Task {

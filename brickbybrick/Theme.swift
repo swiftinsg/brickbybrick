@@ -48,6 +48,25 @@ extension View {
     }
 }
 
+extension View {
+    /// The paper behind a list or form, as on Home.
+    func paperBackground() -> some View {
+        scrollContentBackground(.hidden).background(Color.paper)
+    }
+
+    /// Home's look for a screen: an inline title in the pixel font, on paper.
+    func pixelTitle(_ title: String) -> some View {
+        navigationTitle(title)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text(title).font(.pixel(22, relativeTo: .headline).weight(.bold))
+                }
+            }
+            .paperBackground()
+    }
+}
+
 extension Image {
     /// A pixel-art asset scaled up without blurring.
     func pixelArt() -> some View {
