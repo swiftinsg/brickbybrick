@@ -12,28 +12,47 @@
 		0BC27B0B6B2E495F6E78BE82 /* PlannerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E98D86AEEBBD14AFB1776E95 /* PlannerTests.swift */; };
 		0D4FCBA57D23DF892D66496F /* Scheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5BCC361708AEA99AD39AD8F /* Scheduler.swift */; };
 		0E26D4F65C4D6B1A04FC25FF /* Planner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADF47A616AC95EA8F982681 /* Planner.swift */; };
+		113CD13440F3FD8641F3683F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A3CDFF5EAFAF8FE5AB88D2C2 /* Assets.xcassets */; };
 		193091EA98FC1DE8E51823D9 /* MonthGridTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6638FCAF84E53D354AE6CED7 /* MonthGridTests.swift */; };
+		1B64813E9B270B943C75E509 /* OFL.txt in Resources */ = {isa = PBXBuildFile; fileRef = 9B47B33615CABF55EFAF182B /* OFL.txt */; };
 		1ECC88793385EF6CD757FFB1 /* TodoItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 961FC91DAF1948FF8AF42C11 /* TodoItem.swift */; };
+		30E593FFDE56AD3CA95BEF7D /* PixelifySans.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FE078B3FD49F0C6F5EF20DB4 /* PixelifySans.ttf */; };
+		329D81D26491C2BAA885791A /* RestMonitor.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = FDCA6D752515C8C3B96D5406 /* RestMonitor.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		375769E4FD8A886E7172A595 /* ScreenTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B8FCA50CFC796E95567DD6E /* ScreenTime.swift */; };
 		37E9AEE18A53BB7782566A9B /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61762F006A0C5336D075932C /* SettingsView.swift */; };
 		386821A46268EA512BCD741C /* SubtaskEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4B9B99F4C83C5C7AF524E1 /* SubtaskEditor.swift */; };
+		46B9DC5BDD61075A1A12DD4A /* RestMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7F357A96B85FC7B03548BDA /* RestMonitor.swift */; };
+		4B923B7408E11DFF84C37AF5 /* HouseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335E1C87B92E0212AF7D7333 /* HouseTests.swift */; };
 		5114A631B5264B48568B575E /* PlanTimeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = C228424E44EE090EE3F2E9B4 /* PlanTimeline.swift */; };
 		5C31AE9F33EE98543DD6F94F /* PinTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E378B3E89C826810A78C6B6 /* PinTests.swift */; };
 		63246D9CA5AFED6435DC60C3 /* TaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5103F7C88F6F0D32C1F5E956 /* TaskView.swift */; };
 		66961EB27BA8E03A5BF122C9 /* BrickByBrickApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000AFAAAF3E31920DB5244ED /* BrickByBrickApp.swift */; };
 		66B0F847DA45F2BF0701ACF4 /* RoutineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA200A07635BA7E68F2F0DB /* RoutineTests.swift */; };
+		75D356AB62E4C59A147C7CDB /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B20B753770513A9445A1C96 /* Theme.swift */; };
 		7DF311B9B5ED3258114E0A3F /* TimetableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1067B340CF5AE069BF26E28F /* TimetableTests.swift */; };
 		877F7180B7C745070DB972C9 /* CalendarSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D3423EC25CB2F6AB07CA025 /* CalendarSync.swift */; };
 		8ACB8ABB8D6B2CA0F3D7E4A6 /* NewTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14BE29C8102EB22CFF96AF08 /* NewTaskView.swift */; };
 		9C372016696C91FF60338226 /* NewPlanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BBB7DA0B668CDE6EBFBBD6C /* NewPlanView.swift */; };
 		A479CAA0863B9BF1BCED94C5 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6353C84493B0F59DD2940254 /* Models.swift */; };
 		B234AB0D777A590F7EBB6991 /* CalendarTipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B71408BD45002B222E5B5FB /* CalendarTipView.swift */; };
+		B2473763ED44364B7511135F /* RestLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB270F6B61A2E52BBB75D03 /* RestLog.swift */; };
 		B34245E8CCF82E430131504C /* SchedulerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1078D99946C40897C1B0BD4A /* SchedulerTests.swift */; };
+		B3C1F5A1FD983BEF56F6C33D /* RestLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB270F6B61A2E52BBB75D03 /* RestLog.swift */; };
+		B3CF67E74FA8DDD29CB0E19C /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D75BF2D6CD60F4D56CB5CB30 /* HomeView.swift */; };
 		C107F9079E94F6AE13E4E6AE /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1CDE7F6858E568F06C5995 /* CalendarView.swift */; };
 		C8428787E0AC0B8FF7345CE7 /* PlanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AB02D955D9BFB6AD987B3E3 /* PlanView.swift */; };
 		D87E32B90D743EDA79EB553C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C3B0BE19C2CD843DC012E82 /* ContentView.swift */; };
+		ECDE298CD59918A08AADBC2F /* House.swift in Sources */ = {isa = PBXBuildFile; fileRef = F51092ACA615645D71F966C6 /* House.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		5CCF0A9F9A497C7711A556F9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 440832D98C526B668A145575 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F7685D28524F7E17FA5E633A;
+			remoteInfo = RestMonitor;
+		};
 		65045FE47DD19D0710D61BC8 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 440832D98C526B668A145575 /* Project object */;
@@ -43,12 +62,31 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		4EA9896ED7510963F46911A5 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				329D81D26491C2BAA885791A /* RestMonitor.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		000AFAAAF3E31920DB5244ED /* BrickByBrickApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrickByBrickApp.swift; sourceTree = "<group>"; };
+		0B20B753770513A9445A1C96 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		1067B340CF5AE069BF26E28F /* TimetableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableTests.swift; sourceTree = "<group>"; };
 		1078D99946C40897C1B0BD4A /* SchedulerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchedulerTests.swift; sourceTree = "<group>"; };
 		14BE29C8102EB22CFF96AF08 /* NewTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTaskView.swift; sourceTree = "<group>"; };
 		1C3B0BE19C2CD843DC012E82 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		23867F0D3252AF8ECFD64446 /* brickbybrick.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = brickbybrick.entitlements; sourceTree = "<group>"; };
+		2DB270F6B61A2E52BBB75D03 /* RestLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestLog.swift; sourceTree = "<group>"; };
+		335E1C87B92E0212AF7D7333 /* HouseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HouseTests.swift; sourceTree = "<group>"; };
+		3B8FCA50CFC796E95567DD6E /* ScreenTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenTime.swift; sourceTree = "<group>"; };
 		4D3423EC25CB2F6AB07CA025 /* CalendarSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarSync.swift; sourceTree = "<group>"; };
 		4E378B3E89C826810A78C6B6 /* PinTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinTests.swift; sourceTree = "<group>"; };
 		5103F7C88F6F0D32C1F5E956 /* TaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskView.swift; sourceTree = "<group>"; };
@@ -62,22 +100,42 @@
 		8FBF899B2B46589B6446F175 /* Timetable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Timetable.swift; sourceTree = "<group>"; };
 		961FC91DAF1948FF8AF42C11 /* TodoItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoItem.swift; sourceTree = "<group>"; };
 		9AB02D955D9BFB6AD987B3E3 /* PlanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanView.swift; sourceTree = "<group>"; };
+		9B47B33615CABF55EFAF182B /* OFL.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = OFL.txt; sourceTree = "<group>"; };
+		A3CDFF5EAFAF8FE5AB88D2C2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B5BCC361708AEA99AD39AD8F /* Scheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scheduler.swift; sourceTree = "<group>"; };
 		C228424E44EE090EE3F2E9B4 /* PlanTimeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanTimeline.swift; sourceTree = "<group>"; };
 		C6776605B0E918954DD5F8D5 /* brickbybrick.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = brickbybrick.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEA200A07635BA7E68F2F0DB /* RoutineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutineTests.swift; sourceTree = "<group>"; };
 		CF4682920E48DC1C5D2B7984 /* Reminders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reminders.swift; sourceTree = "<group>"; };
+		D39571C9A5415E3D1A23DA8B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		D75BF2D6CD60F4D56CB5CB30 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		D7F357A96B85FC7B03548BDA /* RestMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestMonitor.swift; sourceTree = "<group>"; };
+		E30D0D0F7DBAFDAEFD5D759B /* RestMonitor.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RestMonitor.entitlements; sourceTree = "<group>"; };
 		E98D86AEEBBD14AFB1776E95 /* PlannerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlannerTests.swift; sourceTree = "<group>"; };
+		F51092ACA615645D71F966C6 /* House.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = House.swift; sourceTree = "<group>"; };
 		FADF47A616AC95EA8F982681 /* Planner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Planner.swift; sourceTree = "<group>"; };
 		FC4B9B99F4C83C5C7AF524E1 /* SubtaskEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubtaskEditor.swift; sourceTree = "<group>"; };
+		FDCA6D752515C8C3B96D5406 /* RestMonitor.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = RestMonitor.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		FE078B3FD49F0C6F5EF20DB4 /* PixelifySans.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = PixelifySans.ttf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
+		06718407158C702AD8244D68 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				9B47B33615CABF55EFAF182B /* OFL.txt */,
+				FE078B3FD49F0C6F5EF20DB4 /* PixelifySans.ttf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
 		3F2AC2981E41E12CACD7783B = {
 			isa = PBXGroup;
 			children = (
 				59BA4DBA712059002D798BE5 /* brickbybrick */,
 				A9B8631DFE5B0475504BA704 /* brickbybrickTests */,
+				E4E2152832C5949C5EF037DE /* RestMonitor */,
+				BA589065091A2F29CB296216 /* Shared */,
 				46A9F444C61FE3DFACF4C180 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -87,6 +145,7 @@
 			children = (
 				C6776605B0E918954DD5F8D5 /* brickbybrick.app */,
 				691861C606F3F35D098BC113 /* brickbybrickTests.xctest */,
+				FDCA6D752515C8C3B96D5406 /* RestMonitor.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -94,11 +153,15 @@
 		59BA4DBA712059002D798BE5 /* brickbybrick */ = {
 			isa = PBXGroup;
 			children = (
+				A3CDFF5EAFAF8FE5AB88D2C2 /* Assets.xcassets */,
+				23867F0D3252AF8ECFD64446 /* brickbybrick.entitlements */,
 				000AFAAAF3E31920DB5244ED /* BrickByBrickApp.swift */,
 				4D3423EC25CB2F6AB07CA025 /* CalendarSync.swift */,
 				6B71408BD45002B222E5B5FB /* CalendarTipView.swift */,
 				7C1CDE7F6858E568F06C5995 /* CalendarView.swift */,
 				1C3B0BE19C2CD843DC012E82 /* ContentView.swift */,
+				D75BF2D6CD60F4D56CB5CB30 /* HomeView.swift */,
+				F51092ACA615645D71F966C6 /* House.swift */,
 				6353C84493B0F59DD2940254 /* Models.swift */,
 				7BBB7DA0B668CDE6EBFBBD6C /* NewPlanView.swift */,
 				14BE29C8102EB22CFF96AF08 /* NewTaskView.swift */,
@@ -107,11 +170,14 @@
 				9AB02D955D9BFB6AD987B3E3 /* PlanView.swift */,
 				CF4682920E48DC1C5D2B7984 /* Reminders.swift */,
 				B5BCC361708AEA99AD39AD8F /* Scheduler.swift */,
+				3B8FCA50CFC796E95567DD6E /* ScreenTime.swift */,
 				61762F006A0C5336D075932C /* SettingsView.swift */,
 				FC4B9B99F4C83C5C7AF524E1 /* SubtaskEditor.swift */,
 				5103F7C88F6F0D32C1F5E956 /* TaskView.swift */,
+				0B20B753770513A9445A1C96 /* Theme.swift */,
 				8FBF899B2B46589B6446F175 /* Timetable.swift */,
 				961FC91DAF1948FF8AF42C11 /* TodoItem.swift */,
+				06718407158C702AD8244D68 /* Fonts */,
 			);
 			path = brickbybrick;
 			sourceTree = "<group>";
@@ -119,6 +185,7 @@
 		A9B8631DFE5B0475504BA704 /* brickbybrickTests */ = {
 			isa = PBXGroup;
 			children = (
+				335E1C87B92E0212AF7D7333 /* HouseTests.swift */,
 				6638FCAF84E53D354AE6CED7 /* MonthGridTests.swift */,
 				4E378B3E89C826810A78C6B6 /* PinTests.swift */,
 				E98D86AEEBBD14AFB1776E95 /* PlannerTests.swift */,
@@ -127,6 +194,24 @@
 				1067B340CF5AE069BF26E28F /* TimetableTests.swift */,
 			);
 			path = brickbybrickTests;
+			sourceTree = "<group>";
+		};
+		BA589065091A2F29CB296216 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				2DB270F6B61A2E52BBB75D03 /* RestLog.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		E4E2152832C5949C5EF037DE /* RestMonitor */ = {
+			isa = PBXGroup;
+			children = (
+				D39571C9A5415E3D1A23DA8B /* Info.plist */,
+				E30D0D0F7DBAFDAEFD5D759B /* RestMonitor.entitlements */,
+				D7F357A96B85FC7B03548BDA /* RestMonitor.swift */,
+			);
+			path = RestMonitor;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -155,10 +240,13 @@
 			buildConfigurationList = 9B3FA74FF9C09EEA04844974 /* Build configuration list for PBXNativeTarget "brickbybrick" */;
 			buildPhases = (
 				C1D405CA0322A61A914A8EAF /* Sources */,
+				EDE168BEBDD544396A95E952 /* Resources */,
+				4EA9896ED7510963F46911A5 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				FCD59F5BCD9B63F762C594C2 /* PBXTargetDependency */,
 			);
 			name = brickbybrick;
 			packageProductDependencies = (
@@ -166,6 +254,23 @@
 			productName = brickbybrick;
 			productReference = C6776605B0E918954DD5F8D5 /* brickbybrick.app */;
 			productType = "com.apple.product-type.application";
+		};
+		F7685D28524F7E17FA5E633A /* RestMonitor */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7A90835DD3AB12FB284052DF /* Build configuration list for PBXNativeTarget "RestMonitor" */;
+			buildPhases = (
+				E2ABEAF69F5E865009FC0422 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RestMonitor;
+			packageProductDependencies = (
+			);
+			productName = RestMonitor;
+			productReference = FDCA6D752515C8C3B96D5406 /* RestMonitor.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -193,16 +298,31 @@
 			projectRoot = "";
 			targets = (
 				9A00C6506A5B61B17D927ED6 /* brickbybrick */,
+				F7685D28524F7E17FA5E633A /* RestMonitor */,
 				6A1194E65355EFECF4BA57CF /* brickbybrickTests */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		EDE168BEBDD544396A95E952 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				113CD13440F3FD8641F3683F /* Assets.xcassets in Resources */,
+				1B64813E9B270B943C75E509 /* OFL.txt in Resources */,
+				30E593FFDE56AD3CA95BEF7D /* PixelifySans.ttf in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		6E25F4395A5E8414A4C44F3B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4B923B7408E11DFF84C37AF5 /* HouseTests.swift in Sources */,
 				193091EA98FC1DE8E51823D9 /* MonthGridTests.swift in Sources */,
 				5C31AE9F33EE98543DD6F94F /* PinTests.swift in Sources */,
 				0BC27B0B6B2E495F6E78BE82 /* PlannerTests.swift in Sources */,
@@ -221,6 +341,8 @@
 				B234AB0D777A590F7EBB6991 /* CalendarTipView.swift in Sources */,
 				C107F9079E94F6AE13E4E6AE /* CalendarView.swift in Sources */,
 				D87E32B90D743EDA79EB553C /* ContentView.swift in Sources */,
+				B3CF67E74FA8DDD29CB0E19C /* HomeView.swift in Sources */,
+				ECDE298CD59918A08AADBC2F /* House.swift in Sources */,
 				A479CAA0863B9BF1BCED94C5 /* Models.swift in Sources */,
 				9C372016696C91FF60338226 /* NewPlanView.swift in Sources */,
 				8ACB8ABB8D6B2CA0F3D7E4A6 /* NewTaskView.swift in Sources */,
@@ -228,12 +350,24 @@
 				C8428787E0AC0B8FF7345CE7 /* PlanView.swift in Sources */,
 				0E26D4F65C4D6B1A04FC25FF /* Planner.swift in Sources */,
 				087DE87C04091AD5BFCCC992 /* Reminders.swift in Sources */,
+				B3C1F5A1FD983BEF56F6C33D /* RestLog.swift in Sources */,
 				0D4FCBA57D23DF892D66496F /* Scheduler.swift in Sources */,
+				375769E4FD8A886E7172A595 /* ScreenTime.swift in Sources */,
 				37E9AEE18A53BB7782566A9B /* SettingsView.swift in Sources */,
 				386821A46268EA512BCD741C /* SubtaskEditor.swift in Sources */,
 				63246D9CA5AFED6435DC60C3 /* TaskView.swift in Sources */,
+				75D356AB62E4C59A147C7CDB /* Theme.swift in Sources */,
 				044039521BB20E124D4D5331 /* Timetable.swift in Sources */,
 				1ECC88793385EF6CD757FFB1 /* TodoItem.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E2ABEAF69F5E865009FC0422 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B2473763ED44364B7511135F /* RestLog.swift in Sources */,
+				46B9DC5BDD61075A1A12DD4A /* RestMonitor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -244,6 +378,11 @@
 			isa = PBXTargetDependency;
 			target = 9A00C6506A5B61B17D927ED6 /* brickbybrick */;
 			targetProxy = 65045FE47DD19D0710D61BC8 /* PBXContainerItemProxy */;
+		};
+		FCD59F5BCD9B63F762C594C2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F7685D28524F7E17FA5E633A /* RestMonitor */;
+			targetProxy = 5CCF0A9F9A497C7711A556F9 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -406,7 +545,8 @@
 		B83D113469845CB41DC835CE /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "";
+				CODE_SIGN_ENTITLEMENTS = brickbybrick/brickbybrick.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSCalendarsFullAccessUsageDescription = "brickbybrick plans around your calendar events and can add your tasks to Calendar.";
@@ -422,10 +562,28 @@
 			};
 			name = Release;
 		};
+		C4B6474C3E51DE53F604C5E9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = RestMonitor/RestMonitor.entitlements;
+				INFOPLIST_FILE = RestMonitor/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.chuahchengxi.brickbybrick.RestMonitor;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		D90BEFB071EE58DCFCACD533 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "";
+				CODE_SIGN_ENTITLEMENTS = brickbybrick/brickbybrick.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSCalendarsFullAccessUsageDescription = "brickbybrick plans around your calendar events and can add your tasks to Calendar.";
@@ -441,9 +599,35 @@
 			};
 			name = Debug;
 		};
+		FE9842D3BF0357420F9D604E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = RestMonitor/RestMonitor.entitlements;
+				INFOPLIST_FILE = RestMonitor/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.chuahchengxi.brickbybrick.RestMonitor;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		7A90835DD3AB12FB284052DF /* Build configuration list for PBXNativeTarget "RestMonitor" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FE9842D3BF0357420F9D604E /* Debug */,
+				C4B6474C3E51DE53F604C5E9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 		9B3FA74FF9C09EEA04844974 /* Build configuration list for PBXNativeTarget "brickbybrick" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

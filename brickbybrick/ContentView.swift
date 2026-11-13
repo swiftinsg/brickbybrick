@@ -6,7 +6,6 @@ struct ContentView: View {
     @Query(sort: \Plan.createdAt, order: .reverse) private var plans: [Plan]
     @State private var path: [Plan] = []
     @State private var showNew = false
-    @State private var showSettings = false
     @AppStorage("seenCalendarTip") private var seenCalendarTip = false
     @State private var calendarError: String?
 
@@ -53,12 +52,9 @@ struct ContentView: View {
                                            description: Text("Tap + to plan your day or a goal."))
                 }
             }
-            .navigationTitle("brickbybrick")
+            .navigationTitle("Schedule")
             .navigationDestination(for: Plan.self) { PlanView(plan: $0) }
             .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Button("Settings", systemImage: "gearshape") { showSettings = true }
-                }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("New plan", systemImage: "plus") { showNew = true }
                 }
@@ -66,7 +62,6 @@ struct ContentView: View {
             .alert("Couldn't add to Calendar", isPresented: Binding(get: { calendarError != nil }, set: { if !$0 { calendarError = nil } })) {
                 Button("OK") {}
             } message: { Text(calendarError ?? "") }
-            .sheet(isPresented: $showSettings) { SettingsView() }
             .sheet(isPresented: .constant(!seenCalendarTip)) {
                 NavigationStack {
                     CalendarTipView()

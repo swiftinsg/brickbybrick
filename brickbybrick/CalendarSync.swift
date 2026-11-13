@@ -24,6 +24,15 @@ import EventKit
             .compactMap { $0.startDate < $0.endDate ? $0.startDate..<$0.endDate : nil }
     }
 
+    /// Timed events the student attends between `from` and `to` (not "free" ones,
+    /// not the ones brickbybrick wrote for tasks), for stress on Home.
+    static func attended(from: Date, to: Date, excluding own: Set<String>) -> [(title: String, start: Date, minutes: Int)] {
+        guard hasAccess else { return [] }
+        return store.events(matching: store.predicateForEvents(withStart: from, end: to, calendars: nil))
+            .filter { !$0.isAllDay && $0.availability != .free && !own.contains($0.eventIdentifier ?? "") }
+            .map { ($0.title ?? "", $0.startDate, Int($0.endDate.timeIntervalSince($0.startDate) / 60)) }
+    }
+
     /// Creates or updates one event per scheduled task. Returns how many were written.
     static func add(_ plan: Plan) async throws -> Int {
         guard await requestAccess() else { throw CalendarError.noAccess }

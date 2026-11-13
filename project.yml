@@ -7,11 +7,36 @@ targets:
   brickbybrick:
     type: application
     platform: iOS
-    sources: [brickbybrick]
+    sources: [brickbybrick, Shared]
+    entitlements:
+      path: brickbybrick/brickbybrick.entitlements
+      properties: &ents
+        com.apple.developer.family-controls: true
+        com.apple.security.application-groups: [group.com.chuahchengxi.brickbybrick]
+    dependencies:
+      - target: RestMonitor
     settings:
       GENERATE_INFOPLIST_FILE: YES
       INFOPLIST_KEY_UILaunchScreen_Generation: YES
       INFOPLIST_KEY_NSCalendarsFullAccessUsageDescription: "brickbybrick plans around your calendar events and can add your tasks to Calendar."
+      SWIFT_VERSION: "6.0"
+      ASSETCATALOG_COMPILER_APPICON_NAME: ""   # no app icon yet
+  RestMonitor:
+    type: app-extension
+    platform: iOS
+    sources: [RestMonitor, Shared]
+    info:
+      path: RestMonitor/Info.plist
+      properties:
+        CFBundleDisplayName: RestMonitor
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.deviceactivity.monitor-extension
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).RestMonitor
+    entitlements:
+      path: RestMonitor/RestMonitor.entitlements
+      properties: *ents
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.chuahchengxi.brickbybrick.RestMonitor
       SWIFT_VERSION: "6.0"
   brickbybrickTests:
     type: bundle.unit-test
