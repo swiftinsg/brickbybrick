@@ -49,8 +49,6 @@ enum House {
     static let todoMinutes = 30
     /// Rest in one day (waking hours) that repairs one step.
     static let restGoal: TimeInterval = 3 * 3600
-    /// A shorter time away doesn't count as rest at all.
-    static let minBreak: TimeInterval = 30 * 60
     static let todoBricks = 3
     static let dailyBrickCap = 100
 
@@ -105,39 +103,13 @@ enum House {
     }
 }
 
-/// Time away from the app, per day. When brickbybrick goes to the background
-/// the time is saved; when it's opened again the gap is added, counting only
-/// waking hours (sleep isn't "rest from the phone") and only gaps of 30+ min.
-// ponytail: measures time away from this app, not the whole phone. Switch to
-// Screen Time (DeviceActivity, needs Apple's Family Controls approval) for real
-// phone-free time.
-struct RestLog: Codable, Equatable {
-    var seconds: [String: TimeInterval] = [:]
-
-    static func key(_ day: Date, _ calendar: Calendar) -> String {
-        String(Int(calendar.startOfDay(for: day).timeIntervalSinceReferenceDate))
-    }
-
-    func seconds(on day: Date, calendar: Calendar = .current) -> TimeInterval {
-        seconds[Self.key(day, calendar)] ?? 0
-    }
-
+/// Fallback rest when Screen Time is off: time away from this app. When
+/// brickbybrick goes to the background the time is saved; when it's opened again
+/// the gap is added (waking hours only, 30+ min).
+extension RestLog {
     mutating func add(from: Date, to: Date, routine: Routine, calendar: Calendar = .current) {
-        guard to.timeIntervalSince(from) >= House.minBreak else { return }
-        var day = calendar.startOfDay(for: from)
-        while day < to {
-            let wake = day.addingTimeInterval(TimeInterval(routine.wake * 60))
-            let bedMinutes = routine.bed <= routine.wake ? routine.bed + 24 * 60 : routine.bed   // bedtime after midnight
-            let bed = day.addingTimeInterval(TimeInterval(bedMinutes * 60))
-            let overlap = min(to, bed).timeIntervalSince(max(from, wake))
-            if overlap > 0 { seconds[Self.key(day, calendar), default: 0] += overlap }
-            day = calendar.date(byAdding: .day, value: 1, to: day)!
-        }
+        add(from: from, to: to, wake: routine.wake, bed: routine.bed, calendar: calendar)
     }
-
-    // Saved in UserDefaults ("restLog"), read by Home through @AppStorage.
-    static func load(_ data: Data) -> RestLog { (try? JSONDecoder().decode(RestLog.self, from: data)) ?? RestLog() }
-    var data: Data { (try? JSONEncoder().encode(self)) ?? Data() }
 
     static func appLeft(at date: Date = .now) {
         UserDefaults.standard.set(date.timeIntervalSinceReferenceDate, forKey: "leftAt")
@@ -148,9 +120,7 @@ struct RestLog: Codable, Equatable {
         guard d.object(forKey: "leftAt") != nil else { return }
         let left = Date(timeIntervalSinceReferenceDate: d.double(forKey: "leftAt"))
         d.removeObject(forKey: "leftAt")
-        var log = load(d.data(forKey: "restLog") ?? Data())
-        log.add(from: left, to: date, routine: .current)
-        d.set(log.data, forKey: "restLog")
+        update { $0.add(from: left, to: date, routine: .current) }
     }
 }
 

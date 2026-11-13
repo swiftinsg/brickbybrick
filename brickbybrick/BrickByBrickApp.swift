@@ -27,9 +27,13 @@ struct BrickByBrickApp: App {
         }
             .modelContainer(container)
             .onChange(of: scenePhase) { _, phase in
-                // Time away from the app counts as rest for the house.
-                if phase == .background { RestLog.appLeft() }
-                if phase == .active { RestLog.appOpened() }
+                // Rest for the house: Screen Time when it's on, else time away from the app.
+                if ScreenTime.isOn {
+                    if phase == .active { ScreenTime.schedule() }   // picks up routine changes
+                } else {
+                    if phase == .background { RestLog.appLeft() }
+                    if phase == .active { RestLog.appOpened() }
+                }
             }
     }
 }

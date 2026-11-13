@@ -67,4 +67,10 @@ struct HouseTests {
         #expect(log.seconds(on: now) == 2 * 3600)          // 7 AM–9 AM, sleep skipped
         #expect(RestLog.load(log.data) == log)
     }
+
+    @Test func restHoursAreHourlyBlocksCappedAtTwenty() {
+        let b = RestHours.blocks(wake: 7 * 60, bed: 22 * 60)
+        #expect(b.count == 15 && b.first?.start == 420 && b.last?.end == 1320)
+        #expect(RestHours.blocks(wake: 6 * 60, bed: 2 * 60).count == 20)   // bedtime after midnight
+    }
 }

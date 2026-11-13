@@ -6,7 +6,7 @@ import SwiftData
 struct HomeView: View {
     @Query private var tasks: [PlanTask]
     @Query private var todos: [TodoItem]
-    @AppStorage("restLog") private var restData = Data()
+    @AppStorage("restLog", store: RestLog.defaults) private var restData = Data()
     @AppStorage("ratings") private var ratingData = Data()
     @State private var events: [(title: String, start: Date, minutes: Int)] = []
     @State private var showSettings = false
@@ -32,7 +32,7 @@ struct HomeView: View {
 
                     VStack(alignment: .leading, spacing: 4) {
                         Text(state.title.uppercased())
-                            .font(.pixel(30, relativeTo: .title).weight(.bold))
+                            .font(.pixel(30, relativeTo: .title))
                             .foregroundStyle(state == .calm || state == .resting ? Color.grass : Color.brick)
                         Text(state.message).font(.subheadline).foregroundStyle(.secondary)
                     }
@@ -62,9 +62,10 @@ struct HomeView: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     // ponytail: just shows the count; opens Upgrades once the furniture shop exists.
                     HStack(spacing: 6) {
-                        Image("icon.brick").pixelArt().frame(width: 22)
-                        Text("\(bricks)").font(.pixel(20, relativeTo: .headline).weight(.bold))
+                        Image("icon.brick").pixelArt().frame(width: 28)
+                        PixelNumber(value: bricks).foregroundStyle(Color.ink)
                     }
+                    .padding(.horizontal, 6)
                     .accessibilityElement(children: .combine)
                     .accessibilityLabel("\(bricks) bricks")
                 }

@@ -78,3 +78,33 @@ struct BrickMeter: View {
         .accessibilityElement(children: .combine)
     }
 }
+
+/// A number drawn as bold 5×7 pixel blocks: pixel style, but every digit is
+/// unmistakable (Pixelify Sans's 8 looks like an S at small sizes).
+struct PixelNumber: View {
+    let value: Int
+    @ScaledMetric(relativeTo: .title3) private var px: CGFloat = 3
+
+    private static let glyphs = [
+        "01110100011001110101110011000101110", "00100011000010000100001000010001110",
+        "01110100010000100010001000100011111", "11110000010000101110000010000111110",
+        "00010001100101010010111110001000010", "11111100001111000001000011000101110",
+        "00110010001000011110100011000101110", "11111000010001000100010000100001000",
+        "01110100011000101110100011000101110", "01110100011000101111000010001001100",
+    ]
+
+    var body: some View {
+        let digits = String(value).compactMap(\.wholeNumberValue)
+        Canvas { ctx, _ in
+            for (i, d) in digits.enumerated() {
+                for (j, c) in Self.glyphs[d].enumerated() where c == "1" {
+                    // 2 px wide = bold, like classic bitmap fonts
+                    ctx.fill(Path(CGRect(x: CGFloat(i * 7 + j % 5) * px, y: CGFloat(j / 5) * px, width: 2 * px, height: px)),
+                             with: .foreground)
+                }
+            }
+        }
+        .frame(width: CGFloat(digits.count * 7 - 1) * px, height: 7 * px)
+        .accessibilityLabel("\(value)")
+    }
+}

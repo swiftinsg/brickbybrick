@@ -11,6 +11,7 @@ struct SettingsView: View {
     @AppStorage("useRoutine") private var useRoutine = true
     @AppStorage("autoAddToCalendar") private var autoAddToCalendar = false
     @AppStorage("askFreeTime") private var askFreeTime = false
+    @AppStorage("screenTimeRest") private var screenTimeRest = false
     @State private var pace = Planner.pace()
 
     var body: some View {
@@ -53,6 +54,18 @@ struct SettingsView: View {
                     Text("Calendar")
                 } footer: {
                     Text("When \"Ask when I'm free\" is on, each new plan asks for your free time instead of using your routine. Calendar events are still avoided.")
+                }
+                Section {
+                    Toggle("Count rest with Screen Time", isOn: $screenTimeRest)
+                        .onChange(of: screenTimeRest) { _, on in
+                            if on { Task { screenTimeRest = await ScreenTime.enable() } } else { ScreenTime.disable() }
+                        }
+                } header: {
+                    Text("Rest")
+                } footer: {
+                    Text(screenTimeRest
+                         ? "Each waking hour you barely use your phone (under \(RestHours.glanceMinutes) min) counts as rest. \(Int(House.restGoal / 3600)) hours a day repairs your house a step."
+                         : "Rest is time away from brickbybrick. Turn on Screen Time to count time away from your whole phone instead.")
                 }
                 Section {
                     ForEach(pace, id: \.category) { p in
