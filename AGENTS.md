@@ -17,6 +17,10 @@ iOS 27.2 SwiftUI app for students and teenagers. On-device Apple Foundation Mode
 - **Editing before accept:** full control: rename/add/delete tasks, change durations (auto-reflow), drag-and-drop on a timeline. "Try again" regenerates.
 - **No Apple Intelligence** (older device / turned off): manual mode, where the student enters tasks and durations. Scheduling, calendar, reminders and check-ins still work; AI features are hidden.
 - **Adaptive estimates (must be personalised):** save plans and actual durations (from check-ins) on device; feed per-category actual/estimate ratios into the model prompt.
+- **House (main page):** Home tab shows a pixel house (sprites from `Art/houses.json`, PNGs via `python3 tools/sprites.py`). Several stressful days in a row damage it (Calm → Stressed → Overloaded → Crumbling); rest repairs one step per day with 3h+ away from the app in waking hours (Resting). Logic in `House.swift`.
+- **Stress:** the AI scores each task, Tasks-tab item and Calendar event 1–10 from its title (cached by title), scaled by the student's pace for that category; ranges 1–3 easy, 4–6 normal, 7–8 hard, 9–10 intense. Easy adds no stress; compulsory things (exams, lessons, set deadlines) count half. Without Apple Intelligence, priority stands in.
+- **Bricks (points):** finished tasks earn 1 per 10 estimated min (×1.5 hard, ×2 intense, 0 easy; Tasks-tab items 3), capped 100/day. Bricks buy furniture (`Art/furniture.json`, Upgrades not built yet); they never repair the house.
+- **Tabs:** Home · Schedule · Tasks · Calendar. Settings opens from Home's menu button. Pixel theme: Pixelify Sans for headings, square borders, brick meters; body text stays system font.
 
 ## Build plan (phases, test each before the next)
 1. **Core:** mode toggle → Foundation Models decomposition + estimates → schedule into routine free time → editable list with auto-reflow → SwiftData persistence. Manual-mode fallback.
@@ -28,5 +32,5 @@ iOS 27.2 SwiftUI app for students and teenagers. On-device Apple Foundation Mode
 ## Working rules
 - Build one phase at a time; stop after each phase for the user to test.
 - Keep it minimal: Apple frameworks only (FoundationModels, SwiftData, EventKit, UserNotifications). No third-party dependencies.
-- Scheduling and push-back are plain deterministic code. Only decomposition, estimates and Re-plan use the model.
+- Scheduling, push-back, stress and bricks are plain deterministic code. Only decomposition, estimates, Re-plan and stress scores use the model.
 - Commit and push to `machine-learning` at the end of each phase.

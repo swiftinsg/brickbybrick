@@ -13,6 +13,7 @@ targets:
       INFOPLIST_KEY_UILaunchScreen_Generation: YES
       INFOPLIST_KEY_NSCalendarsFullAccessUsageDescription: "brickbybrick plans around your calendar events and can add your tasks to Calendar."
       SWIFT_VERSION: "6.0"
+      ASSETCATALOG_COMPILER_APPICON_NAME: ""   # no app icon yet
   brickbybrickTests:
     type: bundle.unit-test
     platform: iOS
