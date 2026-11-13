@@ -576,6 +576,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEVELOPMENT_TEAM = XL5JK4F896;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = focushouse;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSCalendarsFullAccessUsageDescription = "brickbybrick plans around your calendar events and can add your tasks to Calendar.";
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -625,6 +626,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEVELOPMENT_TEAM = XL5JK4F896;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = focushouse;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSCalendarsFullAccessUsageDescription = "brickbybrick plans around your calendar events and can add your tasks to Calendar.";
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
