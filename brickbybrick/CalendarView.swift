@@ -65,7 +65,7 @@ struct CalendarView: View {
                     }
                 }
             }
-            .navigationTitle("Calendar")
+            .pixelTitle("Calendar")
             .navigationDestination(for: Plan.self) { PlanView(plan: $0) }
         }
     }

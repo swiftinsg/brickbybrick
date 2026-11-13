@@ -73,4 +73,17 @@ struct HouseTests {
         #expect(b.count == 15 && b.first?.start == 420 && b.last?.end == 1320)
         #expect(RestHours.blocks(wake: 6 * 60, bed: 2 * 60).count == 20)   // bedtime after midnight
     }
+
+    @Test func shopNeedsLevelOneAndEnoughBricks() {
+        let desk = Furniture(name: "Desk", tag: "Work", description: "", hobby: "desk", level: 1, cost: 40, grid: [])
+        let deluxe = Furniture(name: "Deluxe", tag: "Work", description: "", hobby: "desk", level: 2, cost: 120, grid: [])
+        let all = [desk, deluxe]
+        #expect(Shop.state(desk, owned: [], balance: 39, in: all) == .short(1))
+        #expect(Shop.state(desk, owned: [], balance: 40, in: all) == .buy)
+        #expect(Shop.state(deluxe, owned: [], balance: 500, in: all) == .needs("Desk"))
+        #expect(Shop.state(deluxe, owned: ["Desk"], balance: 120, in: all) == .buy)
+        #expect(Shop.state(desk, owned: ["Desk"], balance: 0, in: all) == .owned)
+        #expect(Shop.spent(["Desk", "Deluxe"], in: all) == 160)
+        #expect(Shop.items.count == 34)   // both JSON files bundled
+    }
 }

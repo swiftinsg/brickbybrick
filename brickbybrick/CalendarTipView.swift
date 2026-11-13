@@ -19,7 +19,7 @@ struct CalendarTipView: View {
                 Text("Plans you add to Calendar from brickbybrick will also show up in Google Calendar.")
             }
         }
-        .navigationTitle("Google Calendar")
+        .pixelTitle("Google Calendar")
     }
 }
 

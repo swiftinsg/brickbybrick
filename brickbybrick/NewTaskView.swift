@@ -43,7 +43,7 @@ struct NewTaskView: View {
                     }
                 }
             }
-            .navigationTitle("New Task")
+            .pixelTitle("New Task")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {

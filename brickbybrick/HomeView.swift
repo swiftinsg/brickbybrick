@@ -10,6 +10,8 @@ struct HomeView: View {
     @AppStorage("ratings") private var ratingData = Data()
     @State private var events: [(title: String, start: Date, minutes: Int)] = []
     @State private var showSettings = false
+    @State private var showUpgrades = false
+    @AppStorage("owned") private var ownedRaw = ""
 
     var body: some View {
         let now = Date.now
@@ -25,13 +27,19 @@ struct HomeView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 18) {
-                    Image("house." + state.rawValue).pixelArt()
-                        .background(state.sky)
-                        .pixelBox()
-                        .accessibilityLabel("Your house: \(state.title)")
+                    ZStack {
+                        HouseScene(state: state)
+                            .background(state.sky)
+                            .id(state)
+                            .transition(.opacity)   // crossfade when the house changes state
+                    }
+                    .animation(.easeInOut(duration: 0.8), value: state)
+                    .pixelBox()
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel("Your house: \(state.title)")
 
                     VStack(alignment: .leading, spacing: 4) {
-                        Text(state.title.uppercased())
+                        Text(state.title)
                             .font(.pixel(30, relativeTo: .title))
                             .foregroundStyle(state == .calm || state == .resting ? Color.grass : Color.brick)
                         Text(state.message).font(.subheadline).foregroundStyle(.secondary)
@@ -60,18 +68,15 @@ struct HomeView: View {
                     Text("brickbybrick").font(.pixel(22, relativeTo: .headline).weight(.bold))
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    // ponytail: just shows the count; opens Upgrades once the furniture shop exists.
-                    HStack(spacing: 6) {
-                        Image("icon.brick").pixelArt().frame(width: 28)
-                        PixelNumber(value: bricks).foregroundStyle(Color.ink)
+                    Button { showUpgrades = true } label: {
+                        BrickCount(value: max(0, bricks - Shop.spent(Shop.owned(ownedRaw))))
                     }
-                    .padding(.horizontal, 6)
-                    .accessibilityElement(children: .combine)
-                    .accessibilityLabel("\(bricks) bricks")
+                    .accessibilityHint("Opens Upgrades")
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
             .sheet(isPresented: $showSettings) { SettingsView() }
+            .sheet(isPresented: $showUpgrades) { UpgradesView(earned: bricks) }
             .task { await refresh() }
         }
     }
@@ -187,4 +192,78 @@ private extension House.State {
 private extension Priority {
     /// The plan tasks' scale: 0 high, 1 normal, 2 low.
     var level: Int { self == .high ? 0 : self == .low ? 2 : 1 }
+}
+
+/// The house sprite with a little life on top, in the sprite's own 32×32 pixels:
+/// chimney smoke when calm, grey smoke when stressed, rain when overloaded,
+/// rain and falling bricks when crumbling, floating Z's and stars when resting.
+/// Off with Reduce Motion.
+private struct HouseScene: View {
+    let state: House.State
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    var body: some View {
+        Image("house." + state.rawValue).pixelArt()
+            .overlay {
+                if !reduceMotion {
+                    // 12 fps on purpose: smooth motion looks wrong on pixel art.
+                    TimelineView(.animation(minimumInterval: 1 / 12)) { timeline in
+                        Canvas { ctx, size in
+                            Self.draw(state, t: timeline.date.timeIntervalSinceReferenceDate, ctx: ctx, px: size.width / 32)
+                        }
+                    }
+                    .clipped()
+                    .allowsHitTesting(false)
+                }
+            }
+    }
+
+    static func draw(_ state: House.State, t: Double, ctx: GraphicsContext, px: CGFloat) {
+        /// One sprite pixel (or a w×h block), snapped to the grid.
+        func dot(_ x: Double, _ y: Double, _ color: Color, w: Double = 1, h: Double = 1) {
+            ctx.fill(Path(CGRect(x: x.rounded() * px, y: y.rounded() * px, width: w * px, height: h * px)), with: .color(color))
+        }
+        /// 0→1 every `period` seconds, offset per particle.
+        func phase(_ period: Double, _ offset: Double) -> Double {
+            (t / period + offset).truncatingRemainder(dividingBy: 1)
+        }
+        func smoke(_ color: Color, period: Double) {
+            for i in 0..<3 {
+                let p = phase(period, Double(i) / 3)
+                let size: Double = p < 0.5 ? 2 : 1
+                dot(16 + p * 4 + sin(p * 6), 3 - p * 5, color.opacity(1 - p), w: size, h: size)
+            }
+        }
+        func rain(_ drops: Int) {
+            for i in 0..<drops {
+                // 37 is coprime with 32, so every drop gets its own column
+                dot(Double((i * 37 + 5) % 32), 4 + phase(0.6, Double(i) * 0.137) * 25,
+                    Color(red: 0.62, green: 0.71, blue: 0.85).opacity(0.85), h: 2)
+            }
+        }
+
+        switch state {
+        case .calm:
+            smoke(.white, period: 3)
+        case .stressed:
+            smoke(Color(white: 0.55), period: 1.8)
+        case .overloaded:
+            rain(8)
+        case .crumbling:
+            rain(16)
+            for (i, x) in [6.0, 23].enumerated() {   // bricks slipping off the eaves
+                let p = phase(2.4, Double(i) / 2)
+                if p < 0.5 { dot(x, 16 + 12 * (p * 2) * (p * 2), Color(red: 0.70, green: 0.29, blue: 0.20), w: 2) }
+            }
+        case .resting:
+            for (i, (x, y)) in [(3.0, 3.0), (9, 1), (13, 6), (30, 9), (19, 1)].enumerated() {
+                dot(x, y, Color(red: 1, green: 0.95, blue: 0.7).opacity(0.3 + 0.7 * max(0, sin(t * 2 + Double(i) * 1.7))))
+            }
+            for i in 0..<2 {
+                let p = phase(4, Double(i) / 2)
+                let (x, y, c) = (25 + p * 3, 5 - p * 6, Color.white.opacity(1 - p))
+                dot(x, y, c, w: 3); dot(x + 1, y + 1, c); dot(x, y + 2, c, w: 3)   // a 3×3 z
+            }
+        }
+    }
 }

@@ -96,7 +96,7 @@ struct TaskView: View {
                 }
                 .onDelete(perform: deleteTasks)
             }
-            .navigationTitle("Tasks")
+            .pixelTitle("Tasks")
             .navigationDestination(for: Plan.self) { PlanView(plan: $0) }
             .safeAreaInset(edge: .bottom) {
                 if !tasks.isEmpty {

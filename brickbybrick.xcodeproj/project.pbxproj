@@ -12,6 +12,7 @@
 		0BC27B0B6B2E495F6E78BE82 /* PlannerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E98D86AEEBBD14AFB1776E95 /* PlannerTests.swift */; };
 		0D4FCBA57D23DF892D66496F /* Scheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5BCC361708AEA99AD39AD8F /* Scheduler.swift */; };
 		0E26D4F65C4D6B1A04FC25FF /* Planner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADF47A616AC95EA8F982681 /* Planner.swift */; };
+		0FD082BE45798A654E53B052 /* Upgrades.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB32FC537908AE3B9F5D3DE /* Upgrades.swift */; };
 		113CD13440F3FD8641F3683F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A3CDFF5EAFAF8FE5AB88D2C2 /* Assets.xcassets */; };
 		193091EA98FC1DE8E51823D9 /* MonthGridTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6638FCAF84E53D354AE6CED7 /* MonthGridTests.swift */; };
 		1B64813E9B270B943C75E509 /* OFL.txt in Resources */ = {isa = PBXBuildFile; fileRef = 9B47B33615CABF55EFAF182B /* OFL.txt */; };
@@ -34,6 +35,7 @@
 		8ACB8ABB8D6B2CA0F3D7E4A6 /* NewTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14BE29C8102EB22CFF96AF08 /* NewTaskView.swift */; };
 		9C372016696C91FF60338226 /* NewPlanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BBB7DA0B668CDE6EBFBBD6C /* NewPlanView.swift */; };
 		A479CAA0863B9BF1BCED94C5 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6353C84493B0F59DD2940254 /* Models.swift */; };
+		A9B791CA7E9F5C4E136CC39E /* furniture.json in Resources */ = {isa = PBXBuildFile; fileRef = 78864437E8B6E36B5A8C0EAB /* furniture.json */; };
 		B234AB0D777A590F7EBB6991 /* CalendarTipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B71408BD45002B222E5B5FB /* CalendarTipView.swift */; };
 		B2473763ED44364B7511135F /* RestLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB270F6B61A2E52BBB75D03 /* RestLog.swift */; };
 		B34245E8CCF82E430131504C /* SchedulerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1078D99946C40897C1B0BD4A /* SchedulerTests.swift */; };
@@ -43,6 +45,7 @@
 		C8428787E0AC0B8FF7345CE7 /* PlanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AB02D955D9BFB6AD987B3E3 /* PlanView.swift */; };
 		D87E32B90D743EDA79EB553C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C3B0BE19C2CD843DC012E82 /* ContentView.swift */; };
 		ECDE298CD59918A08AADBC2F /* House.swift in Sources */ = {isa = PBXBuildFile; fileRef = F51092ACA615645D71F966C6 /* House.swift */; };
+		EEB95E41AA8294753B9CCE7F /* furniture_hobbies.json in Resources */ = {isa = PBXBuildFile; fileRef = 3CEC514F0FB61A570DC148ED /* furniture_hobbies.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -87,6 +90,7 @@
 		2DB270F6B61A2E52BBB75D03 /* RestLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestLog.swift; sourceTree = "<group>"; };
 		335E1C87B92E0212AF7D7333 /* HouseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HouseTests.swift; sourceTree = "<group>"; };
 		3B8FCA50CFC796E95567DD6E /* ScreenTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenTime.swift; sourceTree = "<group>"; };
+		3CEC514F0FB61A570DC148ED /* furniture_hobbies.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = furniture_hobbies.json; sourceTree = "<group>"; };
 		4D3423EC25CB2F6AB07CA025 /* CalendarSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarSync.swift; sourceTree = "<group>"; };
 		4E378B3E89C826810A78C6B6 /* PinTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinTests.swift; sourceTree = "<group>"; };
 		5103F7C88F6F0D32C1F5E956 /* TaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskView.swift; sourceTree = "<group>"; };
@@ -95,6 +99,7 @@
 		6638FCAF84E53D354AE6CED7 /* MonthGridTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthGridTests.swift; sourceTree = "<group>"; };
 		691861C606F3F35D098BC113 /* brickbybrickTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = brickbybrickTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6B71408BD45002B222E5B5FB /* CalendarTipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarTipView.swift; sourceTree = "<group>"; };
+		78864437E8B6E36B5A8C0EAB /* furniture.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = furniture.json; sourceTree = "<group>"; };
 		7BBB7DA0B668CDE6EBFBBD6C /* NewPlanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPlanView.swift; sourceTree = "<group>"; };
 		7C1CDE7F6858E568F06C5995 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		8FBF899B2B46589B6446F175 /* Timetable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Timetable.swift; sourceTree = "<group>"; };
@@ -112,6 +117,7 @@
 		D7F357A96B85FC7B03548BDA /* RestMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestMonitor.swift; sourceTree = "<group>"; };
 		E30D0D0F7DBAFDAEFD5D759B /* RestMonitor.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RestMonitor.entitlements; sourceTree = "<group>"; };
 		E98D86AEEBBD14AFB1776E95 /* PlannerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlannerTests.swift; sourceTree = "<group>"; };
+		EEB32FC537908AE3B9F5D3DE /* Upgrades.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Upgrades.swift; sourceTree = "<group>"; };
 		F51092ACA615645D71F966C6 /* House.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = House.swift; sourceTree = "<group>"; };
 		FADF47A616AC95EA8F982681 /* Planner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Planner.swift; sourceTree = "<group>"; };
 		FC4B9B99F4C83C5C7AF524E1 /* SubtaskEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubtaskEditor.swift; sourceTree = "<group>"; };
@@ -132,6 +138,7 @@
 		3F2AC2981E41E12CACD7783B = {
 			isa = PBXGroup;
 			children = (
+				B71BAC805A11C2B5BC2D066C /* Art */,
 				59BA4DBA712059002D798BE5 /* brickbybrick */,
 				A9B8631DFE5B0475504BA704 /* brickbybrickTests */,
 				E4E2152832C5949C5EF037DE /* RestMonitor */,
@@ -177,6 +184,7 @@
 				0B20B753770513A9445A1C96 /* Theme.swift */,
 				8FBF899B2B46589B6446F175 /* Timetable.swift */,
 				961FC91DAF1948FF8AF42C11 /* TodoItem.swift */,
+				EEB32FC537908AE3B9F5D3DE /* Upgrades.swift */,
 				06718407158C702AD8244D68 /* Fonts */,
 			);
 			path = brickbybrick;
@@ -194,6 +202,15 @@
 				1067B340CF5AE069BF26E28F /* TimetableTests.swift */,
 			);
 			path = brickbybrickTests;
+			sourceTree = "<group>";
+		};
+		B71BAC805A11C2B5BC2D066C /* Art */ = {
+			isa = PBXGroup;
+			children = (
+				3CEC514F0FB61A570DC148ED /* furniture_hobbies.json */,
+				78864437E8B6E36B5A8C0EAB /* furniture.json */,
+			);
+			path = Art;
 			sourceTree = "<group>";
 		};
 		BA589065091A2F29CB296216 /* Shared */ = {
@@ -312,6 +329,8 @@
 				113CD13440F3FD8641F3683F /* Assets.xcassets in Resources */,
 				1B64813E9B270B943C75E509 /* OFL.txt in Resources */,
 				30E593FFDE56AD3CA95BEF7D /* PixelifySans.ttf in Resources */,
+				A9B791CA7E9F5C4E136CC39E /* furniture.json in Resources */,
+				EEB95E41AA8294753B9CCE7F /* furniture_hobbies.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -359,6 +378,7 @@
 				75D356AB62E4C59A147C7CDB /* Theme.swift in Sources */,
 				044039521BB20E124D4D5331 /* Timetable.swift in Sources */,
 				1ECC88793385EF6CD757FFB1 /* TodoItem.swift in Sources */,
+				0FD082BE45798A654E53B052 /* Upgrades.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
