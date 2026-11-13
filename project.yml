@@ -7,7 +7,13 @@ targets:
   brickbybrick:
     type: application
     platform: iOS
-    sources: [brickbybrick, Shared]
+    sources:
+      - brickbybrick
+      - Shared
+      - path: Art/furniture.json   # furniture sprites + prices, drawn at runtime
+        buildPhase: resources
+      - path: Art/furniture_hobbies.json
+        buildPhase: resources
     entitlements:
       path: brickbybrick/brickbybrick.entitlements
       properties: &ents

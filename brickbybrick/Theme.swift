@@ -26,6 +26,8 @@ extension Color {
     static let track = Color(light: 0xEDE6DA, dark: 0x3A3348)
     static let brick = Color(light: 0xB34A34, dark: 0xD9664D)
     static let grass = Color(light: 0x417A3A, dark: 0x74B463)
+    static let gold = Color(light: 0xFFE8B0, dark: 0x8A6A2C)
+    static let wall = Color(light: 0xF6EFE2, dark: 0x332C40)
 
     init(light: UInt32, dark: UInt32) {
         self.init(uiColor: UIColor { $0.userInterfaceStyle == .dark ? UIColor(hex: dark) : UIColor(hex: light) })
@@ -83,10 +85,16 @@ struct BrickMeter: View {
 /// unmistakable (Pixelify Sans's 8 looks like an S at small sizes).
 struct PixelNumber: View {
     let value: Int
-    @ScaledMetric(relativeTo: .title3) private var px: CGFloat = 3
+    @ScaledMetric private var px: CGFloat
+
+    /// `size`: points per pixel block at the default text size.
+    init(value: Int, size: CGFloat = 3) {
+        self.value = value
+        _px = ScaledMetric(wrappedValue: size, relativeTo: .title3)
+    }
 
     private static let glyphs = [
-        "01110100011001110101110011000101110", "00100011000010000100001000010001110",
+        "01110100011000110001100011000101110", "00100011000010000100001000010001110",
         "01110100010000100010001000100011111", "11110000010000101110000010000111110",
         "00010001100101010010111110001000010", "11111100001111000001000011000101110",
         "00110010001000011110100011000101110", "11111000010001000100010000100001000",

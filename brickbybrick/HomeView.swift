@@ -10,6 +10,8 @@ struct HomeView: View {
     @AppStorage("ratings") private var ratingData = Data()
     @State private var events: [(title: String, start: Date, minutes: Int)] = []
     @State private var showSettings = false
+    @State private var showUpgrades = false
+    @AppStorage("owned") private var ownedRaw = ""
 
     var body: some View {
         let now = Date.now
@@ -31,7 +33,7 @@ struct HomeView: View {
                         .accessibilityLabel("Your house: \(state.title)")
 
                     VStack(alignment: .leading, spacing: 4) {
-                        Text(state.title.uppercased())
+                        Text(state.title)
                             .font(.pixel(30, relativeTo: .title))
                             .foregroundStyle(state == .calm || state == .resting ? Color.grass : Color.brick)
                         Text(state.message).font(.subheadline).foregroundStyle(.secondary)
@@ -60,18 +62,15 @@ struct HomeView: View {
                     Text("brickbybrick").font(.pixel(22, relativeTo: .headline).weight(.bold))
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    // ponytail: just shows the count; opens Upgrades once the furniture shop exists.
-                    HStack(spacing: 6) {
-                        Image("icon.brick").pixelArt().frame(width: 28)
-                        PixelNumber(value: bricks).foregroundStyle(Color.ink)
+                    Button { showUpgrades = true } label: {
+                        BrickCount(value: max(0, bricks - Shop.spent(Shop.owned(ownedRaw))))
                     }
-                    .padding(.horizontal, 6)
-                    .accessibilityElement(children: .combine)
-                    .accessibilityLabel("\(bricks) bricks")
+                    .accessibilityHint("Opens Upgrades")
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
             .sheet(isPresented: $showSettings) { SettingsView() }
+            .sheet(isPresented: $showUpgrades) { UpgradesView(earned: bricks) }
             .task { await refresh() }
         }
     }
