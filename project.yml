@@ -3,6 +3,11 @@ options:
   bundleIdPrefix: sg.swiftin
   deploymentTarget:
     iOS: "27.2"
+  xcodeVersion: "27.2"   # Xcode's "recommended settings" check, so it stops asking
+settings:
+  base:   # Xcode 27 recommended settings
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+    STRING_CATALOG_GENERATE_SYMBOLS: YES
 settingGroups:   # Tristan's App Store setup: swiftin team, iPhone only
   phone:
     DEVELOPMENT_TEAM: XL5JK4F896
