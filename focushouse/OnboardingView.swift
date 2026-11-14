@@ -6,6 +6,7 @@ struct OnboardingView: View {
     @AppStorage("seenOnboarding") private var seen = false
     @Environment(\.dismiss) private var dismiss
     @State private var page = 0
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private struct Page {
         let art: String          // asset name
@@ -39,8 +40,7 @@ struct OnboardingView: View {
                     let p = pages[i]
                     VStack(spacing: 24) {
                         Spacer()
-                        Image(p.art).pixelArt()
-                            .frame(maxWidth: p.art.hasPrefix("house") ? 220 : 96)
+                        art(p.art, current: page == i)
                             .accessibilityHidden(true)
                         Text(p.title).font(.pixel(30, relativeTo: .title).weight(.bold))
                             .multilineTextAlignment(.center)
@@ -72,6 +72,41 @@ struct OnboardingView: View {
             }
         }
         .tint(.brick)
+    }
+
+    /// Pops in when its page is current. The house pages show the live house;
+    /// the damage page cycles through every state.
+    @ViewBuilder private func art(_ name: String, current: Bool) -> some View {
+        Group {
+            if name == "house.crumbling" {
+                TimelineView(.periodic(from: .now, by: 1.6)) { t in
+                    let all: [House.State] = [.calm, .stressed, .overloaded, .crumbling, .resting]
+                    let state = all[Int(t.date.timeIntervalSinceReferenceDate / 1.6) % all.count]
+                    VStack(spacing: 8) {
+                        house(state)
+                        Text(state.title).font(.pixel(18, relativeTo: .headline).weight(.bold))
+                            .contentTransition(.opacity)
+                    }
+                    .animation(reduceMotion ? nil : .easeInOut(duration: 0.6), value: state)
+                }
+            } else if name == "house.calm" {
+                house(.calm)
+            } else {
+                Image(name).pixelArt().frame(maxWidth: 96)
+            }
+        }
+        .scaleEffect(current || reduceMotion ? 1 : 0.4)
+        .opacity(current || reduceMotion ? 1 : 0)
+        .rotationEffect(.degrees(current || reduceMotion ? 0 : -12))
+        .animation(.spring(duration: 0.6, bounce: 0.45), value: current)
+    }
+
+    private func house(_ state: House.State) -> some View {
+        HouseScene(state: state)
+            .background(state.sky)
+            .id(state).transition(.opacity)
+            .pixelBox()
+            .frame(maxWidth: 220)
     }
 
     private func finish() {

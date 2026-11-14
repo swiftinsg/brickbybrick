@@ -104,7 +104,7 @@ enum Planner {
             var draft = try await session.respond(to: prompt, generating: DraftPlan.self, options: options).content
             if plan.mode == .today { reconcile(items(plan.input), in: &draft) }
             return tidied(draft)
-        } catch LanguageModelSession.GenerationError.exceededContextWindowSize {
+        } catch LanguageModelError.contextSizeExceeded {
             throw PlannerError.tooLong
         }
     }
@@ -202,7 +202,7 @@ extension Planner {
             """
         do {
             return tidied(try await session.respond(to: prompt, generating: DraftPlan.self).content)
-        } catch LanguageModelSession.GenerationError.exceededContextWindowSize {
+        } catch LanguageModelError.contextSizeExceeded {
             throw PlannerError.tooLong
         }
     }

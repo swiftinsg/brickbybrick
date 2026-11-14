@@ -11,6 +11,10 @@ struct HomeView: View {
     @State private var events: [(title: String, start: Date, minutes: Int)] = []
     @State private var showSettings = false
     @State private var showUpgrades = false
+    @State private var showInside = false
+    @State private var doorStep = 0        // 0 shut, 1 ajar, 2 open
+    @State private var zoomed = false
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @AppStorage("owned") private var ownedRaw = ""
     @AppStorage("insight") private var insight = ""
     @AppStorage("seenOnboarding") private var seenOnboarding = false
@@ -34,9 +38,32 @@ struct HomeView: View {
                             .transition(.opacity)   // crossfade when the house changes state
                     }
                     .animation(.easeInOut(duration: 0.8), value: state)
+                    .overlay {
+                        // the door (sprite pixels 12–17 × 22–29) is a button into the house
+                        GeometryReader { geo in
+                            let px = geo.size.width / 32
+                            Canvas { ctx, _ in Self.drawDoor(ctx, px: px, step: doorStep) }
+                                .allowsHitTesting(false)
+                            Button { enter() } label: { Color.clear.contentShape(Rectangle()) }
+                                .frame(width: 6 * px, height: 8 * px)
+                                .position(x: 15 * px, y: 26 * px)
+                        }
+                    }
+                    .sensoryFeedback(trigger: doorStep) { _, step in
+                        // latch clicks, then the door swings open
+                        switch step {
+                        case 1: .impact(flexibility: .soft, intensity: 0.6)
+                        case 2: .impact(weight: .medium)
+                        default: nil
+                        }
+                    }
+                    .scaleEffect(zoomed ? 4 : 1, anchor: UnitPoint(x: 15 / 32, y: 26 / 32))
+                    .clipped()
                     .pixelBox()
                     .accessibilityElement(children: .ignore)
                     .accessibilityLabel("Your house: \(state.title)")
+                    .accessibilityHint("Double-tap to go inside")
+                    .accessibilityAction { enter() }
                     .tour(.house)
 
                     VStack(alignment: .leading, spacing: 4) {
@@ -83,7 +110,45 @@ struct HomeView: View {
             .navigationBarTitleDisplayMode(.inline)
             .sheet(isPresented: $showSettings) { SettingsView() }
             .sheet(isPresented: $showUpgrades) { UpgradesView(earned: status.earned) }
+            .sheet(isPresented: $showInside, onDismiss: {
+                withAnimation(.easeOut(duration: 0.3)) { zoomed = false }
+                doorStep = 0
+            }) { InsideView(earned: status.earned) }
             .task { await refresh() }
+        }
+    }
+
+    /// Opens the door in two pixel frames, walks in (zooms to the doorway), then
+    /// shows the room. Reduce Motion skips the zoom.
+    private func enter() {
+        guard doorStep == 0 else { return }
+        Task { @MainActor in
+            doorStep = 1
+            try? await Task.sleep(for: .milliseconds(120))
+            doorStep = 2
+            try? await Task.sleep(for: .milliseconds(180))
+            if !reduceMotion {
+                withAnimation(.easeIn(duration: 0.35)) { zoomed = true }
+                try? await Task.sleep(for: .milliseconds(300))
+            }
+            showInside = true
+        }
+    }
+
+    /// The door's open frames, drawn over the sprite's door (columns 14–15, rows 24–27).
+    static func drawDoor(_ ctx: GraphicsContext, px: CGFloat, step: Int) {
+        guard step > 0 else { return }
+        func fill(_ x: Int, _ y: Int, _ w: Int, _ h: Int, _ c: Color) {
+            ctx.fill(Path(CGRect(x: CGFloat(x) * px, y: CGFloat(y) * px, width: CGFloat(w) * px + 0.5, height: CGFloat(h) * px + 0.5)), with: .color(c))
+        }
+        let light = Color(red: 0.96, green: 0.79, blue: 0.36)     // warm room light (palette k)
+        let leaf = Color(red: 0.42, green: 0.27, blue: 0.15)      // door edge (palette d)
+        if step == 1 {                                            // ajar: a sliver of light
+            fill(15, 24, 1, 4, light)
+        } else {                                                  // open: leaf swung in, light spills out
+            fill(14, 24, 1, 4, leaf)
+            fill(15, 24, 1, 4, light)
+            fill(14, 28, 2, 1, light.opacity(0.5))
         }
     }
 
@@ -159,9 +224,45 @@ struct HomeView: View {
             .min { $0.start! < $1.start! }
     }
 
-    static func duration(_ seconds: TimeInterval) -> String {
+    nonisolated static func duration(_ seconds: TimeInterval) -> String {
         let m = Int(seconds / 60)
         return m >= 60 ? (m % 60 == 0 ? "\(m / 60)h" : "\(m / 60)h \(m % 60)m") : "\(m)m"
+    }
+}
+
+/// Inside the house, through the front door: the room with the student's
+/// furniture, and a way to the shop to decorate.
+struct InsideView: View {
+    let earned: Int
+    @State private var showUpgrades = false
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationStack {
+            VStack(alignment: .leading, spacing: 16) {
+                RoomView()
+                Text("Hold and drag your furniture to move it around. Up to \(Shop.roomCap) things fit inside.")
+                    .font(.footnote).foregroundStyle(.secondary)
+                Button { showUpgrades = true } label: {
+                    Label("Decorate with bricks", systemImage: "paintbrush.fill")
+                        .font(.headline).frame(maxWidth: .infinity).padding()
+                        .pixelBox(Color.gold)
+                }
+                .buttonStyle(.plain)
+                Spacer(minLength: 0)
+            }
+            .padding()
+            .foregroundStyle(Color.ink)
+            .background(Color.paper)
+            .pixelTitle("Inside")
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("Leave", systemImage: "door.left.hand.open") { dismiss() }
+                }
+            }
+            .sheet(isPresented: $showUpgrades) { UpgradesView(earned: earned) }
+        }
+        .presentationDetents([.medium, .large])
     }
 }
 
@@ -169,7 +270,7 @@ struct HomeView: View {
 /// chimney smoke when calm, grey smoke when stressed, rain when overloaded,
 /// rain and falling bricks when crumbling, floating Z's and stars when resting.
 /// Off with Reduce Motion.
-private struct HouseScene: View {
+struct HouseScene: View {
     let state: House.State
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 

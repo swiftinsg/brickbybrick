@@ -80,6 +80,8 @@ struct BrickMeter: View {
     let detail: String
     let filled: Int
     let color: Color
+    @State private var shown = 0
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
@@ -90,12 +92,20 @@ struct BrickMeter: View {
             }
             HStack(spacing: 3) {
                 ForEach(0..<10, id: \.self) { i in
-                    Rectangle().fill(i < filled ? color : .track).frame(height: 18)
+                    Rectangle().fill(Color.track).frame(height: 18)
+                        .overlay {
+                            Rectangle().fill(color)
+                                .scaleEffect(i < shown ? 1 : 0.2)
+                                .opacity(i < shown ? 1 : 0)
+                                .animation(reduceMotion ? nil : .spring(duration: 0.35, bounce: 0.5).delay(Double(i) * 0.06), value: shown)
+                        }
                 }
             }
             .padding(5)
             .pixelBox()
         }
+        .onAppear { shown = filled }
+        .onChange(of: filled) { shown = filled }
         .accessibilityElement(children: .combine)
     }
 }
