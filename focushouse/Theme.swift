@@ -135,3 +135,28 @@ struct PixelNumber: View {
         .accessibilityLabel("\(value)")
     }
 }
+
+extension House.State {
+    var title: String { rawValue.capitalized }
+
+    var message: String {
+        switch self {
+        case .calm: "Stress is low. Keep it steady."
+        case .stressed: "A few busy days in a row. Plan some rest."
+        case .overloaded: "Carrying too much for too long. Take a real break."
+        case .crumbling: "Too many high-stress days. Rest to repair."
+        case .resting: "You rested today. Rebuilding one step."
+        }
+    }
+
+    /// Sky behind the sprite, darker as stress builds.
+    var sky: Color {
+        switch self {
+        case .calm: Color(red: 0.80, green: 0.91, blue: 1.0)
+        case .stressed: Color(red: 0.89, green: 0.91, blue: 0.93)
+        case .overloaded: Color(red: 0.73, green: 0.76, blue: 0.81)
+        case .crumbling: Color(red: 0.60, green: 0.64, blue: 0.70)
+        case .resting: Color(red: 0.18, green: 0.21, blue: 0.35)
+        }
+    }
+}

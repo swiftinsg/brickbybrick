@@ -90,5 +90,6 @@ import UserNotifications
             plan.pushBack(task, by: minutes)
         }
         try? context.save()
+        WidgetSync.write(context)
     }
 }

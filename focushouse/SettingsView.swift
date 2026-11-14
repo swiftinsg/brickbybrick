@@ -14,6 +14,7 @@ struct SettingsView: View {
     @AppStorage("screenTimeRest") private var screenTimeRest = false
     @AppStorage("limitSchool") private var limitSchool = WorkLimit.schoolDefault
     @AppStorage("limitOff") private var limitOff = WorkLimit.offDefault
+    @AppStorage("showDamage") private var showDamage = true
     @State private var pace = Planner.pace()
 
     var body: some View {
@@ -68,6 +69,14 @@ struct SettingsView: View {
                     Text(screenTimeRest
                          ? "Each waking hour you barely use your phone (under \(RestHours.glanceMinutes) min) counts as rest. \(Int(House.restGoal / 3600)) hours a day repairs your house a step."
                          : "Rest is time away from focushouse. Turn on Screen Time to count time away from your whole phone instead.")
+                }
+                Section {
+                    Toggle("Show house damage on widgets", isOn: $showDamage)
+                } header: {
+                    Text("Widgets")
+                } footer: {
+                    Text(showDamage ? "Widgets show your house as it is, even on hard days."
+                                    : "On hard days, widgets show your rest instead of a damaged house.")
                 }
                 Section {
                     Stepper(value: $limitSchool, in: 60...720, step: 30) {

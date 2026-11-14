@@ -16,14 +16,11 @@ struct HomeView: View {
 
     var body: some View {
         let now = Date.now
-        let cal = Calendar.current
         let log = RestLog.load(restData)
-        let streak = House.streak(load, now: now)
+        let status = self.status
+        let streak = status.streak
         let restToday = log.seconds(on: now)
-        let restedDays = (0...streak).filter {
-            log.seconds(on: cal.date(byAdding: .day, value: -$0, to: now)!) >= House.restGoal
-        }.count
-        let state = House.state(streak: streak, restedDays: restedDays, restedToday: restToday >= House.restGoal)
+        let state = House.state(streak: streak, log: log, now: now)
 
         NavigationStack {
             ScrollView {
@@ -56,7 +53,7 @@ struct HomeView: View {
                                color: .blue)
 
                     if state != .calm && state != .resting { restCard }
-                    if let next { nextCard(next) }
+                    if let next { nextCard(next, status) }
                     if !insight.isEmpty { insightCard }
                 }
                 .padding()
@@ -71,14 +68,14 @@ struct HomeView: View {
                 }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button { showUpgrades = true } label: {
-                        BrickCount(value: max(0, bricks - Shop.spent(Shop.owned(ownedRaw))))
+                        BrickCount(value: max(0, status.earned - Shop.spent(Shop.owned(ownedRaw))))
                     }
                     .accessibilityHint("Opens Upgrades")
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
             .sheet(isPresented: $showSettings) { SettingsView() }
-            .sheet(isPresented: $showUpgrades) { UpgradesView(earned: bricks) }
+            .sheet(isPresented: $showUpgrades) { UpgradesView(earned: status.earned) }
             .task { await refresh() }
         }
     }
@@ -114,7 +111,7 @@ struct HomeView: View {
         .accessibilityElement(children: .combine)
     }
 
-    private func nextCard(_ task: PlanTask) -> some View {
+    private func nextCard(_ task: PlanTask, _ status: HouseStatus) -> some View {
         HStack(spacing: 14) {
             Button {
                 withAnimation(.snappy) { CheckIn.shared.tick(task) }
@@ -124,7 +121,7 @@ struct HomeView: View {
             .accessibilityLabel("Mark \(task.title) done")
             VStack(alignment: .leading, spacing: 2) {
                 Text("Next: \(task.title)").font(.subheadline.weight(.semibold))
-                let earns = House.bricks(minutes: task.estimate ?? task.minutes, rating(task.title, priority: task.priority, category: task.category).effort)
+                let earns = House.bricks(minutes: task.estimate ?? task.minutes, status.rating(task.title, priority: task.priority, category: task.category).effort)
                 Text("\(task.start!.formatted(date: .omitted, time: .shortened))–\(task.end!.formatted(date: .omitted, time: .shortened))" + (earns > 0 ? " · +\(earns) bricks" : ""))
                     .font(.footnote).foregroundStyle(.secondary)
             }
@@ -134,29 +131,8 @@ struct HomeView: View {
         .pixelBox()
     }
 
-    /// The AI's rating for a title, or one from priority until it's rated;
-    /// for plan tasks, scaled by the student's pace in that category.
-    private func rating(_ title: String, priority: Int, category: String? = nil) -> Rating {
-        let r = Ratings.load(ratingData)[Ratings.key(title)] ?? Rating(priority: priority)
-        guard let category, let pace = Planner.pace().first(where: { $0.category == category }) else { return r }
-        return r.personal(pace.ratio)
-    }
-
-    /// Stress per day from what the student does and attends: plan tasks at their
-    /// time, Tasks-tab items on their due day, Calendar events.
-    // ponytail: scans every task each render; fine for a student's few hundred.
-    private var load: [(day: Date, minutes: Int)] {
-        tasks.compactMap { t in t.start.map { ($0, House.stress(minutes: t.minutes, rating(t.title, priority: t.priority, category: t.category))) } }
-            + todos.map { ($0.dueDate, House.stress(minutes: House.todoMinutes, rating($0.name, priority: $0.priority.level))) }
-            + events.map { ($0.start, House.stress(minutes: $0.minutes, rating($0.title, priority: 1))) }
-    }
-
-    private var bricks: Int {
-        House.total(
-            tasks.filter(\.earnsBricks).compactMap { t in
-                (t.start ?? t.plan?.start).map { ($0, House.bricks(minutes: t.estimate ?? t.minutes, rating(t.title, priority: t.priority, category: t.category).effort)) }
-            }
-            + todos.filter(\.isDone).map { ($0.dueDate, rating($0.name, priority: $0.priority.level).effort == .easy ? 0 : House.todoBricks) })
+    private var status: HouseStatus {
+        HouseStatus(tasks: tasks, todos: todos, events: events, ratings: Ratings.load(ratingData))
     }
 
     /// Loads this fortnight's Calendar events, then has the AI rate anything new.
@@ -180,36 +156,6 @@ struct HomeView: View {
         let m = Int(seconds / 60)
         return m >= 60 ? (m % 60 == 0 ? "\(m / 60)h" : "\(m / 60)h \(m % 60)m") : "\(m)m"
     }
-}
-
-private extension House.State {
-    var title: String { rawValue.capitalized }
-
-    var message: String {
-        switch self {
-        case .calm: "Stress is low. Keep it steady."
-        case .stressed: "A few busy days in a row. Plan some rest."
-        case .overloaded: "Carrying too much for too long. Take a real break."
-        case .crumbling: "Too many high-stress days. Rest to repair."
-        case .resting: "You rested today. Rebuilding one step."
-        }
-    }
-
-    /// Sky behind the sprite, darker as stress builds.
-    var sky: Color {
-        switch self {
-        case .calm: Color(red: 0.80, green: 0.91, blue: 1.0)
-        case .stressed: Color(red: 0.89, green: 0.91, blue: 0.93)
-        case .overloaded: Color(red: 0.73, green: 0.76, blue: 0.81)
-        case .crumbling: Color(red: 0.60, green: 0.64, blue: 0.70)
-        case .resting: Color(red: 0.18, green: 0.21, blue: 0.35)
-        }
-    }
-}
-
-private extension Priority {
-    /// The plan tasks' scale: 0 high, 1 normal, 2 low.
-    var level: Int { self == .high ? 0 : self == .low ? 2 : 1 }
 }
 
 /// The house sprite with a little life on top, in the sprite's own 32×32 pixels:

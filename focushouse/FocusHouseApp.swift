@@ -25,6 +25,7 @@ struct FocusHouseApp: App {
                 Tab("Calendar", image: "tab.calendar") { CalendarView() }
             }
             .tint(.brick)
+            .onOpenURL { WidgetSync.open($0, container.mainContext) }
             .sheet(item: Binding(get: { CheckIn.shared.queue.first },
                                  set: { if $0 == nil, let t = CheckIn.shared.queue.first { CheckIn.shared.later(t) } })) {
                 CheckInSheet(task: $0)
@@ -32,6 +33,8 @@ struct FocusHouseApp: App {
         }
             .modelContainer(container)
             .onChange(of: scenePhase) { _, phase in
+                if phase == .active { WidgetSync.apply(container.mainContext) }
+                if phase == .background { WidgetSync.write(container.mainContext) }
                 // Rest for the house: Screen Time when it's on, else time away from the app.
                 if ScreenTime.isOn {
                     if phase == .active { ScreenTime.schedule() }   // picks up routine changes

@@ -29,6 +29,7 @@ targets:
         com.apple.security.application-groups: [group.sg.swiftin.2am]
     dependencies:
       - target: RestMonitor
+      - target: focushouseWidgets
     settings:
       groups: [phone]
       base:
@@ -59,6 +60,32 @@ targets:
       groups: [phone]
       base:
         PRODUCT_BUNDLE_IDENTIFIER: sg.swiftin.2am.RestMonitor
+        SWIFT_VERSION: "6.0"
+  focushouseWidgets:
+    type: app-extension
+    platform: iOS
+    sources:
+      - focushouseWidgets
+      - Shared
+      - focushouse/Theme.swift
+      - focushouse/Assets.xcassets   # house sprites, brick icon
+      - path: focushouse/Fonts/PixelifySans.ttf
+        buildPhase: resources
+    info:
+      path: focushouseWidgets/Info.plist
+      properties:
+        CFBundleDisplayName: focushouse
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    entitlements:
+      path: focushouseWidgets/focushouseWidgets.entitlements
+      properties:
+        com.apple.security.application-groups: [group.sg.swiftin.2am]
+    settings:
+      groups: [phone]
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: sg.swiftin.2am.widgets
+        IPHONEOS_DEPLOYMENT_TARGET: "27.0"
         SWIFT_VERSION: "6.0"
   focushouseTests:
     type: bundle.unit-test
