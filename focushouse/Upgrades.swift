@@ -197,7 +197,7 @@ struct PixelSprite: View {
 }
 
 /// The furniture shop: wooden shelves of things to buy with bricks, and the
-/// student's room on top. Opens from the brick counter on Home.
+/// student's room on top. Opens from "Decorate with bricks" inside the house.
 struct UpgradesView: View {
     let earned: Int
     @AppStorage("owned") private var ownedRaw = ""

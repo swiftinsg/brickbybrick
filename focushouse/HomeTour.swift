@@ -27,7 +27,7 @@ enum TourStep: Int, CaseIterable {
         case .rest: "Time with your phone down while you're awake. Reach \(HomeView.duration(House.restGoal)) in a day to repair your house one step."
         case .next: "Tick the box when you finish to earn bricks, then say how it went so future plans fit your pace."
         case .settings: "Tap the gear for your routine, school hours, daily work limit and how rest is counted."
-        case .bricks: "Earned by finishing tasks. Tap the counter to buy furniture. Bricks decorate, but only rest repairs."
+        case .bricks: "Earned by finishing tasks. Spend them on furniture inside your house. Bricks decorate, but only rest repairs."
         case .tabs: "Schedule: tap + to turn a goal or to-do list into a timed plan.\nTasks: quick to-dos with due dates.\nCalendar: your month at a glance."
         }
     }

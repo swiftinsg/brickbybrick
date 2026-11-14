@@ -27,7 +27,7 @@ struct OnboardingView: View {
             Page(art: "tab.tasks", title: "Check-ins",
                  text: "You get a reminder when a task starts and a check-in when it ends: Done, or need more time? Your answers teach the app your real pace, so future plans fit you better."),
             Page(art: "icon.brick", title: "Bricks",
-                 text: "Finishing tasks earns bricks. Tap the brick counter on Home to spend them on furniture for your house. Bricks decorate, but only rest repairs."),
+                 text: "Finishing tasks earns bricks. Tap your house's door to go inside and spend them on furniture. Bricks decorate, but only rest repairs."),
             Page(art: "tab.calendar", title: "Tasks & Calendar",
                  text: "Tasks holds one-off to-dos with due dates. Calendar shows your iPhone Calendar, including Google Calendar if it's added in iPhone Settings. Change your routine and work limit in Settings (the gear on Home)."),
         ]

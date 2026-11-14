@@ -10,11 +10,9 @@ struct HomeView: View {
     @AppStorage("ratings") private var ratingData = Data()
     @State private var events: [(title: String, start: Date, minutes: Int)] = []
     @State private var showSettings = false
-    @State private var showUpgrades = false
     @State private var showInside = false
     @State private var doorStep = 0        // 0 shut, 1 ajar, 2 open
-    @State private var zoomed = false
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Namespace private var door
     @AppStorage("owned") private var ownedRaw = ""
     @AppStorage("insight") private var insight = ""
     @AppStorage("seenOnboarding") private var seenOnboarding = false
@@ -46,6 +44,7 @@ struct HomeView: View {
                                 .allowsHitTesting(false)
                             Button { enter() } label: { Color.clear.contentShape(Rectangle()) }
                                 .frame(width: 6 * px, height: 8 * px)
+                                .matchedTransitionSource(id: "door", in: door)
                                 .position(x: 15 * px, y: 26 * px)
                         }
                     }
@@ -57,8 +56,6 @@ struct HomeView: View {
                         default: nil
                         }
                     }
-                    .scaleEffect(zoomed ? 4 : 1, anchor: UnitPoint(x: 15 / 32, y: 26 / 32))
-                    .clipped()
                     .pixelBox()
                     .accessibilityElement(children: .ignore)
                     .accessibilityLabel("Your house: \(state.title)")
@@ -101,25 +98,21 @@ struct HomeView: View {
                     Text("focushouse").font(.pixel(22, relativeTo: .headline).weight(.bold))
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button { showUpgrades = true } label: {
-                        BrickCount(value: max(0, status.earned - Shop.spent(Shop.owned(ownedRaw))))
-                    }
-                    .accessibilityHint("Opens Upgrades")
+                    BrickCount(value: max(0, status.earned - Shop.spent(Shop.owned(ownedRaw))))
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
             .sheet(isPresented: $showSettings) { SettingsView() }
-            .sheet(isPresented: $showUpgrades) { UpgradesView(earned: status.earned) }
-            .sheet(isPresented: $showInside, onDismiss: {
-                withAnimation(.easeOut(duration: 0.3)) { zoomed = false }
-                doorStep = 0
-            }) { InsideView(earned: status.earned) }
+            .fullScreenCover(isPresented: $showInside, onDismiss: { doorStep = 0 }) {
+                InsideView(earned: status.earned)
+                    .navigationTransition(.zoom(sourceID: "door", in: door))   // the whole screen grows out of the doorway
+            }
             .task { await refresh() }
         }
     }
 
-    /// Opens the door in two pixel frames, walks in (zooms to the doorway), then
-    /// shows the room. Reduce Motion skips the zoom.
+    /// Opens the door in two pixel frames, then the room zooms out of the doorway
+    /// full screen (the system zoom transition, which respects Reduce Motion).
     private func enter() {
         guard doorStep == 0 else { return }
         Task { @MainActor in
@@ -127,10 +120,6 @@ struct HomeView: View {
             try? await Task.sleep(for: .milliseconds(120))
             doorStep = 2
             try? await Task.sleep(for: .milliseconds(180))
-            if !reduceMotion {
-                withAnimation(.easeIn(duration: 0.35)) { zoomed = true }
-                try? await Task.sleep(for: .milliseconds(300))
-            }
             showInside = true
         }
     }
@@ -241,7 +230,7 @@ struct InsideView: View {
         NavigationStack {
             VStack(alignment: .leading, spacing: 16) {
                 RoomView()
-                    .frame(maxWidth: .infinity)   // centred when the half sheet makes it shorter than wide
+                    .frame(maxWidth: .infinity)
                 Text("Hold and drag your furniture to move it around. Up to \(Shop.roomCap) things fit inside.")
                     .font(.footnote).foregroundStyle(.secondary)
                 Button { showUpgrades = true } label: {
@@ -263,7 +252,6 @@ struct InsideView: View {
             }
             .sheet(isPresented: $showUpgrades) { UpgradesView(earned: earned) }
         }
-        .presentationDetents([.medium, .large])
     }
 }
 
