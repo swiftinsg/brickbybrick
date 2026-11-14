@@ -31,7 +31,7 @@ struct CalendarView: View {
                     ForEach(tasksOnDay) { task in
                         HStack(spacing: 12) {
                             Button {
-                                withAnimation(.snappy) { task.setDone(!task.done) }
+                                withAnimation(.snappy) { CheckIn.shared.toggle(task) }
                                 task.plan?.reflow()   // re-arm reminders, as in PlanView
                             } label: {
                                 Image(systemName: task.done ? "checkmark.circle.fill" : "circle")

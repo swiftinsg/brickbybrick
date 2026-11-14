@@ -10,6 +10,7 @@ struct FocusHouseApp: App {
         do { container = try ModelContainer(for: Plan.self, TodoItem.self) }
         catch { fatalError("Couldn't open saved plans: \(error)") }
         Reminders.shared.setUp(container: container)
+        CheckIn.shared.restore(container.mainContext)
         Theme.registerFonts()
     }
 
@@ -24,6 +25,10 @@ struct FocusHouseApp: App {
                 Tab("Calendar", image: "tab.calendar") { CalendarView() }
             }
             .tint(.brick)
+            .sheet(item: Binding(get: { CheckIn.shared.queue.first },
+                                 set: { if $0 == nil, let t = CheckIn.shared.queue.first { CheckIn.shared.later(t) } })) {
+                CheckInSheet(task: $0)
+            }
         }
             .modelContainer(container)
             .onChange(of: scenePhase) { _, phase in

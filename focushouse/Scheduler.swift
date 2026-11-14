@@ -48,9 +48,10 @@ enum Scheduler {
     /// `busy` (calendar events) is never scheduled over.
     /// `notBefore[i]` (a timeline drag) is the earliest task `i` may start; it can
     /// still be pushed later if earlier tasks run over.
+    /// `gap`: minutes of break after each task.
     static func schedule(_ tasks: [(minutes: Int, day: Int)], from start: Date,
                          routine: Routine, busy: [Range<Date>] = [], notBefore: [Date?] = [],
-                         calendar: Calendar = .current) -> [Date] {
+                         gap: Int = 0, calendar: Calendar = .current) -> [Date] {
         let firstDay = calendar.startOfDay(for: start)
         var cursor = start
         return tasks.enumerated().map { i, task in
@@ -60,7 +61,7 @@ enum Scheduler {
             }
             if i < notBefore.count, let earliest = notBefore[i] { cursor = max(cursor, earliest) }
             let slot = firstFit(after: cursor, length: length, routine: routine, busy: busy, calendar: calendar)
-            cursor = slot + length
+            cursor = slot + length + TimeInterval(gap * 60)
             return slot
         }
     }

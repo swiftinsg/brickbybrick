@@ -16,7 +16,7 @@ import UserNotifications
         self.container = container
         let center = UNUserNotificationCenter.current()
         center.delegate = self
-        let actions = [UNNotificationAction(identifier: Self.done, title: "Done ✓")]
+        let actions = [UNNotificationAction(identifier: Self.done, title: "Done ✓", options: .foreground)]
             + Self.more.map { UNNotificationAction(identifier: "MORE\($0)", title: "Need \($0) more min") }
         center.setNotificationCategories([
             UNNotificationCategory(identifier: Self.checkIn, actions: actions, intentIdentifiers: []),
@@ -84,7 +84,7 @@ import UserNotifications
               let task = try? context.fetch(FetchDescriptor<PlanTask>(predicate: #Predicate { $0.uid == uid })).first,
               let plan = task.plan else { return }
         if action == Self.done {
-            task.setDone(true)
+            CheckIn.shared.tick(task)   // opens the app to ask how it went
             plan.reflow()
         } else if action.hasPrefix("MORE"), let minutes = Int(action.dropFirst(4)) {
             plan.pushBack(task, by: minutes)

@@ -18,11 +18,14 @@
 		246215BB222C8FBDE9006EB9 /* NewPlanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216157960E97327CF5D0A32E /* NewPlanView.swift */; };
 		25816E89C16CEE9C0B5FE6C3 /* RestLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84FD95A3351594CB129A00CB /* RestLog.swift */; };
 		291F9DF6AA1945186F47BC99 /* PixelifySans.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4A4DEFAFDD203A9555D86A7E /* PixelifySans.ttf */; };
+		298BF0C794CD597AB5FA981F /* CheckInSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9B7733473A6C7AA8E96253 /* CheckInSheet.swift */; };
+		29D15B8B36EAAB80D0C3BF59 /* ReflectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 056ABEF2EDB00D1B7EF7E7DD /* ReflectionTests.swift */; };
 		2A20813AB7BA81B3F07F377F /* MonthGridTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E044F295CE7890BD56683F9 /* MonthGridTests.swift */; };
 		2FAE874E7B776A1949B28796 /* PinTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C769B08F1B6ED6CBA67C1E39 /* PinTests.swift */; };
 		3684C6CD278690EE7E9473D5 /* PlannerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DB80D5B9CC2F8B531114A96 /* PlannerTests.swift */; };
 		3D724E239E9034A4C2538BCE /* TaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43801DB9127B1FE54B19D8A /* TaskView.swift */; };
 		3E22722E8BE1FC9742A2A2F3 /* Scheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA8E533175C1BEC7F2C2DE0 /* Scheduler.swift */; };
+		518122F66462C78DF6CE9BC9 /* Reflections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27232D4D6341F9A882C7D129 /* Reflections.swift */; };
 		52ECFC825D706AEAAE0DF9C1 /* SchedulerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F23D453986A905C37C1585D /* SchedulerTests.swift */; };
 		651F02B71B5A6AA17BE55787 /* TodoItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C35969715D056595DBCEF12B /* TodoItem.swift */; };
 		83980AE54E113EEF3B280707 /* FocusHouseApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4552A590898BDE41DC5EE887 /* FocusHouseApp.swift */; };
@@ -80,6 +83,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		056ABEF2EDB00D1B7EF7E7DD /* ReflectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReflectionTests.swift; sourceTree = "<group>"; };
 		0DF8759D901E8A611D2454F3 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		0E044F295CE7890BD56683F9 /* MonthGridTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthGridTests.swift; sourceTree = "<group>"; };
 		15CA6253454E1C7253F1A961 /* furniture.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = furniture.json; sourceTree = "<group>"; };
@@ -87,6 +91,7 @@
 		216157960E97327CF5D0A32E /* NewPlanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPlanView.swift; sourceTree = "<group>"; };
 		216D92EE08BE865626356812 /* RestMonitor.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = RestMonitor.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		264D348FE2D5FCA52189074D /* Planner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Planner.swift; sourceTree = "<group>"; };
+		27232D4D6341F9A882C7D129 /* Reflections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reflections.swift; sourceTree = "<group>"; };
 		2D486305CD5D7018CE42FB12 /* Timetable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Timetable.swift; sourceTree = "<group>"; };
 		425BF9CFDBE211B8830DA862 /* Upgrades.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Upgrades.swift; sourceTree = "<group>"; };
 		4552A590898BDE41DC5EE887 /* FocusHouseApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusHouseApp.swift; sourceTree = "<group>"; };
@@ -101,6 +106,7 @@
 		7535BBAB426B0F10326A64D6 /* TimetableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableTests.swift; sourceTree = "<group>"; };
 		7D8F166292F19E0C9CA30987 /* NewTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTaskView.swift; sourceTree = "<group>"; };
 		84FD95A3351594CB129A00CB /* RestLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestLog.swift; sourceTree = "<group>"; };
+		8B9B7733473A6C7AA8E96253 /* CheckInSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckInSheet.swift; sourceTree = "<group>"; };
 		8F23D453986A905C37C1585D /* SchedulerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchedulerTests.swift; sourceTree = "<group>"; };
 		9259EF76E1AE0B0CD5A20CB8 /* focushouseTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = focushouseTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		992D87DDF9AAA1400FBCA858 /* ScreenTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenTime.swift; sourceTree = "<group>"; };
@@ -152,6 +158,7 @@
 				0E044F295CE7890BD56683F9 /* MonthGridTests.swift */,
 				C769B08F1B6ED6CBA67C1E39 /* PinTests.swift */,
 				9DB80D5B9CC2F8B531114A96 /* PlannerTests.swift */,
+				056ABEF2EDB00D1B7EF7E7DD /* ReflectionTests.swift */,
 				B06BD775BF03FCA6965ED651 /* RoutineTests.swift */,
 				8F23D453986A905C37C1585D /* SchedulerTests.swift */,
 				7535BBAB426B0F10326A64D6 /* TimetableTests.swift */,
@@ -186,6 +193,7 @@
 				C1CD91A0CDE5CA574A273977 /* CalendarSync.swift */,
 				9DB59EF4946F3158394F640C /* CalendarTipView.swift */,
 				6A4AA7204167A77945CC2395 /* CalendarView.swift */,
+				8B9B7733473A6C7AA8E96253 /* CheckInSheet.swift */,
 				A444C467E91742D0651D4FC4 /* ContentView.swift */,
 				467FF050698CACDE38957FC8 /* focushouse.entitlements */,
 				4552A590898BDE41DC5EE887 /* FocusHouseApp.swift */,
@@ -197,6 +205,7 @@
 				264D348FE2D5FCA52189074D /* Planner.swift */,
 				1B5798B29D351AC822D6EC73 /* PlanTimeline.swift */,
 				64F92ADDF3F74CBB77A02ACD /* PlanView.swift */,
+				27232D4D6341F9A882C7D129 /* Reflections.swift */,
 				C315DA44F96EC043EDA1C801 /* Reminders.swift */,
 				5AA8E533175C1BEC7F2C2DE0 /* Scheduler.swift */,
 				992D87DDF9AAA1400FBCA858 /* ScreenTime.swift */,
@@ -354,6 +363,7 @@
 				2A20813AB7BA81B3F07F377F /* MonthGridTests.swift in Sources */,
 				2FAE874E7B776A1949B28796 /* PinTests.swift in Sources */,
 				3684C6CD278690EE7E9473D5 /* PlannerTests.swift in Sources */,
+				29D15B8B36EAAB80D0C3BF59 /* ReflectionTests.swift in Sources */,
 				D6D558324E6EBB583432911B /* RoutineTests.swift in Sources */,
 				52ECFC825D706AEAAE0DF9C1 /* SchedulerTests.swift in Sources */,
 				FD88131FF6B7A549CB0DBE6F /* TimetableTests.swift in Sources */,
@@ -367,6 +377,7 @@
 				E38B3C4377E0969A56773949 /* CalendarSync.swift in Sources */,
 				1E33914E6B6306BCABD9F260 /* CalendarTipView.swift in Sources */,
 				9B117F2C1C8F4A818CEBB78A /* CalendarView.swift in Sources */,
+				298BF0C794CD597AB5FA981F /* CheckInSheet.swift in Sources */,
 				A48E56EBAE62015E9B5F1CBA /* ContentView.swift in Sources */,
 				83980AE54E113EEF3B280707 /* FocusHouseApp.swift in Sources */,
 				F0B86E967EA83C98F3383CB8 /* HomeView.swift in Sources */,
@@ -377,6 +388,7 @@
 				FBD48DF6458548D1899A696B /* PlanTimeline.swift in Sources */,
 				E1D4D1A60CD7FB517F6D5116 /* PlanView.swift in Sources */,
 				0121509A343BDBC1A1D608FD /* Planner.swift in Sources */,
+				518122F66462C78DF6CE9BC9 /* Reflections.swift in Sources */,
 				84D2A5D7808E5880540AD97A /* Reminders.swift in Sources */,
 				AD0E3DC2D75E479BCBEB59DB /* RestLog.swift in Sources */,
 				3E22722E8BE1FC9742A2A2F3 /* Scheduler.swift in Sources */,

@@ -12,6 +12,7 @@ struct HomeView: View {
     @State private var showSettings = false
     @State private var showUpgrades = false
     @AppStorage("owned") private var ownedRaw = ""
+    @AppStorage("insight") private var insight = ""
 
     var body: some View {
         let now = Date.now
@@ -56,6 +57,7 @@ struct HomeView: View {
 
                     if state != .calm && state != .resting { restCard }
                     if let next { nextCard(next) }
+                    if !insight.isEmpty { insightCard }
                 }
                 .padding()
             }
@@ -97,10 +99,25 @@ struct HomeView: View {
         .accessibilityElement(children: .combine)
     }
 
+    /// The AI's weekly insight from the student's check-ins.
+    private var insightCard: some View {
+        HStack(alignment: .top, spacing: 14) {
+            Image(systemName: "lightbulb.fill").font(.title2).foregroundStyle(.yellow)
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Your week").font(.pixel(20, relativeTo: .headline).weight(.bold))
+                Text(insight).font(.footnote)
+            }
+            Spacer(minLength: 0)
+        }
+        .padding()
+        .pixelBox()
+        .accessibilityElement(children: .combine)
+    }
+
     private func nextCard(_ task: PlanTask) -> some View {
         HStack(spacing: 14) {
             Button {
-                withAnimation(.snappy) { task.setDone(true) }
+                withAnimation(.snappy) { CheckIn.shared.tick(task) }
             } label: {
                 Rectangle().strokeBorder(Color.ink, lineWidth: 3).frame(width: 26, height: 26)
             }
@@ -136,7 +153,7 @@ struct HomeView: View {
 
     private var bricks: Int {
         House.total(
-            tasks.filter(\.done).compactMap { t in
+            tasks.filter(\.earnsBricks).compactMap { t in
                 (t.start ?? t.plan?.start).map { ($0, House.bricks(minutes: t.estimate ?? t.minutes, rating(t.title, priority: t.priority, category: t.category).effort)) }
             }
             + todos.filter(\.isDone).map { ($0.dueDate, rating($0.name, priority: $0.priority.level).effort == .easy ? 0 : House.todoBricks) })
@@ -151,6 +168,7 @@ struct HomeView: View {
         let titles = Set(tasks.map(\.title) + todos.map(\.name) + events.map(\.title))
             .filter { !$0.isEmpty && rated[Ratings.key($0)] == nil }
         await Ratings.rate(Array(titles))
+        await Reflections.refreshInsight(tasks.filter { $0.checkIn == PlanTask.CheckInState.answered.rawValue })
     }
 
     private var next: PlanTask? {

@@ -177,3 +177,42 @@ A: B: in phases, in the order listed in the Plan.
 - "brickbybrick" is taken, so the app, targets, scheme and folders are now focushouse.
 - Uses Tristan's App Store setup from main: bundle id `sg.swiftin.2am` (+ `.RestMonitor`), App Group `group.sg.swiftin.2am`, team XL5JK4F896, app icon, iPhone only, display name focushouse, no non-exempt encryption, app target iOS 27.0. These live in `project.yml` (setting group `phone`) so xcodegen keeps them.
 - Repo moved to https://github.com/swiftinsg/focushouse.
+
+### Widgets plan (WidgetKit, 2026-11-14)
+FigJam board: section "Widgets — WidgetKit plan" (mockups A–H, open questions). Q&A:
+- **Which widgets?** All of them in the first widget phase: A Small House (state + bricks), B Small Today (done/planned + next), C Medium House + Next task (buttons: Done, +15 min, Take a break), D Large My Day (house, rest meter, today's timeline with ticks, free time as a block), H Medium Week (7-day work vs rest bars), Lock Screen E circular (3/7), F rectangular (next task), G inline.
+- **Task count** = done / planned today ("3/7"), not total tasks created.
+- **Widget tick loophole:** ticking Done in a widget gives no bricks on its own. The widget asks "How did it go?" first (actual time, which also feeds adaptive estimates); bricks only come once it's answered. An unanswered tick never pays out later.
+- **Lock Screen privacy:** counts only while locked ("3/7 · next 4:30"); task names after unlock (`privacySensitive`).
+- **Bad days:** Settings toggle "Show house damage on widgets". Off = widget leads with rest ("Rest 40m of 3h · Take a break") instead of the damaged house.
+- **Fake-rest loophole:** phone-down hours that overlap a scheduled task or a Calendar lesson don't count as rest.
+- **Over-planning:** above a daily work limit (e.g. 5h on school days) New Plan warns and auto-adds a free-time block.
+- **Take a break:** pushes later tasks back 15 min (existing push-back) and starts a 15 min rest, which only counts if the phone really stays down.
+- Data: app writes a small snapshot to App Group `group.sg.swiftin.2am`; `WidgetCenter.reloadAllTimelines()` on change; a timeline entry at each task start; buttons are AppIntents.
+- **Rest during a cancelled or moved task:** counts. Only tasks still on the schedule block rest.
+- **Lock Screen check-in:** allowed (interactive widget can answer "How did it go?").
+- **Daily work limit:** the student sets it in Settings. Research defaults are 3h after school and 4h on weekends/holidays, with the note "Above 5h a day is linked to more anxiety". The user first suggested 7–10h for off-days; research put that in the harm range:
+  - Singapore, 1,225 teens aged 13–19: ≥5h/day of weekend study → more anhedonia and anxiety (https://pubmed.ncbi.nlm.nih.gov/32536472/).
+  - Stanford (Pope, Galloway, Conner 2014), 4,317 students: benefit plateaus ~2h/night; 1.5–2.5h optimal (https://ed.stanford.edu/news/more-two-hours-homework-may-be-counterproductive-research-suggests).
+  - China, 68,891 teens: high-school thresholds ~2.4h weekdays, ~1.8h weekends (https://www.sciencedirect.com/science/article/abs/pii/S016503272501078X).
+
+### Reflections phase (next, before widgets) — Q&A 2026-11-14
+- **Check-in asks:** time taken (Less / About right / More, or minutes), how it felt (one tap, 1–5 energy/stress), optional free-text note. Best time of day isn't asked; the AI infers it from ticks + feelings.
+- **The AI uses reflections to:** move hard tasks to the student's best hours, split or shorten tasks often rated draining, add breaks after hard days, and write a weekly insight card (Home / Week widget), e.g. "Essays take you 40% longer after CCA days. Try mornings?"
+- **Privacy:** all on device (Foundation Models). Raw notes auto-delete after 30 days; only the learned patterns are kept.
+- **Built (2026-11-14):** `Reflections.swift` (CheckIn queue, patterns, prompt section, weekly insight, WorkLimit, `Plan.addFreeTime`), `CheckInSheet.swift`. Ticks everywhere (lists, Calendar, Home, the notification "Done", which now opens the app) go through `CheckIn`. Swiping the sheet away = ask again next launch; "Skip (no bricks)" = never. Tasks done before this phase keep their bricks. A corrected time replaces the auto-recorded pace ratio. New plans after a hard day get 10 min breaks between tasks (`Plan.breakMinutes`, `Scheduler gap`). Days over the limit get one 30 min "Free time" block (category `free time`, no bricks, no check-in) and an orange warning under the day in the plan.
+- Best time of day and draining kinds of work are found by plain code (3+ answers each) and given to the model as instructions; the model applies them via item order and subtasks.
+- opencode (GLM 5.3 Flash) wrote `CheckInSheet.swift` and the Settings "Daily work limit" section from a spec; Claude reviewed them (no changes needed). Fixed `MonthGridTests` crashing (needed `@MainActor`).
+
+### Phase 7 handoff: Widgets (WidgetKit) — for a fresh session
+Plan and mockups: FigJam board "2026 Swift Accelerator Challenge 3 Journal", section **"Widgets — WidgetKit plan"** (mockups A–H, grill questions, teal DECIDED stickies). All decisions are in "Widgets plan" above; this is the build checklist.
+- **Target:** new `app-extension` target `focushouseWidgets` in `project.yml` (extension point `com.apple.widgetkit-extension`), sources `[focushouseWidgets, Shared]`, same entitlements anchor `*ents` (App Group `group.sg.swiftin.2am`), setting group `phone`, bundle id `sg.swiftin.2am.widgets`, iOS 27.0. Add it to the app's `dependencies`. Run `xcodegen`.
+- **Data:** add `Shared/WidgetSnapshot.swift`: a Codable struct the app writes to `RestLog.defaults` (App Group) whenever tasks, plans, rest or bricks change, then `WidgetCenter.shared.reloadAllTimelines()`. Fields: house state, rest today / goal, bricks balance, done/planned today, today's tasks (title, start, minutes, done, isFreeTime), next task, 7-day work minutes + rest seconds per day, `showDamage` (Settings toggle "Show house damage on widgets"), the weekly insight. The widget never opens SwiftData; it reads the snapshot only. House state logic stays in `House.swift`; compute it in the app (move the HomeView calculation into a function both can call).
+- **Timeline:** one entry now plus one at each remaining task start today (so "Next up" rolls over), `.atEnd`.
+- **Widgets:** A Small House · B Small Today (3/7 + next) · C Medium House + Next with buttons · D Large My Day (house, rest meter, timeline with ticks, free time as a block) · H Medium Week (work vs rest bars) · Lock Screen E `accessoryCircular` (3/7), F `accessoryRectangular` (next task), G `accessoryInline`. Pixel style: house PNGs from Assets (`house.<state>`), Pixelify Sans headings (register the font in the extension too), `Color.paper` background via `containerBackground`.
+- **Privacy:** task names wrapped in `.privacySensitive()`, so locked Lock Screen / StandBy shows counts only.
+- **Bad days:** when `showDamage` is off and the house is Stressed or worse, widgets lead with rest ("Rest 40m of 3h · Take a break") instead of the damaged house.
+- **Buttons (AppIntents, run in the widget process, so they must work without the app):** `Done` sets the task waiting for a check-in (Phase 6: `PlanTask.checkIn = waiting`, no bricks until "How did it go?" is answered; the app re-asks on next launch via `CheckIn.restore`). The widget can't reach SwiftData directly unless the store moves into the App Group; simplest: the intent writes `{taskUID, action}` into an App Group "pendingActions" list and the app applies them on launch / `scenePhase == .active` (or move the SwiftData store into the App Group container and open it from the intent). `+15 min` = `Plan.pushBack`. `Take a break` = push back 15 min + start a 15 min rest that only counts if the phone stays down (Screen Time). Lock Screen check-in is allowed.
+- **Rest rules still to build (decided, not done yet):** phone-down hours overlapping a scheduled (not done/cancelled) task or Calendar lesson don't count as rest; rest during a cancelled or moved task does count. That's in `RestLog`/`HomeView` rest calculation, not the widget.
+- **Phase 6 bits the widgets reuse:** `CheckIn` (Reflections.swift), the weekly insight (UserDefaults "insight"), `Plan.freeTime` category for free-time blocks, `WorkLimit`.
+- Stop after Phase 7 for the user to test on a real device (Screen Time + widgets), then commit and push to `machine-learning`.

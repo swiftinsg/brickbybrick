@@ -20,6 +20,7 @@ iOS 27.2 SwiftUI app for students and teenagers. On-device Apple Foundation Mode
 - **House (main page):** Home tab shows a pixel house (sprites from `Art/houses.json`, PNGs via `python3 tools/sprites.py`). Several stressful days in a row damage it (Calm → Stressed → Overloaded → Crumbling); rest repairs one step per day with 3h+ of rest in waking hours (Resting). Rest = Screen Time (FamilyControls `.individual` + DeviceActivity): each waking hour with under 2 min of phone use counts, recorded by the `RestMonitor` extension into the App Group (`Shared/RestLog.swift`). Settings toggle "Count rest with Screen Time"; when off, time away from the app counts instead. Needs a real device. Logic in `House.swift`.
 - **Stress:** the AI scores each task, Tasks-tab item and Calendar event 1–10 from its title (cached by title), scaled by the student's pace for that category; ranges 1–3 easy, 4–6 normal, 7–8 hard, 9–10 intense. Easy adds no stress; compulsory things (exams, lessons, set deadlines) count half. Without Apple Intelligence, priority stands in.
 - **Bricks (points):** finished tasks earn 1 per 10 estimated min (×1.5 hard, ×2 intense, 0 easy; Tasks-tab items 3), capped 100/day. Bricks buy furniture in Upgrades (tap the brick counter on Home): `Art/furniture.json` + `Art/furniture_hobbies.json` (DeepSeek-researched teen hobbies, `Art/hobby_research.md`), drawn at runtime by `PixelSprite`. Lv 2 needs the Lv 1 of the same group; balance = earned − spent (owned names in UserDefaults "owned"). They never repair the house.
+- **Widgets (WidgetKit):** House (S), Today 3/7 (S), House + Next task with Done/+15/Take a break (M), My Day (L), Week work vs rest (M), Lock Screen circular/rectangular/inline. Data via App Group snapshot. Widget ticks give bricks only after "How did it go?" is answered. Lock Screen hides task names while locked. Settings toggle "Show house damage on widgets". Rest overlapping scheduled tasks/lessons doesn't count. Details in `NOTES.md`.
 - **Tabs:** Home · Schedule · Tasks · Calendar. Settings opens from Home's menu button. Pixel theme: Pixelify Sans for headings, square borders, brick meters; body text stays system font.
 
 ## Build plan (phases, test each before the next)
@@ -28,6 +29,8 @@ iOS 27.2 SwiftUI app for students and teenagers. On-device Apple Foundation Mode
 3. **Reminders & check-ins:** start notifications, end-of-task check-in, push-back, Re-plan with AI.
 4. **Timeline:** drag-and-drop tasks between time slots.
 5. **Adaptive estimates:** record actuals, inject per-category ratios into the prompt.
+6. **Reflections:** check-in asks time taken, how it felt (1–5) and an optional note (on device, notes auto-delete after 30 days). AI infers best hours, moves hard tasks there, splits draining tasks, adds breaks after hard days, writes a weekly insight card. Daily work limit set by the student (default 3h school days / 4h off days); New Plan warns and adds free time above it.
+7. **Widgets (WidgetKit):** see Decisions.
 
 ## Working rules
 - Build one phase at a time; stop after each phase for the user to test.

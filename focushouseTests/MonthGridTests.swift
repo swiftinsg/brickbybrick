@@ -2,7 +2,7 @@ import Foundation
 import Testing
 @testable import focushouse
 
-struct MonthGridTests {
+@MainActor struct MonthGridTests {
     func cal(firstWeekday: Int) -> Calendar {
         var c = Calendar(identifier: .gregorian)
         c.timeZone = TimeZone(identifier: "UTC")!

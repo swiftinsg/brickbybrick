@@ -108,6 +108,15 @@ struct PlanView: View {
                         Text(hoursAndMinutes(group.tasks.reduce(0) { $0 + $1.minutes }))
                             .monospacedDigit()
                     }
+                } footer: {
+                    if let day = group.day {
+                        let work = group.tasks.filter { $0.category != Plan.freeTime }.reduce(0) { $0 + $1.minutes }
+                        let limit = WorkLimit.minutes(on: day, routine: plan.routine)
+                        if work > limit {
+                            Text("\(hoursAndMinutes(work)) of work is over your \(hoursAndMinutes(limit)) limit for this day. Plan in a break, or move something to another day.")
+                                .foregroundStyle(.orange)
+                        }
+                    }
                 }
             }
 
@@ -186,6 +195,7 @@ struct PlanView: View {
         let left = plan.tasks.filter { !$0.done }.reduce(0) { $0 + $1.minutes }
         if left == 0 { return "All done" }
         return "\(doneCount) of \(plan.tasks.count) done · \(hoursAndMinutes(left)) left"
+            + (plan.breakMinutes > 0 ? " · \(plan.breakMinutes) min breaks after a tiring day" : "")
     }
 
     @ToolbarContentBuilder private var toolbarItems: some ToolbarContent {
@@ -202,7 +212,8 @@ struct PlanView: View {
                             Task {
                                 await run {
                                     // Show the AI the current plan so it makes a different one.
-                                    plan.replaceTasks(with: try await Planner.draft(for: plan, previous: plan.ordered))
+                                    plan.replaceTasks(with: try await Planner.draft(for: plan, previous: plan.ordered,
+                                                                                    history: Reflections.history(in: plan.modelContext)))
                                 }
                             }
                         }
@@ -279,7 +290,7 @@ private struct ParentRow: View {
             Button {
                 withAnimation(.snappy) {
                     let newValue = !allDone
-                    tasks.forEach { $0.setDone(newValue) }
+                    tasks.forEach { newValue ? CheckIn.shared.tick($0) : CheckIn.shared.untick($0) }
                 }
                 onChange()   // re-arm reminders
             } label: {
@@ -332,7 +343,7 @@ private struct TaskRow: View {
     var body: some View {
         HStack(alignment: .firstTextBaseline, spacing: 12) {
             Button {
-                withAnimation(.snappy) { task.setDone(!task.done) }
+                withAnimation(.snappy) { CheckIn.shared.toggle(task) }
                 onChange()   // re-arm reminders; a finished task keeps its time
             } label: {
                 Image(systemName: task.done ? "checkmark.circle.fill" : "circle")
