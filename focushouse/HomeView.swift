@@ -13,6 +13,8 @@ struct HomeView: View {
     @State private var showUpgrades = false
     @AppStorage("owned") private var ownedRaw = ""
     @AppStorage("insight") private var insight = ""
+    @AppStorage("seenOnboarding") private var seenOnboarding = false
+    @AppStorage("homeTourDone") private var tourDone = false
 
     var body: some View {
         let now = Date.now
@@ -35,6 +37,7 @@ struct HomeView: View {
                     .pixelBox()
                     .accessibilityElement(children: .ignore)
                     .accessibilityLabel("Your house: \(state.title)")
+                    .tour(.house)
 
                     VStack(alignment: .leading, spacing: 4) {
                         Text(state.title)
@@ -42,26 +45,30 @@ struct HomeView: View {
                             .foregroundStyle(state == .calm || state == .resting ? Color.grass : Color.brick)
                         Text(state.message).font(.subheadline).foregroundStyle(.secondary)
                     }
+                    .tour(.status)
 
                     BrickMeter(title: "Stress this week",
                                detail: streak == 0 ? "Low" : "\(streak) day\(streak == 1 ? "" : "s") in a row",
                                filled: min(10, Int((Double(streak) / 6 * 10).rounded())),
                                color: streak >= 4 ? .brick : streak >= 2 ? .orange : .grass)
+                        .tour(.stress)
                     BrickMeter(title: "Rest today",
                                detail: "\(Self.duration(restToday)) / \(Self.duration(House.restGoal)) away",
                                filled: min(10, Int(restToday / House.restGoal * 10)),
                                color: .blue)
+                        .tour(.rest)
 
                     if state != .calm && state != .resting { restCard }
-                    if let next { nextCard(next, status) }
+                    if let next { nextCard(next, status).tour(.next) }
                     if !insight.isEmpty { insightCard }
                 }
                 .padding()
             }
             .background(Color.paper)
+            .homeTour(isOn: Binding(get: { seenOnboarding && !tourDone }, set: { tourDone = !$0 }))
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button("Settings", systemImage: "line.3.horizontal") { showSettings = true }
+                    Button("Settings", systemImage: "gearshape") { showSettings = true }
                 }
                 ToolbarItem(placement: .principal) {
                     Text("focushouse").font(.pixel(22, relativeTo: .headline).weight(.bold))

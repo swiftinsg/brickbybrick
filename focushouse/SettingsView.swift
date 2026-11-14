@@ -16,6 +16,7 @@ struct SettingsView: View {
     @AppStorage("limitOff") private var limitOff = WorkLimit.offDefault
     @AppStorage("showDamage") private var showDamage = true
     @State private var pace = Planner.pace()
+    @State private var showIntro = false
 
     var body: some View {
         NavigationStack {
@@ -113,13 +114,23 @@ struct SettingsView: View {
                          ? "After you finish \(Planner.paceRunway) tasks of a kind, the AI learns how long they really take you."
                          : "Real time ÷ AI estimate. ×1.5 means it takes you 50% longer; new plans adjust for it.")
                 }
-                Section("Google Calendar") {
+                Section {
+                    Button("Show intro") {
+                        showIntro = true
+                        UserDefaults.standard.set(true, forKey: "resetHints")
+                        UserDefaults.standard.set(false, forKey: "homeTourDone")
+                    }
                     NavigationLink("How to connect Google Calendar") {
                         CalendarTipView()
                     }
+                } header: {
+                    Text("Help")
+                } footer: {
+                    Text("Replays the intro and the tour of Home.")
                 }
             }
             .pixelTitle("Settings")
+            .fullScreenCover(isPresented: $showIntro) { OnboardingView() }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Done") { dismiss() }
