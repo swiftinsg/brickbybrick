@@ -1,30 +1,30 @@
-name: brickbybrick
+name: focushouse
 options:
   bundleIdPrefix: com.chuahchengxi
   deploymentTarget:
     iOS: "27.2"
 targets:
-  brickbybrick:
+  focushouse:
     type: application
     platform: iOS
     sources:
-      - brickbybrick
+      - focushouse
       - Shared
       - path: Art/furniture.json   # furniture sprites + prices, drawn at runtime
         buildPhase: resources
       - path: Art/furniture_hobbies.json
         buildPhase: resources
     entitlements:
-      path: brickbybrick/brickbybrick.entitlements
+      path: focushouse/focushouse.entitlements
       properties: &ents
         com.apple.developer.family-controls: true
-        com.apple.security.application-groups: [group.com.chuahchengxi.brickbybrick]
+        com.apple.security.application-groups: [group.com.chuahchengxi.focushouse]
     dependencies:
       - target: RestMonitor
     settings:
       GENERATE_INFOPLIST_FILE: YES
       INFOPLIST_KEY_UILaunchScreen_Generation: YES
-      INFOPLIST_KEY_NSCalendarsFullAccessUsageDescription: "brickbybrick plans around your calendar events and can add your tasks to Calendar."
+      INFOPLIST_KEY_NSCalendarsFullAccessUsageDescription: "focushouse plans around your calendar events and can add your tasks to Calendar."
       SWIFT_VERSION: "6.0"
       ASSETCATALOG_COMPILER_APPICON_NAME: ""   # no app icon yet
   RestMonitor:
@@ -42,21 +42,21 @@ targets:
       path: RestMonitor/RestMonitor.entitlements
       properties: *ents
     settings:
-      PRODUCT_BUNDLE_IDENTIFIER: com.chuahchengxi.brickbybrick.RestMonitor
+      PRODUCT_BUNDLE_IDENTIFIER: com.chuahchengxi.focushouse.RestMonitor
       SWIFT_VERSION: "6.0"
-  brickbybrickTests:
+  focushouseTests:
     type: bundle.unit-test
     platform: iOS
-    sources: [brickbybrickTests]
+    sources: [focushouseTests]
     dependencies:
-      - target: brickbybrick
+      - target: focushouse
     settings:
       GENERATE_INFOPLIST_FILE: YES
       SWIFT_VERSION: "6.0"
 schemes:
-  brickbybrick:
+  focushouse:
     build:
       targets:
-        brickbybrick: all
+        focushouse: all
     test:
-      targets: [brickbybrickTests]
+      targets: [focushouseTests]

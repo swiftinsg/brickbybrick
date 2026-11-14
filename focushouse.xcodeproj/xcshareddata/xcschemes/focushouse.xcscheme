@@ -15,10 +15,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "9A00C6506A5B61B17D927ED6"
-               BuildableName = "brickbybrick.app"
-               BlueprintName = "brickbybrick"
-               ReferencedContainer = "container:brickbybrick.xcodeproj">
+               BlueprintIdentifier = "DB60F179ADAD55FE071FAE35"
+               BuildableName = "focushouse.app"
+               BlueprintName = "focushouse"
+               ReferencedContainer = "container:focushouse.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -32,10 +32,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "9A00C6506A5B61B17D927ED6"
-            BuildableName = "brickbybrick.app"
-            BlueprintName = "brickbybrick"
-            ReferencedContainer = "container:brickbybrick.xcodeproj">
+            BlueprintIdentifier = "DB60F179ADAD55FE071FAE35"
+            BuildableName = "focushouse.app"
+            BlueprintName = "focushouse"
+            ReferencedContainer = "container:focushouse.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <Testables>
@@ -44,10 +44,10 @@
             parallelizable = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "6A1194E65355EFECF4BA57CF"
-               BuildableName = "brickbybrickTests.xctest"
-               BlueprintName = "brickbybrickTests"
-               ReferencedContainer = "container:brickbybrick.xcodeproj">
+               BlueprintIdentifier = "C07F26641A2632ADF2D3A481"
+               BuildableName = "focushouseTests.xctest"
+               BlueprintName = "focushouseTests"
+               ReferencedContainer = "container:focushouse.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -68,10 +68,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "9A00C6506A5B61B17D927ED6"
-            BuildableName = "brickbybrick.app"
-            BlueprintName = "brickbybrick"
-            ReferencedContainer = "container:brickbybrick.xcodeproj">
+            BlueprintIdentifier = "DB60F179ADAD55FE071FAE35"
+            BuildableName = "focushouse.app"
+            BlueprintName = "focushouse"
+            ReferencedContainer = "container:focushouse.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -85,10 +85,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "9A00C6506A5B61B17D927ED6"
-            BuildableName = "brickbybrick.app"
-            BlueprintName = "brickbybrick"
-            ReferencedContainer = "container:brickbybrick.xcodeproj">
+            BlueprintIdentifier = "DB60F179ADAD55FE071FAE35"
+            BuildableName = "focushouse.app"
+            BlueprintName = "focushouse"
+            ReferencedContainer = "container:focushouse.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

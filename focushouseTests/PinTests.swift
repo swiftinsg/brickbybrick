@@ -1,7 +1,7 @@
 import Foundation
 import SwiftData
 import Testing
-@testable import brickbybrick
+@testable import focushouse
 
 @MainActor struct PinTests {
     @Test func pinnedTaskStaysAndOthersFlowAround() throws {

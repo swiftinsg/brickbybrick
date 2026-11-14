@@ -104,7 +104,7 @@ enum House {
 }
 
 /// Fallback rest when Screen Time is off: time away from this app. When
-/// brickbybrick goes to the background the time is saved; when it's opened again
+/// focushouse goes to the background the time is saved; when it's opened again
 /// the gap is added (waking hours only, 30+ min).
 extension RestLog {
     mutating func add(from: Date, to: Date, routine: Routine, calendar: Calendar = .current) {

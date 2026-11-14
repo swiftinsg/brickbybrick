@@ -1,6 +1,6 @@
 # Teen hobbies and schoolwork: research notes
 
-Research for **brickbybrick**, a study planner for students aged 13–18. The aim was to ground the furniture catalogue in what teenagers actually do, using published surveys and national statistics rather than assumptions.
+Research for **focushouse**, a study planner for students aged 13–18. The aim was to ground the furniture catalogue in what teenagers actually do, using published surveys and national statistics rather than assumptions.
 
 ## How to read this
 
@@ -40,7 +40,7 @@ Four categories were chosen for the planner. They are design categories based on
 3. **Essays and writing** — longer-form writing and coursework. The UK arts survey separately lists "written stories, plays, or poetry" as a common creative activity, showing writing is both schoolwork and leisure. ([UK Government, arts report](https://www.gov.uk/government/statistics/community-and-engagement-survey-202526-arts/community-and-engagement-survey-202526-arts-report))
 4. **Group projects and presentations** — collaborative work and speaking tasks. Pew found that 72% of teen gamers play with others and 41% say gaming has helped them work with others, which reflects how central group work and collaboration are to teen life. ([Pew, *Teens and Video Games Today*](https://www.pewresearch.org/internet/2024/05/09/teens-and-video-games-today/))
 
-## Design implications for brickbybrick
+## Design implications for focushouse
 
 - The room should support **both consumption and creation**: a screen corner, a gaming corner, a music corner, and a making corner.
 - Reading and writing are quieter, smaller-scale activities; their furniture should feel like a nook rather than a workstation.

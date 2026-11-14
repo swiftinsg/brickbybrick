@@ -1,4 +1,4 @@
-# brickbybrick — Planning Notes
+# focushouse — Planning Notes
 
 Living notes from the requirements Q&A. Updated after each answer.
 
@@ -8,7 +8,7 @@ A SwiftUI app using Apple's on-device Foundation Models to:
 - recommend a schedule with suggested timings for each task
 
 ## Decided
-- Name: brickbybrick
+- Name: focushouse
 - Repo: public on GitHub
 - Platform: iOS SwiftUI app targeting iOS 27.2 (confirmed)
 - Input modes (toggle): **Goal mode** (one big goal → tasks spread over days) and **Today mode** (messy to-do dump → tidied, timed, fitted into today)
@@ -172,3 +172,7 @@ A: B: in phases, in the order listed in the Plan.
 - **School timetable → Calendar** (Settings → School → Add timetable to Calendar): pick a photo or a PDF (first 2 pages). Vision's RecognizeDocumentsRequest reads the table, the on-device model turns it into lessons (and also gets the image if the model supports vision), and the student checks and edits the list (or types lessons in without Apple Intelligence). The lessons become weekly repeating events until a chosen end of term. Re-importing replaces the last timetable. Plans then avoid lessons like any Calendar event, including ones that run past normal school hours (CCAs).
   - Uses Vision, PDFKit and PhotosUI (Apple frameworks).
   - **Week A/B (odd/even)**: a toggle plus "This week is Week A / Week B". Each lesson is Every week, Week A or Week B (the AI marks them; editable). A/B lessons repeat every 2 weeks starting in the right week, titled e.g. "Maths (Week A)".
+
+### Renamed to focushouse (2026-11-14)
+- "brickbybrick" is taken, so the app, targets, scheme, folders, App Group and bundle id (`com.chuahchengxi.focushouse`) are now focushouse. New bundle id = new app on device; old data stays in the old one.
+- Repo moved to https://github.com/swiftinsg/focushouse.

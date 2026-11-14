@@ -2,7 +2,7 @@ import DeviceActivity
 import Foundation
 
 /// Screen Time runs this in the background at the start and end of each waking
-/// hour brickbybrick watches. If the phone was used less than
+/// hour focushouse watches. If the phone was used less than
 /// `RestHours.glanceMinutes` that hour, it counts as an hour of rest.
 // ponytail: Screen Time callbacks can be late or skipped; a missed hour just
 // isn't counted, which errs on the side of less rest.
