@@ -21,7 +21,7 @@ enum TourStep: Int, CaseIterable {
 
     var text: String {
         switch self {
-        case .house: "It mirrors your mental health. Stressful days in a row wear it down, and rest builds it back up. Look after yourself and it stays standing."
+        case .house: "It mirrors your mental health. Stressful days in a row wear it down, and rest builds it back up. Look after yourself and it stays standing. Tap the door to go inside."
         case .status: "Calm, Stressed, Overloaded or Crumbling, based on how many hard days you've had in a row. Resting means you rested enough today to repair a step."
         case .stress: "Fills a little for each stressful day in a row. Easy tasks don't count, and lessons and exams count half."
         case .rest: "Time with your phone down while you're awake. Reach \(HomeView.duration(House.restGoal)) in a day to repair your house one step."
@@ -73,6 +73,7 @@ private struct TourOverlay: View {
     let size: CGSize
     let finish: () -> Void
     @State private var index = 0
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     /// Spotlight steps whose view isn't on screen (e.g. no next task) are skipped.
     private var steps: [TourStep] { TourStep.allCases.filter { $0.arrow != nil || rects[$0] != nil } }
@@ -83,16 +84,15 @@ private struct TourOverlay: View {
         let last = index >= steps.count - 1
 
         ZStack {
-            Path { p in
-                p.addRect(CGRect(origin: .zero, size: size))
-                if let hole { p.addRect(hole) }
-            }
-            .fill(.black.opacity(0.65), style: FillStyle(eoFill: true))
-            .contentShape(Rectangle())
-            .onTapGesture(perform: advance)
+            // With nothing to spotlight, the hole shrinks to a point by the arrow's target.
+            Spotlight(hole: hole ?? CGRect(origin: target(step), size: .zero))
+                .fill(.black.opacity(0.65), style: FillStyle(eoFill: true))
+                .contentShape(Rectangle())
+                .onTapGesture(perform: advance)
 
             if let hole {
                 Rectangle().strokeBorder(Color.gold, lineWidth: 3)
+                    .phaseAnimator(reduceMotion ? [1.0] : [1.0, 0.35]) { $0.opacity($1) } animation: { _ in .easeInOut(duration: 0.7) }
                     .frame(width: hole.width, height: hole.height)
                     .position(x: hole.midX, y: hole.midY)
                     .allowsHitTesting(false)
@@ -105,6 +105,7 @@ private struct TourOverlay: View {
                     Text(step.text).font(.subheadline)
                     HStack {
                         Text("\(index + 1) of \(steps.count)").font(.footnote).foregroundStyle(.secondary)
+                            .contentTransition(.numericText())
                         Spacer()
                         if !last { Button("Skip", action: finish).font(.subheadline) }
                         Button(last ? "Done" : "Next", action: advance)
@@ -116,19 +117,31 @@ private struct TourOverlay: View {
                 .pixelBox()
                 if let arrow = step.arrow, arrow.edge == .bottom { arrowImage(arrow.symbol, arrow.edge) }
             }
+            .id(step)
+            .transition(reduceMotion ? .opacity : .scale(scale: 0.9).combined(with: .opacity))
             .padding()
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: cardAlignment(step, hole))
             .accessibilityElement(children: .contain)
             .accessibilityAddTraits(.isModal)
         }
-        .animation(.easeInOut(duration: 0.25), value: index)
+        .animation(reduceMotion ? .easeInOut(duration: 0.2) : .spring(duration: 0.5, bounce: 0.25), value: index)
         .tint(.brick)
     }
 
     private func arrowImage(_ symbol: String, _ edge: Alignment) -> some View {
         Image(systemName: symbol).font(.largeTitle.weight(.bold)).foregroundStyle(Color.gold)
+            .symbolEffect(.bounce, options: .repeating, isActive: !reduceMotion)
             .frame(maxWidth: .infinity, alignment: edge == .topTrailing ? .trailing : edge == .bottom ? .center : .leading)
             .accessibilityHidden(true)
+    }
+
+    /// Where an arrow step points: the toolbar corners or the tab bar.
+    private func target(_ step: TourStep) -> CGPoint {
+        switch step.arrow?.edge {
+        case .topTrailing: CGPoint(x: size.width - 30, y: 0)
+        case .bottom: CGPoint(x: size.width / 2, y: size.height)
+        default: CGPoint(x: 30, y: 0)
+        }
     }
 
     /// Card goes on the other half of the screen from the spotlight.
@@ -139,5 +152,21 @@ private struct TourOverlay: View {
 
     private func advance() {
         if index >= steps.count - 1 { finish() } else { index += 1 }
+    }
+}
+
+/// The dimmed screen with a rectangular hole that glides between steps.
+private struct Spotlight: Shape {
+    var hole: CGRect
+
+    var animatableData: AnimatablePair<AnimatablePair<CGFloat, CGFloat>, AnimatablePair<CGFloat, CGFloat>> {
+        get { .init(.init(hole.minX, hole.minY), .init(hole.width, hole.height)) }
+        set { hole = CGRect(x: newValue.first.first, y: newValue.first.second, width: newValue.second.first, height: newValue.second.second) }
+    }
+
+    func path(in rect: CGRect) -> Path {
+        var p = Path(rect)
+        p.addRect(hole)
+        return p
     }
 }

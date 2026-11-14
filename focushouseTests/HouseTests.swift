@@ -86,4 +86,16 @@ struct HouseTests {
         #expect(Shop.spent(["Desk", "Deluxe"], in: all) == 160)
         #expect(Shop.items.count == 34)   // both JSON files bundled
     }
+
+    @Test func roomSpotsCapSwapAndReplace() {
+        var raw = ""
+        for g in ["A", "B", "C", "D", "E"] { raw = Shop.toggle(g, in: raw) }
+        #expect(Shop.slots(raw) == ["A", "B", "C", "D"])        // E doesn't fit
+        raw = Shop.put("A", at: 2, in: raw)
+        #expect(Shop.slots(raw) == ["C", "B", "A", "D"])        // moving swaps
+        raw = Shop.put("E", at: 1, in: raw)
+        #expect(Shop.slots(raw) == ["C", "E", "A", "D"])        // new replaces
+        raw = Shop.toggle("A", in: raw)
+        #expect(Shop.slots(raw) == ["C", "E", "", "D"])         // spot stays put
+    }
 }

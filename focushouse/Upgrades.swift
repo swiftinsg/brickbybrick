@@ -53,6 +53,127 @@ enum Shop {
             .compactMap { $0.max { $0.level < $1.level } }
             .sorted { $0.name < $1.name }
     }
+
+    /// How many things fit inside the house at once.
+    static let roomCap = 4
+
+    /// The house's spots, `roomCap` of them, each a furniture group or "" when empty.
+    /// Saved one per line in UserDefaults ("placed"), by group so upgrading
+    /// Lv 1 → Lv 2 keeps its spot.
+    static func slots(_ raw: String) -> [String] {
+        let s = raw.components(separatedBy: "\n")
+        return Array((s + Array(repeating: "", count: roomCap)).prefix(roomCap))
+    }
+
+    /// What stands in each spot (nil = empty).
+    static func placed(_ raw: String, owned: Set<String>) -> [Furniture?] {
+        let room = room(owned)
+        return slots(raw).map { g in room.first { $0.group == g } }
+    }
+
+    /// Drops a group on spot `i`. Moving within the house swaps with whatever is
+    /// there; bringing something new in replaces it.
+    static func put(_ group: String, at i: Int, in raw: String) -> String {
+        var s = slots(raw)
+        if let from = s.firstIndex(of: group) { s.swapAt(from, i) } else { s[i] = group }
+        return s.joined(separator: "\n")
+    }
+
+    /// Takes a group out, or puts it in the first empty spot.
+    static func toggle(_ group: String, in raw: String) -> String {
+        var s = slots(raw)
+        if let i = s.firstIndex(of: group) { s[i] = "" }
+        else if let i = s.firstIndex(of: "") { s[i] = group }
+        return s.joined(separator: "\n")
+    }
+}
+
+/// Inside the house: a pixel room (wallpaper, window, plank floor) drawn at the
+/// furniture sprites' own pixel size, with furniture standing in `roomCap` spots.
+/// Long-press and drag to move things between spots, or drop something from
+/// "Your things" onto a spot. Opens from the house's door on Home.
+struct RoomView: View {
+    @AppStorage("owned") private var ownedRaw = ""
+    @AppStorage("placed") private var placedRaw = ""
+    @State private var target: Int?
+
+    /// The room in sprite pixels: 4 spots of 24, a pixel apart, with a margin.
+    static let size = CGSize(width: 106, height: 64)
+    static func spotX(_ i: Int) -> Int { 4 + i * 25 }
+    static let spotY = 29          // a sprite's bottom row lands on floor row 52
+
+    var body: some View {
+        let owned = Shop.owned(ownedRaw)
+        let slots = Shop.placed(placedRaw, owned: owned)
+        let items = slots.compactMap { $0 }
+
+        GeometryReader { geo in
+            let px = geo.size.width / Self.size.width
+            ZStack(alignment: .topLeading) {
+                Canvas { ctx, _ in Self.draw(ctx, px: px, filled: slots.map { $0 != nil }) }
+                ForEach(slots.indices, id: \.self) { i in
+                    spot(slots[i], px: px)
+                        .overlay { if target == i { Rectangle().strokeBorder(Color.gold, lineWidth: 3) } }
+                        .dropDestination(for: String.self) { groups, _ in
+                            // only things the student owns, not any text dragged in from elsewhere
+                            guard let g = groups.first, Shop.room(owned).contains(where: { $0.group == g }) else { return false }
+                            withAnimation(.snappy) { placedRaw = Shop.put(g, at: i, in: placedRaw) }
+                            return true
+                        } isTargeted: { on in
+                            if on { target = i } else if target == i { target = nil }
+                        }
+                        .frame(width: 24 * px, height: 24 * px)
+                        .position(x: (CGFloat(Self.spotX(i)) + 12) * px, y: (CGFloat(Self.spotY) + 12) * px)
+                }
+            }
+        }
+        .aspectRatio(Self.size.width / Self.size.height, contentMode: .fit)
+        .pixelBox(Color.wall)
+        .sensoryFeedback(.selection, trigger: placedRaw)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(items.isEmpty ? "Inside your house: empty" : "Inside your house: " + items.map(\.name).joined(separator: ", "))
+    }
+
+    @ViewBuilder private func spot(_ item: Furniture?, px: CGFloat) -> some View {
+        if let item {
+            PixelSprite(grid: item.grid)
+                .draggable(item.group) { PixelSprite(grid: item.grid).frame(width: 72) }
+        } else {
+            // an empty spot: a dashed footprint on the floor
+            Rectangle().strokeBorder(Color.white.opacity(0.7), style: StrokeStyle(lineWidth: 2, dash: [4, 4]))
+                .frame(height: 8 * px)
+                .frame(maxHeight: .infinity, alignment: .bottom)
+                .padding(.bottom, -1 * px)
+                .contentShape(Rectangle())
+        }
+    }
+
+    /// The room itself, in fixed pixel-art colours like the house sprites.
+    static func draw(_ ctx: GraphicsContext, px: CGFloat, filled: [Bool]) {
+        func fill(_ x: Int, _ y: Int, _ w: Int, _ h: Int, _ hex: UInt32, _ opacity: Double = 1) {
+            ctx.fill(Path(CGRect(x: CGFloat(x) * px, y: CGFloat(y) * px, width: CGFloat(w) * px + 0.5, height: CGFloat(h) * px + 0.5)),
+                     with: .color(Color(light: hex, dark: hex).opacity(opacity)))
+        }
+        let w = Int(size.width), h = Int(size.height)
+        fill(0, 0, w, 45, 0xF4E7CE)                                          // wallpaper
+        for x in stride(from: 3, to: w, by: 6) { fill(x, 2, 1, 40, 0xE6D3AF) } // stripes
+        fill(0, 0, w, 2, 0x553A22)                                           // ceiling beam
+        fill(40, 6, 26, 18, 0x6A4426)                                        // window frame
+        for (x, y, c) in [(42, 8, 0x8ECFE6), (54, 8, 0x8ECFE6), (42, 15, 0x4D93B0), (54, 15, 0x4D93B0)] as [(Int, Int, UInt32)] {
+            fill(x, y, 10, 6, c)
+        }
+        fill(43, 9, 1, 3, 0xF4FBFF); fill(55, 9, 1, 3, 0xF4FBFF)             // glints
+        fill(39, 24, 28, 1, 0xE8F0FB)                                        // sill
+        fill(0, 42, w, 3, 0x6A4426); fill(0, 42, w, 1, 0x91603A)             // skirting
+        for (band, y) in stride(from: 45, to: h, by: 3).enumerated() {       // floor planks
+            let rows = min(3, h - y)
+            fill(0, y, w, rows, band % 2 == 0 ? 0x91603A : 0x7A5334)
+            for x in stride(from: (band * 11) % 26, to: w, by: 26) { fill(x, y, 1, rows, 0x553A22) }
+        }
+        for (i, on) in filled.enumerated() where on {                       // soft shadow under furniture
+            fill(spotX(i) + 2, spotY + 23, 20, 2, 0x2B2340, 0.25)
+        }
+    }
 }
 
 /// A furniture sprite, crisp at any size.
@@ -80,6 +201,7 @@ struct PixelSprite: View {
 struct UpgradesView: View {
     let earned: Int
     @AppStorage("owned") private var ownedRaw = ""
+    @AppStorage("placed") private var placedRaw = ""
     @State private var picked: Furniture?
     @Environment(\.dismiss) private var dismiss
 
@@ -87,18 +209,22 @@ struct UpgradesView: View {
         let owned = Shop.owned(ownedRaw)
         let balance = earned - Shop.spent(owned)
         let room = Shop.room(owned)
+        let placed = Shop.placed(placedRaw, owned: owned).compactMap { $0 }
 
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 24) {
                     Text("Finish tasks to earn bricks, then spend them here. Bricks never repair the house: only rest does.")
                         .font(.subheadline).foregroundStyle(.secondary)
-                    if room.isEmpty {
-                        Text("Your room is empty. Pick something from the shelves below.")
-                            .font(.subheadline).frame(maxWidth: .infinity, alignment: .leading)
-                            .padding().pixelBox()
-                    } else {
-                        shelf("Your room", room, owned: owned, balance: balance)
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Inside your house \(placed.count)/\(Shop.roomCap)").font(.pixel(20, relativeTo: .headline).weight(.bold))
+                        RoomView()
+                        Text(room.isEmpty ? "Buy something from the shelves below, then put it inside."
+                                          : "Hold and drag your things onto a spot, or tap one to put it in or take it out.")
+                            .font(.footnote).foregroundStyle(.secondary)
+                    }
+                    if !room.isEmpty {
+                        shelf("Your things", room, owned: owned, balance: balance, placed: placed)
                     }
                     ForEach(["Work", "Hobbies", "Rest"], id: \.self) { tag in
                         shelf(tag, Shop.items.filter { $0.tag == tag }, owned: owned, balance: balance)
@@ -121,8 +247,16 @@ struct UpgradesView: View {
                 }
             }
             .sheet(item: $picked) { item in
-                FurnitureDetail(item: item, state: Shop.state(item, owned: owned, balance: balance)) {
+                FurnitureDetail(item: item, state: Shop.state(item, owned: owned, balance: balance),
+                                isPlaced: placed.contains { $0.group == item.group },
+                                roomFull: placed.count >= Shop.roomCap) {
                     ownedRaw = (owned.union([item.name])).sorted().joined(separator: "\n")
+                    // new things go straight inside while there's space
+                    if item.level == 1, !placed.contains(where: { $0.group == item.group }) {
+                        placedRaw = Shop.toggle(item.group, in: placedRaw)
+                    }
+                } place: {
+                    placedRaw = Shop.toggle(item.group, in: placedRaw)
                 }
             }
             .sensoryFeedback(.success, trigger: ownedRaw)
@@ -130,16 +264,21 @@ struct UpgradesView: View {
     }
 
     /// A titled wooden shelf with items standing on the plank.
-    private func shelf(_ title: String, _ items: [Furniture], owned: Set<String>, balance: Int) -> some View {
+    private func shelf(_ title: String, _ items: [Furniture], owned: Set<String>, balance: Int, placed: [Furniture] = []) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(title).font(.pixel(20, relativeTo: .headline).weight(.bold))   // pixel caps B reads as G
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(alignment: .bottom, spacing: 14) {
                     ForEach(items) { item in
-                        Button { picked = item } label: {
-                            tile(item, Shop.state(item, owned: owned, balance: balance))
+                        let button = Button { picked = item } label: {
+                            tile(item, Shop.state(item, owned: owned, balance: balance), placed: placed.contains(item))
                         }
                         .buttonStyle(.plain)
+                        if owned.contains(item.name) {
+                            button.draggable(item.group) { PixelSprite(grid: item.grid).frame(width: 72) }
+                        } else {
+                            button
+                        }
                     }
                 }
                 .padding(.horizontal, 14)
@@ -151,28 +290,34 @@ struct UpgradesView: View {
         }
     }
 
-    private func tile(_ item: Furniture, _ state: Shop.State) -> some View {
+    private func tile(_ item: Furniture, _ state: Shop.State, placed: Bool) -> some View {
         VStack(spacing: 6) {
             Text(item.name).font(.caption.weight(.semibold)).lineLimit(2)
                 .multilineTextAlignment(.center).frame(width: 92, height: 32, alignment: .bottom)
             PixelSprite(grid: item.grid).frame(width: 84)
                 .opacity(state == .owned || state == .buy ? 1 : 0.55)
-            PriceTag(item: item, state: state)
+            PriceTag(item: item, state: state, placed: placed)
         }
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("\(item.name), \(PriceTag.text(item, state))")
+        .accessibilityLabel("\(item.name), \(placed ? "in your house" : PriceTag.text(item, state))")
     }
 }
 
 /// The brick icon and a pixel number, as on Home's toolbar.
 struct BrickCount: View {
     let value: Int
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     var body: some View {
         HStack(spacing: 6) {
             Image("icon.brick").pixelArt().frame(width: 28)
             PixelNumber(value: value).foregroundStyle(Color.ink)
         }
         .padding(.horizontal, 6)
+        .keyframeAnimator(initialValue: 1.0, trigger: reduceMotion ? 0 : value) { $0.scaleEffect($1) } keyframes: { _ in
+            SpringKeyframe(1.35, duration: 0.15)
+            SpringKeyframe(1.0, duration: 0.4, spring: .bouncy)
+        }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("\(value) bricks")
     }
@@ -181,6 +326,7 @@ struct BrickCount: View {
 private struct PriceTag: View {
     let item: Furniture
     let state: Shop.State
+    var placed = false
 
     static func text(_ item: Furniture, _ state: Shop.State) -> String {
         switch state {
@@ -194,8 +340,8 @@ private struct PriceTag: View {
         HStack(spacing: 4) {
             switch state {
             case .owned:
-                Image(systemName: "checkmark").font(.caption2.weight(.heavy))
-                Text("Owned").font(.caption2.weight(.bold))
+                Image(systemName: placed ? "house.fill" : "checkmark").font(.caption2.weight(.heavy))
+                Text(placed ? "In house" : "Owned").font(.caption2.weight(.bold))
             case .needs:
                 Image(systemName: "lock.fill").font(.caption2)
                 Text("Lv 1 first").font(.caption2.weight(.bold))
@@ -225,8 +371,13 @@ private struct Plank: View {
 private struct FurnitureDetail: View {
     let item: Furniture
     let state: Shop.State
+    let isPlaced: Bool
+    let roomFull: Bool
     let buy: () -> Void
+    let place: () -> Void
     @Environment(\.dismiss) private var dismiss
+
+    private var enabled: Bool { state == .buy || (state == .owned && (isPlaced || !roomFull)) }
 
     var body: some View {
         VStack(spacing: 16) {
@@ -240,12 +391,12 @@ private struct FurnitureDetail: View {
             }
             Spacer(minLength: 0)
             Button {
-                buy()
+                state == .owned ? place() : buy()
                 dismiss()
             } label: {
                 Group {
                     switch state {
-                    case .owned: Text("In your room")
+                    case .owned: Text(isPlaced ? "Take out of house" : roomFull ? "House is full (\(Shop.roomCap)/\(Shop.roomCap))" : "Put in house")
                     case .needs(let base): Text("Buy \(base) first")
                     case .short(let n): Text("\(n) more bricks needed")
                     case .buy: Text("\(item.level > 1 ? "Upgrade" : "Buy") for \(item.cost) bricks")
@@ -253,10 +404,10 @@ private struct FurnitureDetail: View {
                 }
                 .font(.headline)
                 .frame(maxWidth: .infinity).padding()
-                .pixelBox(state == .buy ? Color.gold : Color.track)
+                .pixelBox(enabled ? Color.gold : Color.track)
             }
             .buttonStyle(.plain)
-            .disabled(state != .buy)
+            .disabled(!enabled)
         }
         .padding(20)
         .foregroundStyle(Color.ink)

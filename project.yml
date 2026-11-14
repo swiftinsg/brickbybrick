@@ -37,6 +37,8 @@ targets:
         IPHONEOS_DEPLOYMENT_TARGET: "27.0"
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_KEY_CFBundleDisplayName: focushouse
+        CURRENT_PROJECT_VERSION: "1"
+        MARKETING_VERSION: "1.0"
         INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: NO
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
         INFOPLIST_KEY_NSCalendarsFullAccessUsageDescription: "focushouse plans around your calendar events and can add your tasks to Calendar."
