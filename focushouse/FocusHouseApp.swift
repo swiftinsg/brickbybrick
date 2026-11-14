@@ -5,6 +5,7 @@ import SwiftData
 struct FocusHouseApp: App {
     let container: ModelContainer
     @Environment(\.scenePhase) private var scenePhase
+    @AppStorage("seenOnboarding") private var seenOnboarding = false
 
     init() {
         do { container = try ModelContainer(for: Plan.self, TodoItem.self) }
@@ -12,6 +13,7 @@ struct FocusHouseApp: App {
         Reminders.shared.setUp(container: container)
         CheckIn.shared.restore(container.mainContext)
         Theme.registerFonts()
+        Hint.setUp()
     }
 
     var body: some Scene {
@@ -25,6 +27,9 @@ struct FocusHouseApp: App {
                 Tab("Calendar", image: "tab.calendar") { CalendarView() }
             }
             .tint(.brick)
+            .fullScreenCover(isPresented: .constant(!seenOnboarding), onDismiss: { Hint.introDone = true }) {
+                OnboardingView()
+            }
             .onOpenURL { WidgetSync.open($0, container.mainContext) }
             .sheet(item: Binding(get: { CheckIn.shared.queue.first },
                                  set: { if $0 == nil, let t = CheckIn.shared.queue.first { CheckIn.shared.later(t) } })) {

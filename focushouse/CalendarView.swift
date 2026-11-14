@@ -1,4 +1,5 @@
 import SwiftUI
+import TipKit
 import SwiftData
 
 /// Home: a month calendar, then everything on the picked day. That's the
@@ -109,6 +110,7 @@ struct MonthGrid: View {
             }
         }
         .padding(.vertical, 4)
+        .popoverTip(Hint.calendar)
         .onChange(of: day) { if !cal.isDate(day, equalTo: month, toGranularity: .month) { month = day } }
         .sensoryFeedback(.selection, trigger: day)
     }
