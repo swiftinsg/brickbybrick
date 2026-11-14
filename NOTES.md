@@ -174,5 +174,6 @@ A: B: in phases, in the order listed in the Plan.
   - **Week A/B (odd/even)**: a toggle plus "This week is Week A / Week B". Each lesson is Every week, Week A or Week B (the AI marks them; editable). A/B lessons repeat every 2 weeks starting in the right week, titled e.g. "Maths (Week A)".
 
 ### Renamed to focushouse (2026-11-14)
-- "brickbybrick" is taken, so the app, targets, scheme, folders, App Group and bundle id (`com.chuahchengxi.focushouse`) are now focushouse. New bundle id = new app on device; old data stays in the old one.
+- "brickbybrick" is taken, so the app, targets, scheme and folders are now focushouse.
+- Uses Tristan's App Store setup from main: bundle id `sg.swiftin.2am` (+ `.RestMonitor`), App Group `group.sg.swiftin.2am`, team XL5JK4F896, app icon, iPhone only, display name focushouse, no non-exempt encryption, app target iOS 27.0. These live in `project.yml` (setting group `phone`) so xcodegen keeps them.
 - Repo moved to https://github.com/swiftinsg/focushouse.

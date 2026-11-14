@@ -1,8 +1,16 @@
 name: focushouse
 options:
-  bundleIdPrefix: com.chuahchengxi
+  bundleIdPrefix: sg.swiftin
   deploymentTarget:
     iOS: "27.2"
+settingGroups:   # Tristan's App Store setup: swiftin team, iPhone only
+  phone:
+    DEVELOPMENT_TEAM: XL5JK4F896
+    TARGETED_DEVICE_FAMILY: "1"
+    SUPPORTED_PLATFORMS: "iphoneos iphonesimulator"
+    SUPPORTS_MACCATALYST: NO
+    SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: NO
+    SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD: NO
 targets:
   focushouse:
     type: application
@@ -18,15 +26,21 @@ targets:
       path: focushouse/focushouse.entitlements
       properties: &ents
         com.apple.developer.family-controls: true
-        com.apple.security.application-groups: [group.com.chuahchengxi.focushouse]
+        com.apple.security.application-groups: [group.sg.swiftin.2am]
     dependencies:
       - target: RestMonitor
     settings:
-      GENERATE_INFOPLIST_FILE: YES
-      INFOPLIST_KEY_UILaunchScreen_Generation: YES
-      INFOPLIST_KEY_NSCalendarsFullAccessUsageDescription: "focushouse plans around your calendar events and can add your tasks to Calendar."
-      SWIFT_VERSION: "6.0"
-      ASSETCATALOG_COMPILER_APPICON_NAME: ""   # no app icon yet
+      groups: [phone]
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: sg.swiftin.2am
+        IPHONEOS_DEPLOYMENT_TARGET: "27.0"
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: focushouse
+        INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: NO
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_NSCalendarsFullAccessUsageDescription: "focushouse plans around your calendar events and can add your tasks to Calendar."
+        SWIFT_VERSION: "6.0"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
   RestMonitor:
     type: app-extension
     platform: iOS
@@ -42,8 +56,10 @@ targets:
       path: RestMonitor/RestMonitor.entitlements
       properties: *ents
     settings:
-      PRODUCT_BUNDLE_IDENTIFIER: com.chuahchengxi.focushouse.RestMonitor
-      SWIFT_VERSION: "6.0"
+      groups: [phone]
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: sg.swiftin.2am.RestMonitor
+        SWIFT_VERSION: "6.0"
   focushouseTests:
     type: bundle.unit-test
     platform: iOS
@@ -51,8 +67,10 @@ targets:
     dependencies:
       - target: focushouse
     settings:
-      GENERATE_INFOPLIST_FILE: YES
-      SWIFT_VERSION: "6.0"
+      groups: [phone]
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        SWIFT_VERSION: "6.0"
 schemes:
   focushouse:
     build:
