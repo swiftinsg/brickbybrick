@@ -65,7 +65,7 @@ struct SettingsView: View {
                 } footer: {
                     Text(screenTimeRest
                          ? "Each waking hour you barely use your phone (under \(RestHours.glanceMinutes) min) counts as rest. \(Int(House.restGoal / 3600)) hours a day repairs your house a step."
-                         : "Rest is time away from brickbybrick. Turn on Screen Time to count time away from your whole phone instead.")
+                         : "Rest is time away from focushouse. Turn on Screen Time to count time away from your whole phone instead.")
                 }
                 Section {
                     ForEach(pace, id: \.category) { p in

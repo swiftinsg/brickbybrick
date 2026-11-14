@@ -31,7 +31,7 @@ struct NewPlanView: View {
                     .listRowBackground(Color.clear)
                     .listRowInsets(EdgeInsets())
                 } footer: {
-                    Text(mode == .today ? "Tidy a messy to-do list into a timed plan for today."
+                    Text(mode == .today ? "Input your messy to-do list into a timed plan for today."
                                         : "Break one big goal into steps spread over several days.")
                 }
 
@@ -53,7 +53,7 @@ struct NewPlanView: View {
                 } header: {
                     Text("When")
                 } footer: {
-                    Text("Plan ahead by picking a later start. Times are fitted around your routine and calendar.")
+                    Text("Plan ahead by picking a later start, and times are fitted around your routine and calendar.")
                 }
 
                 if Planner.isAvailable {
@@ -64,7 +64,7 @@ struct NewPlanView: View {
                     } header: {
                         Text("Study material (optional)")
                     } footer: {
-                        Text("Paste notes or a syllabus. Each section becomes a task with subtasks. Mark priorities in your list with words like \"urgent\" or \"can wait\".")
+                        Text("Paste your own notes or a syllabus, and each section becomes a task with subtasks. Label priorities in your list with words like \"urgent\" or \"can wait\".")
                     }
                 }
 

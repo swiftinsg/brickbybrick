@@ -25,7 +25,7 @@ import EventKit
     }
 
     /// Timed events the student attends between `from` and `to` (not "free" ones,
-    /// not the ones brickbybrick wrote for tasks), for stress on Home.
+    /// not the ones focushouse wrote for tasks), for stress on Home.
     static func attended(from: Date, to: Date, excluding own: Set<String>) -> [(title: String, start: Date, minutes: Int)] {
         guard hasAccess else { return [] }
         return store.events(matching: store.predicateForEvents(withStart: from, end: to, calendars: nil))
@@ -45,7 +45,7 @@ import EventKit
             event.title = task.title
             event.startDate = start
             event.endDate = end
-            event.notes = "From brickbybrick · \(plan.title)"
+            event.notes = "From focushouse · \(plan.title)"
             try store.save(event, span: .thisEvent, commit: false)
             task.eventID = event.eventIdentifier
             count += 1
@@ -81,7 +81,7 @@ enum CalendarError: LocalizedError {
     case noAccess, noCalendar
     var errorDescription: String? {
         switch self {
-        case .noAccess: "brickbybrick needs Calendar access. Turn it on in Settings → Apps → brickbybrick."
+        case .noAccess: "focushouse needs Calendar access. Turn it on in Settings → Apps → focushouse."
         case .noCalendar: "There's no calendar to add events to."
         }
     }

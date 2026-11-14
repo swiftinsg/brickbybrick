@@ -4,14 +4,14 @@
     python3 tools/sprites.py
 
 Reads Art/houses.json (house sprites designed with DeepSeek) and the tab icons
-below, and writes brickbybrick/Assets.xcassets. Pixels are kept at their real
+below, and writes focushouse/Assets.xcassets. Pixels are kept at their real
 size (32x32 houses); the app scales them up with interpolation off, so they stay
 crisp. Standard library only.
 """
 import json, os, struct, zlib
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-ASSETS = os.path.join(ROOT, "brickbybrick", "Assets.xcassets")
+ASSETS = os.path.join(ROOT, "focushouse", "Assets.xcassets")
 
 # 8x8 tab icons, drawn in one colour and tinted by the tab bar (template images).
 ICONS = {

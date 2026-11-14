@@ -2,7 +2,7 @@ import SwiftUI
 import SwiftData
 
 @main
-struct BrickByBrickApp: App {
+struct FocusHouseApp: App {
     let container: ModelContainer
     @Environment(\.scenePhase) private var scenePhase
 

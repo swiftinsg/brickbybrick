@@ -65,7 +65,7 @@ struct HomeView: View {
                     Button("Settings", systemImage: "line.3.horizontal") { showSettings = true }
                 }
                 ToolbarItem(placement: .principal) {
-                    Text("brickbybrick").font(.pixel(22, relativeTo: .headline).weight(.bold))
+                    Text("focushouse").font(.pixel(22, relativeTo: .headline).weight(.bold))
                 }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button { showUpgrades = true } label: {

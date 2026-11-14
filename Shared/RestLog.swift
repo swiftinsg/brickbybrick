@@ -3,7 +3,7 @@ import Foundation
 /// Rest per day, in seconds, shared between the app and the Screen Time monitor
 /// extension through the app group. Home reads it through @AppStorage.
 struct RestLog: Codable, Equatable {
-    static let group = "group.com.chuahchengxi.brickbybrick"
+    static let group = "group.sg.swiftin.2am"
     static var defaults: UserDefaults { UserDefaults(suiteName: group) ?? .standard }
     /// A shorter time away doesn't count as rest at all.
     static let minBreak: TimeInterval = 30 * 60

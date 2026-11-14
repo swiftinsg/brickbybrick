@@ -114,7 +114,7 @@ enum Timetable {
             event.title = lesson.week == .every ? lesson.subject : "\(lesson.subject) (\(lesson.week.rawValue))"
             event.startDate = firstDate(of: lesson, from: .now, thisWeekIsA: thisWeekIsA)
             event.endDate = event.startDate.addingTimeInterval(TimeInterval((lesson.end - lesson.start) * 60))
-            event.notes = "From brickbybrick · School timetable"
+            event.notes = "From focushouse · School timetable"
             event.addRecurrenceRule(EKRecurrenceRule(recurrenceWith: .weekly, interval: lesson.week == .every ? 1 : 2,
                                                      end: EKRecurrenceEnd(end: until)))
             try store.save(event, span: .futureEvents, commit: false)

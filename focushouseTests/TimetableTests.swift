@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import brickbybrick
+@testable import focushouse
 
 struct TimetableTests {
     var cal: Calendar = {
