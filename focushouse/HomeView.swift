@@ -241,6 +241,7 @@ struct InsideView: View {
         NavigationStack {
             VStack(alignment: .leading, spacing: 16) {
                 RoomView()
+                    .frame(maxWidth: .infinity)   // centred when the half sheet makes it shorter than wide
                 Text("Hold and drag your furniture to move it around. Up to \(Shop.roomCap) things fit inside.")
                     .font(.footnote).foregroundStyle(.secondary)
                 Button { showUpgrades = true } label: {
