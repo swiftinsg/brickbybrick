@@ -1,5 +1,6 @@
 import DeviceActivity
 import Foundation
+import WidgetKit
 
 /// Screen Time runs this in the background at the start and end of each waking
 /// hour focushouse watches. If the phone was used less than
@@ -19,6 +20,10 @@ final class RestMonitor: DeviceActivityMonitor {
 
     override func intervalDidEnd(for activity: DeviceActivityName) {
         guard !RestLog.defaults.bool(forKey: usedKey(activity)) else { return }
-        RestLog.update { $0.add(3600, on: Date.now.addingTimeInterval(-60)) }
+        // Phone down during a task still on the schedule, or a lesson, isn't rest.
+        let now = Date.now
+        guard !WidgetSnapshot.load().blocksRest(from: now.addingTimeInterval(-3600), to: now) else { return }
+        RestLog.update { $0.add(3600, on: now.addingTimeInterval(-60)) }
+        WidgetCenter.shared.reloadAllTimelines()
     }
 }

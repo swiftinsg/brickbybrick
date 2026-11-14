@@ -44,7 +44,8 @@ enum Planner {
 
     /// Splits the plan's input into tasks. `previous` is the plan the student
     /// rejected with "Start over": the AI is asked for a genuinely different one.
-    @MainActor static func draft(for plan: Plan, previous: [PlanTask] = []) async throws -> DraftPlan {
+    /// `history`: answered check-ins, so the plan fits how tasks really feel to them.
+    @MainActor static func draft(for plan: Plan, previous: [PlanTask] = [], history: [PlanTask] = []) async throws -> DraftPlan {
         let session = LanguageModelSession(instructions: """
             You help a student or teenager plan their work. Turn each thing the user asked for \
             into one item. Quick, simple jobs (pay mum back, tidy room, reply to a message, feed \
@@ -82,6 +83,7 @@ enum Planner {
         if !material.isEmpty { prompt += "\n\nStudy material:\n" + material.prefix(6000) }
         prompt += examples(for: plan.input + " " + material.prefix(2000))
         prompt += paceNote()
+        prompt += Reflections.promptNote(history)
 
         var options = GenerationOptions()
         if !previous.isEmpty {
@@ -255,6 +257,18 @@ extension Planner {
         all[category, default: []].append(Double(actual) / Double(estimate))
         all[category] = Array(all[category]!.suffix(20))
         UserDefaults.standard.set(try? JSONEncoder().encode(all), forKey: paceKey)
+    }
+
+    /// The student corrected a recorded time in the check-in: swap that ratio.
+    static func correctPace(category: String, estimate: Int, from old: Int, to new: Int) {
+        guard estimate > 0 else { return }
+        var all = savedPace()
+        if let i = all[category]?.lastIndex(of: Double(old) / Double(estimate)) {
+            all[category]![i] = Double(new) / Double(estimate)
+            UserDefaults.standard.set(try? JSONEncoder().encode(all), forKey: paceKey)
+        } else {
+            recordPace(category: category, estimate: estimate, actual: new)
+        }
     }
 
     static func savedPace() -> [String: [Double]] {

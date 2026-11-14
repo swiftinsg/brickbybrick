@@ -134,7 +134,9 @@ struct NewPlanView: View {
         defer { isWorking = false }
         do {
             let plan = newPlan(title: "", input: input, insert: false)
-            let draft = try await Planner.draft(for: plan)
+            let history = Reflections.history(in: context)
+            plan.breakMinutes = Reflections.breakMinutes(history)
+            let draft = try await Planner.draft(for: plan, history: history)
             plan.title = draft.title.trimmingCharacters(in: .whitespaces.union(.punctuationCharacters))
             context.insert(plan)
             plan.replaceTasks(with: draft)
@@ -147,7 +149,9 @@ struct NewPlanView: View {
 
     private func makeManual() {
         let firstLine = input.split(separator: "\n").first.map(String.init) ?? ""
-        onCreate(newPlan(title: firstLine.isEmpty ? "My plan" : firstLine, input: ""))
+        let plan = newPlan(title: firstLine.isEmpty ? "My plan" : firstLine, input: "")
+        plan.breakMinutes = Reflections.breakMinutes(Reflections.history(in: context))
+        onCreate(plan)
     }
 
     private func newPlan(title: String, input: String, insert: Bool = true) -> Plan {
@@ -204,5 +208,6 @@ extension Plan {
             .map(\.element)
         for (i, task) in tasks.enumerated() { task.order = i }
         reflow()
+        addFreeTime()
     }
 }

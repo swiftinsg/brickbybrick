@@ -16,6 +16,8 @@ enum PlanMode: String, CaseIterable {
     /// "Ask when I'm free" answer, minutes since midnight; nil = use the routine.
     var freeFrom: Int?
     var freeUntil: Int?
+    /// Minutes between tasks: 10 when the student's check-ins say yesterday or today was hard.
+    var breakMinutes = 0
     @Relationship(deleteRule: .cascade, inverse: \PlanTask.plan) var tasks: [PlanTask] = []
 
     init(title: String, mode: PlanMode, input: String, days: Int, start: Date) {
@@ -52,7 +54,7 @@ enum PlanMode: String, CaseIterable {
         let busy = CalendarSync.busy(from: start, days: days, excluding: Set(list.compactMap(\.eventID)))
         let starts = Scheduler.schedule(flowing.map { ($0.minutes, $0.day) }, from: start,
                                         routine: routine, busy: busy + fixed,
-                                        notBefore: flowing.map(\.notBefore))
+                                        notBefore: flowing.map(\.notBefore), gap: breakMinutes)
         for (task, s) in zip(flowing, starts) { task.start = s }
         for (i, task) in list.enumerated().sorted(by: {
             ($0.element.start ?? .distantFuture, $0.offset) < ($1.element.start ?? .distantFuture, $1.offset)
@@ -150,7 +152,21 @@ extension Date {
     var notBefore: Date?   // dropped here on the timeline; may still be pushed later
     var estimate: Int?     // the AI's minutes, kept to learn the student's pace
     var actual: Int?       // minutes it really took, once recorded
+    /// "How did it go?" (CheckIn): CheckInState raw value. Tasks done before
+    /// reflections existed stay `none` and keep their bricks.
+    var checkIn = 0
+    var feeling: Int?      // 1 drained … 5 energised
+    var note = ""          // optional, deleted after 30 days
+    var reflectedAt: Date?
     var plan: Plan?
+
+    enum CheckInState: Int { case none, waiting, answered, skipped }
+
+    /// Earns bricks when done and answered (or done before check-ins existed); never free time.
+    var earnsBricks: Bool {
+        done && category != Plan.freeTime
+            && (checkIn == CheckInState.none.rawValue || checkIn == CheckInState.answered.rawValue)
+    }
 
     init(title: String, category: String, minutes: Int, day: Int, order: Int) {
         self.title = title
